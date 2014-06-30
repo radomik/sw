@@ -1,0 +1,84 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 38</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>38. Porty wejścia/wyjścia mikrokontrolerów PIC16F8x. Porty wejścia/wyjścia mikrokontrolera PIC16F877A. Rejestry PORTx i TRISx. Inicjalizacja portów</h2>
+<p>
+<b>Porty A, B, C, D i E mikrokontrolerów są portami wejścia/wyjścia ogólnego przeznaczenia. Wyprowadzenia portów mogą również pełnić wiele funkcji dodatkowych, takich jak np.:   </b>
+<ul>
+<li>wejście układu czasowo-licznikowego; </li>
+<li>wejście sygnału przerwania; </li>
+<li>wejście przetwornika analogowo-cyfrowego; </li>
+<li>wejścia i wyjścia interfejsu szeregowego i równoległego</li>
+<li>magistrali I2C; </li>
+<li>wyprowadzenia układu CCP, itp. </li>
+</ul>
+</p>
+
+<p>
+<b>     Mikrokontroler PIC16F877A posiada 5 portów ogólnego przeznaczania: A, B, C, D i E. Porty te mogą pełnić następujące funkcje:  </b>
+<ul>
+    <li>port A:<ul>
+        <li>wejście/wyjście cyfrowe, </li>
+        <li>wejście analogowe, </li>
+        <li>wejście napięcia odniesienia, </li>
+        <li>wejście zewnętrznego zegara dla układu TIMER0, </li>
+        <li>wyjście komparatora,</li>
+        <li>wejście wyboru urządzenia podrzędnego dla portu SSP; </li>
+    </ul> </li>
+    <li>port B: <ul>
+    
+        <li>wejście/wyjście cyfrowe, </li>
+        <li>wejście do programowania mikrokontrolera, </li>
+        <li>wejście przerwania zewnętrznego; </li>
+    </ul></li>
+    <li>port C: <ul>
+        <li>wejście/wyjście cyfrowe, </li>
+        <li>wejście/wyjście modułów CCP, </li>
+        <li>wejście/wyjście dla różnego typu magistral szeregowych (SPI, I2C),</li>
+        <li> wejście/wyjście dla kontrolera transmisji szeregowej USART,</li>
+        <li>wyjście oscylatora i wejście zegarowe dla układu TIMER1; </li>
+        </ul></li>
+    <li>port D: <ul>
+        <li>wejście/wyjście cyfrowe, </li>
+        <li>wejście/wyjście portu równoległego PSP;</li>
+        </ul></li>
+    <li>port E: <ul>
+        <li>wejścia sterujące portem równoległym PSP, </li>
+        <li>wejście analogowe. </li>
+        </ul></li>
+
+
+</ul>
+</p>
+
+<p>
+<b> Wybór kierunku pracy </b><br />
+    Z każdym portem wejścia/wyjścia są związane dwa specjalne rejestry: PORTx i TRISx, gdzie &#8216;x&#8217; odpowiada nazwie portu określonej kolejną literą alfabetu (A, B, C, D, E). Rejestry PORTx stanowią interfejs pomiędzy jednostką centralną mikrokontrolera a portami.<br />
+    <br />
+    Za pomocą tych rejestrów można wysyłać dane na zewnątrz mikrokontrolera, wpisując odpowiednią wartość do odpowiedniego rejestru PORTx. Rejestry PORTx służą też do przekazywania jednostce centralnej wartości wejściowych przychodzących do portów mikrokontrolera, poprzez odczyt odpowiednich rejestrów PORTx. <br />
+    <br />
+        Rejestry TRISx służą do konfiguracji portów wejścia/wyjścia poprzez określenie kierunku pracy danego portu (wejście lub wyjście). Ustalanie kierunku pracy portu odbywa się poprzez ustawienie odpowiednich bitów w rejestrze TRISx. Ustawienie jedynki w rejestrze TRISx powoduje przełączenie odpowiedniego wyprowadzenia portu PORTx na tryb wejścia, natomiast wpisanie zera &#8211; przełączenie na wyjście. W celu łatwiejszego zapamiętania wystarczy zauważyć podobieństwo pomiędzy znakami 1 &#8211; I (czyli Input &#8211; wejście) oraz 0 &#8211; O(czyli Output &#8211; wyjście). <br />
+        <br />
+        
+</p>
+
+<p>
+<b> Inicjalizacja portów </b><br />
+Wszystkie porty wejścia/wyjścia należy przed użyciem zainicjalizować. Polega to głównie na wyborze kierunku przesyłania danych za pomocą rejestrów TRISx. Inicjalizację portów można przeprowadzić wykonując  następujące czynności: <br />
+<br />
+<ol>
+    <li>wybrać bank w którym znajdują się rejestry PORTx (bank nr 0); </li>
+    <li>wyzerować rejestry zatrzaskowe portu poprzez wpisanie 0 do rejestru PORTx; </li>
+    <li>wybrać bank w którym znajdują się rejestry TRISx (bank nr 1);</li>
+    <li>wybrać kierunek przepływu danych portu x, poprzez ustawienie poszczególnych bitów rejestru TRISx.</li>
+</ol>
+W przypadku mikrokontrolera PIC16F877A, port A po włączeniu zasilania jest ustawiany w tryb wejścia analogowego. Powoduje to, że przy odczycie tego portu zwracana jest wartość 0. Aby można było używać portu A jako wejścia/wyjścia cyfrowego należy ustawić odpowiednia wartość (06h) w rejestrze ADCON1.
+</p>
+
+</body>
+
+</html>

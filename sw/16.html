@@ -1,0 +1,118 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 16</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h1>16. Instrukcje sterujące: skoku bezwarunkowego (goto), brak operacji (nop), przejście w tryb bezczynności (sleep). Tryb uśpienia SLEEP</h1>
+
+<br />
+<p>
+    <pre>
+    <b>16.1. GOTO k</b>
+<i>Funkcja:</i>    Skok bezwarunkowy do podanej etykiety
+<i>Argumenty:</i>  0 &lt;= k &lt;= 2047
+<i>Działanie:</i>  k -&gt; PC&lt;10:0&gt;
+            PCLATH&lt;4:3&gt;-&gt; PC&lt;12:11&gt;
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  10 1kkk kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Bezwarunkowy skok do adresu określonego w argumencie rozkazu.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Do licznika rozkazów PC na pozycje PC&lt;10:0&gt; jest przesyłanych jedenaście bitów bezpośredniego adresu z  argumentu rozkazu. Dwa najbardziej znaczące bity licznika rozkazów są ładowane z rejestru PCLATH&lt;4:3&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Rozkaz jest wykonywany w dwóch cyklach rozkazowych.
+</p>
+
+<p>
+Przykład: <b class="code">GOTO THERE</b><br />
+Po wykonaniu instrukcji:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;PC = Address(<b class="code">THERE</b>)
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>16.2. NOP</b>
+<i>Funkcja:</i>    Nie wykonuj żadnej operacji przez jeden cykl rozkazowy
+<i>Argumenty:</i>  brak
+<i>Działanie:</i>  (PC) + 1 -&gt; PC
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  00 0000 0xx0 0000
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Nie wykonuj żadnej operacji.
+</p>
+
+<p>
+Przykład: <b class="code">HERE: NOP</b><br />
+Przed wykonaniem instrukcji:
+<pre class="code">
+    PC = address( HERE )
+</pre>
+Po wykonaniu instrukcji:
+<pre class="code">
+    PC = address( HERE + 1 )
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>16.3. SLEEP</b>
+<i>Funkcja:</i>    Przejdź w tryb uśpienia
+<i>Argumenty:</i>  brak
+<i>Działanie:</i>  00h -&gt; WDT
+            00h -&gt; preskaler
+            1 -&gt; !TO
+            0 -&gt; !PD
+<i>Zm. znaczn:</i> !TO, !PD
+<i>Kod rozk.:</i>  00 0000 0110 0011
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Wykonanie tej instrukcji spowoduje wyzerowanie bitu !PD, ustawienie bitu !TO oraz wyzerowanie zawartości licznika watchdog i preskalera, a następnie przejście w stan uśpienia.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;W trybie uśpienia zatrzymywany jest oscylator mikrokontrolera.
+</p>
+
+<h2>16.4. Tryb uśpienia SLEEP</h2>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Tryb uśpienia (Sleep Mode, Power-down Mode) jest trybem, w którym mikrokontroler jest w najbardziej energooszczędnym stanie.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Generator sygnału zegarowego jest wyłączony, więc impulsy zegarowe nie dochodzą do mikrokontrolera.
+</p>
+<p>
+    <b>Przejście w tryb uśpienia</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Tryb uśpienia jest włączany za pomocą <b>instrukcji SLEEP</b>.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeżeli licznik WDT jest włączony, to zostanie on wyzerowany w momencie przejścia mikrokontrolera w tryb uśpienia, ale będzie nadal pracował.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bit !PD w rejestrze STATUS zostanie wyzerowany, a bit !TO ustawiony na jedynkę.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Porty</b> wejścia/wyjścia zachowają swój <b>wcześniejszy stan</b>, sprzed wykonania instrukcji SLEEP. 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Aby zapewnić jak najmniejszy pobór prądu w tym trybie, wszystkie wyprowadzenia powinny być na poziomie dodatniego lub ujemnego napięcia zasilania bez możliwości poboru prądu z tych wyprowadzeń przez układy zewnętrzne. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Także układy wewnętrzne mikrokontrolera, które pobierają minimalny prąd w stanie uśpienia powinny zostać wyłączone.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Wyprowadzenie zerujące <b>MCLR</b> powinno być w wysokim stanie logicznym.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Niektóre funkcje mikrokontrolera (np. WDT, BOR) powodujące pobór małego prądu w stanie uśpienia mogą zostać wyłączone podczas programowania mikrokontrolera za pomocą bitów rejestru konfiguracyjnego. 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Mikrokontroler może zostać wyprowadzony ze stanu uśpienia poprzez wystąpienie jednego z następujących zdarzeń:
+<ul>
+    <li>uruchomienie dowolnego trybu zerowania mikrokontrolera</li>
+    <li>obudzenie mikrokontrolera przez układ WDT (WDT Wake-up)</li>
+    <li>zgłoszenie przerwania przez dowolny moduł, który może ustawić znacznik przerwania w trybie uśpienia:
+        <ul>
+            <li>wejście RB0/INT</li>
+            <li>zmiana stanu wyprowadzeń RB7:RB4</li>
+            <li>komparatory</li>
+            <li>przetwornik A/C</li>
+            <li>układ czasowy TIMER1</li>
+            <li>synchroniczny port szeregowy SSP</li>
+            <li>moduł przechwytywania (CCP)</li>
+        </ul>
+    </li>
+</ul>
+</p>
+</body>
+
+</html>
+
+

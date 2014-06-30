@@ -1,0 +1,139 @@
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 61</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>61. Klawiatura matrycowa.  Algorytm procedury obsługi klawiatury matrycowej 4x4</h1>
+<p>
+    <img src="/sw/img/61_1.jpg" /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Zwiększanie liczby przycisków wymaga zwiększenia liczby wyprowadzeń mikrokontrolera zajętych przez dołączone przyciski. Sytuacja taka powoduje znaczne zredukowanie liczby wyprowadzeń, które pozostają do wykorzystania przez inne układy.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Załóżmy, że system wymaga podłączenia 4 przycisków. Można to zrealizować analogicznie, jak zostało pokazane w powyższym przykładzie, jedynie przez dołączenie kolejnych przycisków do kolejnych wyprowadzeń mikrokontrolera. Następnie chcemy zwiększyć liczbę przycisków o kolejne 4. Gdyby podłączyć je do tych samych wyprowadzeń, co poprzednie przyciski, nie mielibyśmy możliwości rozróżnienia, który przycisk został wciśnięty.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Można to jednak zrobić dodając dwa dodatkowe sygnały służące do aktywacji odczytu jednego z dwóch zestawów przycisków. Jeśli teraz dodamy jeszcze dwa zestawy po 4 przyciski każdy to uzyskamy układ 16 klawiszy, który może być odczytywany za pomocą 8 (zamiast 16) linii mikrokontrolera (4 linie na aktywację każdego z zestawów oraz 4 linie do odczytu stanu przycisku w aktywnym zestawie). Układ taki nazywany jest klawiaturą matrycową.<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Klawiatura podłączona jest do portu C w taki sposób, że do wyprowadzeń:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>RC7, RC5, RC3, RC1</b> – podłączono wiersze klawiatury,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>RC6, RC4, RC2, RC0</b> – kolumny<br /><br />
+
+&nbsp;&nbsp;&nbsp;&nbsp;Do odczytu stanu klawiatury służy procedura ReadKey. Na początku następuje aktywowanie odczytu stanu kolumny pierwszej (za pomocą makrodefinicji ACT_COL z parametrem B_COL1).<br />
+<pre class="code">
+<b>ReadKey:</b>
+    <b>dla każdej kolumny k</b>
+        podaj zero logiczne na port kolumny k
+        <b>dla każdego wiersza w</b>
+                <b>jeżeli</b> na porcie wiersza w jest zero logiczne <b>to</b>
+                        klawisz wxk jest wciśnięty
+                        <i><b>return</b></i>
+                <b>end</b>
+        <b>end</b>
+    <b>end</b>
+    żaden klawisz nie wciśnięty
+    <i><b>return</b></i>
+</pre>
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Aktywacja polega na ustawieniu trybu wyprowadzenia połączonego z kolumną 1 na wyjście i ustawienie na nim niskiego poziomu. Następnie wywoływana jest procedura TST_ROW, która odczytuje z portu B jaki klawisz został naciśnięty i zamienia numer wiersza, w którym został naciśnięty klawisz na kod od 0x80 do 0x83.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;W przypadku, gdy nie został naciśnięty żaden przycisk rejestr W zawiera wartość 0. Gdy naciśnięty został przycisk, to po odczytaniu jego kodu procedurą TST_ROW następuje zamiana (od etykiety RK_press) kodu klawisza na kod ASCII znaku, który został naciśnięty.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Gdy w danej kolumnie nie został naciśnięty przycisk następuje sprawdzenie kolejnych kolumn. Gdy żaden przycisk nie został naciśnięty w rejestrze W jest zapisywana wartość 0xFF i następuje opuszczenie procedury. 
+</p>
+<p>
+    <pre class="code">
+<b>; Program obsługi klawiatury matrycowej</b>
+KB_PORT     equ PORTC       ; port, do którego podłączona 
+KB_TRIS     equ TRISC       ; jest klawiatura 
+KB_ROW1     equ RC7         ; pierwszy wiersz 
+KB_ROW2     equ RC5         ; drugi wiersz 
+KB_ROW3     equ RC3         ; trzeci wiersz 
+KB_ROW4     equ RC1         ; czwarty wiersz 
+KB_COL1     equ RC6         ; pierwszą kolumnę 
+KB_COL2     equ RC4         ; drugą kolumnę 
+KB_COL3     equ RC2         ; trzecią kolumnę 
+KB_COL4     equ RC0         ; czwartą kolumnę 
+
+
+;  Makro aktywujące odczyt naciśnięcia klawisza w wierszu 'ROW' 
+ACT_COL MACRO COL 
+    bsf         STATUS, RP0         ; przejdź do banku 1 
+    movlw       ~(1 &lt;&lt; COL)         ; ustaw tryb pracy wyprowadzenia; 
+    movwf       KB_TRIS             ; odpowiada za wybór kolumny na wyjście 
+    bcf         STATUS, RP0         ; powrót do banku 0 
+    movwf       KB_PORT             ; ustaw na wyprowadzenie wyboru kol. stan niski 
+    goto            $+1             ; dla ustalenia stanu wyjścia odczekaj 2 cykle 
+ENDM
+RST CODE    0x000           ;   wektor resetu procesora 
+   pagesel  main            ; wybór strony pamięci programu 
+   goto     main            ; skok do początku programu 
+PGM CODE 
+main 
+   banksel  OPTION_REG 
+   bcf      OPTION_REG, NOT_RBPU ; włączenie pull-up na PORTB 
+   banksel  PORTA 
+   call     readKey 
+   goto     $               ; pętla bez końca
+;  Procedura odczytująca klawisz. Zwraca w W kod ASCII klawisza
+readKey 
+    ACT_COL     KB_COL1             ; aktywuj kolumnę 1 
+    call        TST_ROW             ; zamień nr wiersza na kod 0x80-0x83 
+    iorlw       0x00                ; sprawdź, czy nie 0 (żaden nie wciśnięty) 
+    btfss       STATUS, Z           ; 
+    goto        RK_press            ; Z=0, W != 0, wciśnięto - zakończ testowanie 
+                                    ; Z=1, W = 0,  nic nie wciśnięto - kolejna kolumna 
+RK_COL_2 
+   ACT_COL      KB_COL2             ; aktywuj kolumnę 2 
+   call         TST_ROW             ; zamień nr wiersza na kod 0x80-0x83 
+   iorlw        0x00                ; czy 0 (żaden nie wciśnięty) 
+   btfsc        STATUS, Z           ; nie - przeskocz 
+   goto         RK_COL_3            ; Z=1, W = 0,  nic nie wciśnięto - kolejna kolumna 
+   iorlw        B'00000100'         ; Z=0, W != 0, wciśnięto - dołącz numer kolumny 
+   goto         RK_press            ; i zakończ testowanie
+RK_COL_3 
+   ACT_COL      KB_COL3             ; aktywuj kolumnę 3 
+   call         TST_ROW             ; zamień nr wiersza na kod 0x80-0x83 
+   iorlw        0x00                ; czy nie 0 (żaden nie wciśnięty) 
+   btfsc        STATUS, Z           ; nie - przeskocz 
+   goto         RK_COL_4            ; Z=1, W = 0,  nic nie wciśnięto - kolejna kolumna 
+   iorlw        B'00001000'         ; Z=0, W != 0, wciśnięto - dołącz nr kolumny 
+   goto         RK_press            ; i zakończ testowanie 
+RK_COL_4 
+   ACT_COL      KB_COL4             ; aktywuj kolumnę 4 
+   call         TST_ROW             ; zamień nr wiersza na kod 0x80-0x83 
+   iorlw        0x00                ; sprawdź czy nie 0 (żaden nie wciśnięty) 
+   btfsc        STATUS, Z           ; nie - przeskocz 
+   goto         RK_COL_STOP         ; Z=1, W = 0,  nic nie wciśnięto - koniec 
+   iorlw        B'00001100'         ; Z=0, W != 0, wciśnięto - dołącz numer kolumny 
+   goto         RK_press            ; i zakończ testowanie 
+RK_COL_STOP 
+   movlw        0xFF                ; nic nie naciśnięto 
+return 
+RK_press 
+   andlw        B'01111111' 
+   addwf        PCL, F              ; zamień na kod ASCII 
+   dt           "147*2580369#ABCD"
+   
+;  Procedura spr., w którym wierszu klawiatury został wciśnięty klawisz
+;  Zwraca w 'W' numer wiersza
+TST_ROW 
+    clrw
+    btfss       KB_PORT, KB_ROW1    ; czy naciśnięto w wierszu 1? 
+    movlw       B'10000000'         ; kod - 0x80 
+    btfss       KB_PORT, KB_ROW2    ; czy naciśnięto w wierszu 2? 
+    movlw       B'10000001'         ; kod - 0x81 
+    btfss       KB_PORT, KB_ROW3    ; czy naciśnięto w wierszu 3? 
+    movlw       B'10000010'         ; kod - 0x82 
+    btfss       KB_PORT, KB_ROW4    ; czy naciśnięto w wierszu 4? 
+    movlw       B'10000011'         ; kod - 0x83 
+    return 
+END
+</pre>
+</p>
+
+</body>
+</html>

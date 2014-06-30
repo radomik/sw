@@ -1,0 +1,92 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 66</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>66. Język Verilog. Pierwszy projekt w języku Verilog (Sumator jednobitowy). Opis struktury. Opis równań logicznych. Opis za pomocy instrukcji proceduralnych. Hierarchiczny opis sumatora 4-bitowego.</h1>
+
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Początki języka Verilog sięgają wczesnych lat 80. ubiegłego stulecia. Głównym twórcą pierwotnej wersji języka był Phil Moorby – pracownik amerykańskiej firmy Gateway Design Automation, zajmującej się wytwarzaniem oprogramowania CAE. Firma ta w roku 1984 rozpoczęła sprzedaż symulatora układów cyfrowych pod nazwą Verilog (nieco później Verilog XL).<br />
+&nbsp;&nbsp;&nbsp;&nbsp;W tamtym okresie nie istniał jeszcze żaden standard języka opisu sprzętu (VHDL również dopiero się rozwijał i nie stanowił jeszcze standardu IEEE), dlatego też Gateway stworzył  własny język i nazwał go Verilog HDL. Język Verilog przeznaczony był wówczas stosowany wyłącznie do symulacji układów cyfrowych.
+</p>
+<p>
+    <pre class="code">
+<b>/* Sumator 1-bitowy (bramki)*/</b>
+module <b>sum1_1</b>(input A, B, Cin, output Y, Cout);
+    wire g1_o, g2_o, g3_o, g4_o;
+
+    and g1(g1_o, A, B);
+    xor g4(g4_o, A, B);
+    and g2(g2_o, Cin, g4_o);
+    or  g3(Cout, g1_o, g2_o);
+    xor g5(Y, Cin, g4_o);
+endmodule
+    </pre>
+</p>
+<img src="/sw/img/66_1.png"/>
+<p>
+    <pre class="code">
+<b>/* Sumator 1-bitowy (równania logiczne) */</b>
+module <b>sum1_2</b>(input A, B, Cin, output Y, Cout);
+assign s = a^b^cin;
+    assign cout = a &amp; b | (a^b) &amp; cin;
+endmodule
+    </pre>
+</p>
+<p>
+    <pre class="code">
+<b>/* Sumator 1-bitowy (proceduralnie) */</b>
+module <b>sum1_3</b>(input A, B, Cin, output Y, Cout);
+    always@(cin,a,b) 
+    begin
+        if (a &amp; b | cin &amp; a | cin &amp; b) cout = 1;
+        else cout = 0;
+        s = a^b^cin;
+    end
+endmodule
+    </pre>
+</p>
+<p>
+    <pre class="code">
+<b>/* Sumator 1-bitowy (strukturalnie)*/</b>
+module <b>sum1_4</b>(input A, B, Cin, output Y, Cout);
+    wire g1_o, g2_o, g3_o;
+    
+    and g1(g1_o, a, b);
+    xor g2(g2_o, a, b);
+    and g3(g3_o, g2_o, cin);
+    xor g4(s, g2_o, cin);
+    or  g5(cout, g3_o, g1_o);
+endmodule
+    </pre>
+</p>
+<h2>66.2. HIERARCHICZNY OPIS SUMATORA 4-BITOWEGO</h2>
+<p>
+    <pre class="code">
+module <b>sum4</b> (cin, x3, x2, x1, x0, y3, y2, y1, y0, s3, s2, s1, s0, cout);
+    input  cin, x3, x2, x1, x0, y3, y2, y1, y0;
+    output s3, s2, s1, s0, cout;
+
+    sum1  stage0 (cin, x0, y0, s0, c1);
+    sum1  stage1 (c1, x1, y1, s1, c2);
+    sum1  stage2 (c2, x2, y2, s2, c3);
+    sum1  stage3 (c3, x3, y3, s3, cout);
+endmodule
+    </pre>
+</p>
+</body>
+</html>
+
+
+
+
+
+
+

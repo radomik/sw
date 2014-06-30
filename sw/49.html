@@ -1,0 +1,73 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 49</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>49. REJESTRY TMR0 I OPTION_REG. KONFIGURACJA UKŁADU PRESKALERA. Inicjalizacja TIMER0: w trybie czasomierza i w trybie licznika</h2>
+<p>
+<b>  </b>
+<img src="/sw/img/49_2.png" /><br />
+<br />
+    Rejestr OPTION_REG służy do ustawiania opcji układu czasowego TIMER0. Za pośrednictwem rejestru OPTION _REG można także ustawić aktywne zbocze sygnału przerwania zewnętrznego oraz aktywować rezystory podciągające (pull-up) dla wyprowadzeń portu B.<br />
+    <br />
+ <img src="/sw/img/49_1.png" /><br />   
+
+</p>
+
+<p>
+<b>  </b>
+<pre>
+
+</pre>
+</p>
+
+<p>
+<b>  Tryby pracy TIMER0</b><br />
+    Układ czasowy TIMER0 może pracować w dwóch trybach: w trybie licznika i trybie czasomierza. Wyboru trybu dokonuje się za pomocą ustawień bitu T0CS w rejestrze OPTION_REG. Tryb czasomierza jest wybierany poprzez wyzerowanie bitu T0CS w rejestrze OPTION_REG. W tym trybie zawartość licznika jest inkrementowana w każdym cyklu rozkazowym (bez preskalera). <br />
+    Jeżeli do rejestru licznika TMR0 jest zapisywana jakaś wartość, inkrementacja jest zawieszana na 2 następne cykle. Użytkownik powinien to skorygować poprzez wpisanie odpowiedniej wartości do rejestru TMR0. 
+</p>
+
+<p>
+<b>Inicjalizację układu TIMER0 w trybie czasomierza pokazano na przykładzie  </b>
+<pre class="code">
+ ; program zlicza za pomocą TIMER0 125 impulsów zegara wewnętrznego
+ ; z podzielnikiem 1/8 (1000 impulsów) 
+ bsf    STATUS, RP0  ; bank 1 
+ movlw  B'00000010'  ; ustaw_tryb_czasomierza, prescaler na 1/8 
+ movwf  OPTION_REG   ; zliczanie_impulsów zegarowych 
+ bcf    STATUS, RP0  ; bank 0 
+ movlw  .256 - .125  ; licz do 125 
+ movwf  TMR0
+</pre>
+</p>
+
+<p>
+Tryb licznika wybiera się poprzez ustawienie na jedynkę bitu T0CS w rejestrze OPTION_REG. W trybie licznika zawartość licznika będzie inkrementowana w przypadku nadejścia każdego narastającego lub opadającego zbocza na wyprowadzeniu RA4/T0CKI. <br />
+<br />
+    Zbocze, na które licznik ma reagować jest ustalane za pomocą bitu T0SE w rejestrze OPTION_REG. Wyzerowanie tego bitu oznacza, że układ będzie reagował na zbocze narastające, a ustawienie na jedynkę oznacza, że układ będzie reagował na zbocze opadające sygnału na wyprowadzeniu RA4/T0CKI. <br />
+    <br />
+    
+</p>
+
+
+
+<p>
+<b>Inicjalizację układu TIMER0 w trybie licznika pokazano na przykładzie:  </b>
+<pre class="code">
+ ; program zlicza za pomocą TIMER0 125 impulsów zegara wewnętrznego 
+ ; z podzielnikiem 1/4 (500 impulsów) 
+ bsf    STATUS, RP0 ; bank 1 
+ movlw  B'00100001' ; ustaw tryb licznika, prescaler na 1/4 
+ movwf  OPTION_REG  ; zliczanie impulsów zegarowych a
+ bcf    STATUS, RP0 ; bank 0 
+ movlw  .256 - .125 ; licz do 125 
+ movwf  TMR0
+</pre>
+</p>
+
+</body>
+
+</html>

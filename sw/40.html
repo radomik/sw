@@ -1,0 +1,69 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 40</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>40. Architektura wyprowadzeń portu B. Inicjalizacja portu B. Funkcje wyprowadzeń portu B. Schemat blokowy wyprowadzeń RB3:RB0 i RB7:RB4 portu B dla mikrokontrolera PIC16F877A.</h2>
+<p>
+    Port B jest dwukierunkowym 8-bitowym portem ogólnego przeznaczenia mikrokontrolerów PIC16.
+</p><p>
+    Dla mikrokontrolera PIC16F877A wyprowadzenie portu B są współdzielone z wejściami programatora niskonapięciowego i debuggera sprzętowego.
+</p><p>
+    
+    Każde wyprowadzenie portu B ma możliwość podłączenia rezystora podciągającego (pull-up). Opcja ta jest aktywowana poprzez wyzerowanie bitu RBPU w rejestrze OPTION_REG. <br />Rezystory podciągające są automatycznie wyłączane, gdy wyprowadzenia są skonfigurowane jako wyjścia. Funkcja ta jest też wyłączana w momencie zerowania mikrokontrolera.
+</p>
+
+<p>
+<h2>Inicjalizację portu B pokazano na przykładzie: </h2>
+<pre class="code">
+ bcf     STATUS, RP0 ; wybór banku 0 
+ clrf    PORTB       ; inicjalizacja przez zerowanie zatrzasków wyjściowych 
+ bsf     STATUS, RP0 ; wybór banku 1 
+ bcf     OPTION_REG, RBPU ; włączenie rezystorów pull-up 
+ movlw   B'00001111' ; ustawienie wyprowadzeń  RB3:RB0 jako wejść oraz
+ movwf   TRISB       ; wyprowadzeń RB4:RB7 ; jako wyjść
+</pre>
+</p>
+
+<p>
+<b> Funkcje poszczególnych pinów portu B </b><br />
+<img src="/sw/img/40_1.png" />
+</p>
+
+<p>
+<b> PIC16F877A </b><br />
+<img src="/sw/img/40_2.png" />
+
+</p>
+
+
+<p>
+<b> SCHEMAT BLOKOWY WYPROWADZEŃ RB3:RB0 I RB7:RB4 PORTU B DLA MIKROKONTROLERA PIC16F877A </b><br />
+
+Port B posiada także wejście przerwania zewnętrznego (bit nr 0) oznaczone jako RB0/INT Wszystkie wyprowadzenia posiadają bufor TTL na wejściu. Linia 0 portu posiada na wejściu przerzutnik Schmitta, kiedy jest wykorzystywana jako wejście przerwaniazewnętrznego. 
+</p><p>
+    Linie 6 i 7 (dla mikrokontrolera PIC16F877A) posiadają na wejściu przerzutnik Schmitta, gdy są wykorzystywane do programowania mikrokontrolera. 
+</p><p>
+    
+    Cztery wyprowadzenia portu B (RB7:RB4) mają funkcję generacji przerwania w momencie zmiany stanu. Jest to możliwe tylko w przypadku konfiguracji tych wyprowadzeń jako wejścia. Stan wejść jest wówczas porównywany z zawartością zatrzasków pamiętających poprzednią wartość  na wyprowadzeniu. &#8222;Różniące się&#8221; wyjścia są połączone za pomocą bramki OR i generują przerwanie sygnalizowane bitem RBIF w rejestrze INTCON. Przerwanie to może także wybudzić mikrokontroler ze stanu uśpienia.
+</p><p>
+    
+    Należy pamiętać o wyzerowaniu znacznika RBIF w procedurze obsługi przerwania. Przed wyzerowaniem RBIF należy jednak odczytać rejestr PORTB, gdyż dopiero wówczas znikną różnice pomiędzy stanami na wyprowadzeniach RB7:RB4 i wartościami zapamiętanymi w zatrzaskach.
+</p>
+
+
+<p>
+<b>Schemat portów RB3:RB0</b><br />
+<img src="/sw/img/40_3.png" /><br />
+<br /><br />
+<b>Schemat portów RB7:RB4</b><br />
+<img src="/sw/img/40_4.png" />
+</p>
+
+
+</body>
+
+</html>

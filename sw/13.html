@@ -1,0 +1,200 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 13</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h1>13. Instrukcje arytmetyczne addlw, addwf, incf, sublw, subwf i decf</h1>
+
+<br />
+<p>
+    <pre>
+    <b>13.1. ADDLW k</b>
+<i>Funkcja:</i>    Dodaj stałą k i zawartość rej. W
+<i>Argumenty:</i>  0 &lt;= k &lt;= 255
+<i>Działanie:</i>  W + k -&gt; W
+<i>Zm. znaczn:</i> C, DC, Z
+<i>Kod rozk.:</i>  11 111x kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Zawartość rejestru W jest dodawania do 8-bitowej stałej k.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Wynik operacji jest przesyłany do W.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ movlw  1       ; W := 1
+ addlw  0xFF    ; W := 0xFF + W
+ ; Po wykonaniu rozkazów: 
+ ; W = 0x00, C = 1, DC = 1, Z = 1
+
+ movlw  0x81    ; W := 0x81
+ addlw  0x80    ; W := 0x80 + W
+ ; Po wykonaniu rozkazów: 
+ ; W = 0x01, C = 1, DC = 0, Z = 0
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>13.2. ADDWF f, d</b>
+<i>Funkcja:</i>    Dodaj zawartość rej. W i zawartość rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  W + (f) -&gt; rejestr przeznaczenia określony bitem d
+<i>Zm. znaczn:</i> C, DC, Z
+<i>Kod rozk.:</i>  00 0111 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Zawartość rejestru W jest dodawania do zawartości rejestru o adresie f<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ movlw  0x17    ; W := 0x17
+ movwf  FSR     ; FSR := W = 0x17
+ movlw  0xC2    ; W := 0xC2
+ addwf  FSR, 0  ; W := FSR + W = 0x17 + 0xC2
+
+ ; Po wykonaniu rozkazów: 
+ ; FSR = 0x17, W = 0xD9, C = 0, DC = 0, Z = 0
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>13.3. INCF f, d</b>
+<i>Funkcja:</i>    Zwiększ o 1 zawartość rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  (f) + 1 -&gt; rejestr przeznaczenia określony bitem d
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  00 1010 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Zawartość rejestru o adresie f jest zwiększana o 1. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>13.4. DECF f, d</b>
+<i>Funkcja:</i>    Zmniejsz o 1 zawartość rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  (f) - 1 -&gt; rejestr przeznaczenia określony bitem d
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  00 0011 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Zawartość rejestru o adresie f jest zmniejszona o 1. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ REG    equ 0x20
+ movlw  .254    ; W := 254
+ movwf  REG     ; REG := W
+ incf   REG, 1  ; REG := REG + 1 = .255 ( Z = 0 )
+ incf   REG, 0  ; W = REG + 1 = 0 ( Z = 1 )
+ decf   REG, 0  ; W = REG – 1 = .254 ( Z = 0 )
+    </pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>13.5. SUBLW k</b>
+<i>Funkcja:</i>    Odejmij zawartość rej. W od stałej k
+<i>Argumenty:</i>  0 &lt;= k &lt;= 255
+<i>Działanie:</i>  k - W -&gt; W
+<i>Zm. znaczn:</i> C, DC, Z
+<i>Kod rozk.:</i>  11 110x kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Od 8-bitowej stałej k odejmowana jest zawartość rejestru W.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Wynik tej operacji przesyłany jest do rejestru W.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Odejmowanie jest wykonywane na liczbach zapisanych w kodzie uzupełnienia do 2.
+</p>
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ movlw  0x01    ; W := 0x01
+ sublw  0x02    ; W := 0x02 – W
+
+ ; Po wykonaniu rozkazów: 
+ ; W = 0x01, DC = 1, C = 1, Z = 0 (wynik dodatni)
+
+ movlw  0x02    ; W := 0x02
+ sublw  0x02    ; W := 0x02 – W
+
+ ; Po wykonaniu rozkazów: 
+ ; W = 0x00, DC = 1, C = 1, Z = 1 (wynik równy zero)
+
+ movlw  0x03    ; W := 0x03
+ sublw  0x02    ; W := 0x02 – W
+
+ ; Po wykonaniu rozkazów: 
+ ; W = 0xFF, DC = 0, C = 0, Z = 0 (wynik ujemny)
+    </pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>13.6. SUBWF f, d</b>
+<i>Funkcja:</i>    Odejmij zawartość rej. W i zawartość rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  (f) - W -&gt; rejestr przeznaczenia określony bitem d
+<i>Zm. znaczn:</i> C, DC, Z
+<i>Kod rozk.:</i>  00 0010 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Od zawartości rejestru o adresie f odejmowana jest zawartość rejestru W.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Odejmowanie jest wykonywane na liczbach zapisanych w kodzie uzupełnienia do 2.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ ; Wykonanie porównania arytmetycznego rejestru ze stałą
+ REG        equ 0x20
+ ST         equ .123
+
+ ; dowolny kod zapisujący wartość rejestru REG
+ . . .                        
+
+ movlw     ST            ; W := ST = .123
+ subwf     REG, 0        ; W := ST – REG
+ btfss     STATUS, Z
+ goto      reg_not_equ_st; Z = 0 ( W różny od zera -&gt; REG różny od ST)
+reg_equ_st:              ; Z = 1 ( W równy zero -&gt; REG równy ST)
+    . . .
+    goto   on_end
+
+reg_not_equ_st:          ; Z = 0 ( W różny od zera -&gt; REG różny od ST)
+    btfss   STATUS, C
+    goto    reg_above_st ; C = 0 ( W ujemny -&gt; REG większy od ST)
+
+reg_below_st:            ; C = 1 ( W dodatni -&gt; REG mniejszy od ST)
+    . . .
+    goto    on_end
+
+reg_above_st:            ; C = 0 ( W ujemny -&gt; REG większy od ST)
+    . . .
+
+on_end:
+    . . .
+    </pre>
+</p>
+
+</body>
+
+</html>

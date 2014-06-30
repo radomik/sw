@@ -1,0 +1,57 @@
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 63</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>63. Przetwornik analogowo-cyfrowy. Parametry przetwornika A/C. Schemat blokowy przetwornika A/C. Wynik przetwarzania</h1>
+
+<p>
+    <b>Schemat blokowy przetwornika ADC</b><br />
+    <img src="/sw/img/63_1.jpg" />
+</p><br />
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Układ przetwornika analogowo cyfrowego występuje tylko w mikrokontrolerach PIC16F87xA, nie występuje w PIC16F8x. Dla PIC16F877A przetwornik posiada <b>8 wejść analogowych</b>.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Wynikiem konwersji wejściowego sygnału analogowego jest 10-bitowa liczba binarna. Przetwornik ADC posiada wejścia napięcia odniesienia zarówno dla poziomu wysokiego jak i niskiego. Są one wybierane dla pewnych kombinacji Vdd, Vss, wejść RA2 i RA3.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Przetwornik układów PIC16 posiada <b>unikatową cechę</b> możliwości pracy gdy mikrokontroler jest <b>uśpiony</b>. W tym celu musi być taktowany <b>własnym wewnętrznym oscylatorem RC</b>.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Moduł przetwornika ADC operuje na <b>4 rejestrach:</b>
+    <ol>
+        <li><b>ADRESH</b> - rejestr górnego bajtu wyniku</li>
+        <li><b>ADRESL</b> - rejestr dolnego bajtu wyniku</li>
+        <li><b>ADCON0</b> - rejestr kontrolny 0</li>
+        <li><b>ADCON1</b> - rejestr kontrolny 1</li>
+    </ol>
+</p>
+<p>
+    <b>Wynik przetwarzania</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;10-bitowy wynik przetwarzania umieszczany jest w dwóch rejestrach 8-bitowych. Istnieją dwie możliwości zapisu wyniku do tych rejestrów.<br />
+    <img src="/sw/img/63_2.jpg" /><br />
+    <ol>
+        <li><b>wyjustowanie do prawej strony</b> - ADCON1&lt;ADFM&gt;=1, dwa najstarsze bity wyniku w ADRESH, młodszy bajt w ADRESL, używamy tego trybu jeśli mierzone wartości napięcia są relatywnie małe, a zależy nam na większej dokładności. Możemy wówczas odczytać tylko wartość z ADRESL, a dwa starsze bity w ADRESH pominąć.</li>
+        <li><b>wyjustowanie do lewej strony</b> - ADCON1&lt;ADFM&gt;=0, starszy bajt wyniku umieszczany w ADRESH, najmłodsze dwa bity w ADRESL. Używamy go gdy nie zależy nam na tak bardzo na dokładności, lub gdy wynik pomiaru jest niestabilny. Możemy wówczas odczytać tylko wartość w ADRESH pomijając 2 młodsze bity w ADRESL</li>
+    </ol><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Oczywiście można też odczytać pełny 10-bitowy wynik jednak jego przetworzenie będzie już wymagało zazwyczaj napisania procedur operujących na liczbach 16-bitowych, gdyz mikrokontroler PIC16 nie posiada takich rozkazów.
+</p>
+
+</body>
+</html>
+
+
+
+
+
+
+

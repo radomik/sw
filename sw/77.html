@@ -1,0 +1,50 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 77</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>77. Selekcja bitów. Tablice instancji (array of instances)</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Selekcja bitów to wybór pojedynczego bitu lub części bitów zmiennych  lub sygnałów, które są wektorami. Składnia selekcji bitu lub jego częściowej selekcji jest następująca (nawias kwadratowy jest częścią opisu składni i nie oznacza elementu opcjonalnego) :
+    </p>
+    <p>
+    <pre class="code">
+    identyfikator [wyrażenie_zakresu]
+    </pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;gdzie <b>wyrażenie_zakresu</b> może być jednym z poniższych:
+<ol>
+    <li>wyrażenie</li>
+    <li>wyrażenie_stałe_msb : wyrażenie_stałe_lsb</li>
+    <li>wyrażenie_podstawy + : wyrażenie_stałe_szerokość</li>
+    <li>wyrażenie_podstawy - : wyrażenie_stałe_szerokość</li>
+</ol>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W pierwszym przypadku, gdy wyrażenie_zakresu jest zwykłym wyrażeniem, mamy do czynienia z selekcją <b>pojedynczego bitu</b> o numerze, który jest wartością tego wyrażenia (zwróćmy uwagę, że wyrażenie to nie musi być stałe). 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W drugim przypadku mamy do czynienia z <b>częściową selekcją</b> bitów wektora o <b>numerach</b> zawartych pomiędzy wartościami wyrażeń <b>wyrażenie_stałe_lsb</b> a <b>wyrażenie_stałe_msb</b>. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W dwóch ostatnich przypadkach jako <b>wyrażenie_podstawy</b> podaje się numer <b>bitu początkowego</b>, a jako <b>wyrażenie_stałe_szerokość</b> jest podawana <b>liczba bitów</b>. Liczba bitów jest następnie dodawana (jeżeli przed znakiem dwukropka znajduje się znak +) lub odejmowana (jeżeli przed znakiem dwukropka znajduje się znak - ) od wyrażenie_podstawy tworząc konstrukcję analogiczną do częściowej selekcji bitu.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Tablice instancji znajdują swoje zastosowanie w metodach specyfikacji, gdzie numeracja kolejnych instancji różni się w sposób kontrolowany. Przykładowo bufif0 b[1:8] (out, in, oe) zastępuje długi opis 8-bitowego modułu bufora trójstanowego zrealizowanego z użyciem jednego z podstawowych elementów logicznych.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Specyfikacja z tablicą instancji jest tworzona przy użyciu opcjonalnego specyfikatora zakresu występującego tuż za nazwą instancji. Nie występują tutaj istotne ograniczenia wartości granicznych specyfikatora zakresu, z wyjątkiem tego, ze obie liczby muszą być całkowite. Nie jest ważne, czy jedna jest większa od drugiej – w przypadku, gdy są równe, tworzona jest tylko jedna instancja. Przy zakresie zdefiniowanym przez dwie wartości msb i lsb, liczba wygenerowanych instrukcji wynosi: abs(msb – lsb) +1.
+    </p>
+</body>
+
+</html>
+
+

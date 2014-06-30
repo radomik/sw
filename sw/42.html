@@ -1,0 +1,98 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 42</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>42. UKŁAD PRZERWAŃ. UOGÓLNIONY SCHEMAT UKŁADU PRZERWAŃ. REJESTRY STEROWANIA UKŁADEM PRZERWAŃ</h2>
+<p>
+<b>     Mikrokontrolery PIC16 mogą obsługiwać wiele źródeł przerwań. Zwykle jest to jedno przerwanie od jednego urządzenia peryferyjnego. Niektóre moduły mogą generować kilka przerwań (np. moduł USART).  </b>
+<br />
+<br />
+Źródła przerwań mogą być następujące: 
+<ol>
+    <li>wyprowadzenie INT (przerwanie zewnętrzne); </li>
+    <li>przepełnienie rejestru licznika TMR0; </li>
+    <li>zmiana stanu na wejściach RB7:RB4; </li>
+    <li>zmiana stanu komparatora; </li>
+    <li>port równoległy PSP;</li>
+    <li>moduł USART; </li>
+    <li>odbiornik portu szeregowego; </li>
+    <li>nadajnik portu szeregowego; </li>
+    <li>zakończenie konwersji w przetworniku A/C; </li>
+    <li>wyświetlacz LCD; </li>
+    <li>zakończenie zapisu w pamięci EEPROM; </li>
+    <li>przepełnienie rejestru licznika TMR1; </li>
+    <li>przepełnienie rejestru licznika TMR2; </li>
+    <li>moduły CCP1 i CCP2; </li>
+    <li>moduł transmisji SSP</li>
+
+</ol>
+</p>
+
+<p>
+    W mikrokontrolerze istnieje przynajmniej jeden rejestr do sterowania maskowaniem przerwań oraz do sprawdzania ich stanu. Jest to rejestr INTCON.
+</p><p>
+	Dodatkowo, jeżeli mikrokontroler posiada urządzenia peryferyjne, to posiada również dodatkowe rejestry do zarządzania przerwaniami od tych urządzeń (np. PIC16F877A). W zależności od typu mikrokontrolera mogą to być rejestry: PIE1; PIR1; PIE2; PIR2. 
+</p><p>
+    W rejestrze INTCON znajduje się bit GIE (Global Interrupt Enable), który włącza (1) lub wyłącza (0) wszystkie przerwania. 
+</p><p>
+    Poszczególne przerwania mogą być uaktywniane lub wyłączane za pomocą odpowiednich bitów w rejestrze INTCON lub w rejestrach PIE1 i PIE2. Bit GIE jest zawsze wyzerowany podczas restartu mikrokontrolera.
+</p><p>
+    Instrukcja powrotu z przerwania (RETFIE) wychodzi z procedury przerwania jak również ustawia bit GIE, co pozwala na obsługę kolejnego przerwania. 
+</p>
+
+<p>
+<b>  W rejestrze INTCON znajdują się zawsze bity sterujące przerwaniami od: </b>
+<ul>
+    <li>Wejścia zewnętrznego INT, </li>
+    <li>zmiany stanu na wyprowadzeniach RB7:RB4 portu B </li>
+    <li>przepełnienia licznika układu TIMER0. </li>
+
+
+</ul><br />
+    Rejestr INTCON często posiada także bit PEIE (Peripherial Interrupt Enable) do aktywacji przerwań od układów peryferyjnych mikrokontrolera. 
+</p>
+
+<p>
+    Kiedy nadchodzi przerwanie bit GIE zostaje wyzerowany, aby wyłączyć przerwania przychodzące, adres powrotu jest odkładany na stosie, a licznik rozkazów jest ładowany wartością 0004h. 
+</p><p>
+    Następnie należy zidentyfikować przerwanie poprzez sprawdzanie znaczników flag poszczególnych przerwań w rejestrach INTCON, PIR1 i PIR2. 
+</p><p>
+    Ustawiony znacznik przerwania powinien zostać z powrotem wyzerowany programowo przed ponownym włączeniem wszystkich przerwań, aby uniknąć rekurencji.   
+
+</p>
+
+
+<p>
+    Znaczniki identyfikujące przerwania, są ustawiane w wyniku nastąpienia jakiegoś zdarzenia niezależnie od stanu bitów maskujących przerwania, w tym bitu GIE. Kiedy instrukcja zerująca bit GIE jest wykonywana, inne przerwania czekające na obsługę w następnym cyklu są ignorowane. 
+</p><p>
+    Jednostka centralna wykonuje instrukcję NOP w następnym cyklu po instrukcji zerowania bitu GIE. Przerwania, które zostały zignorowane nadal czekają na obsługę do czasu, aż bit GIE zostanie z powrotem ustawiony na jedynkę.
+</p>
+
+
+<p>
+<font color="red">
+<b>Pozostawienie wyzerowanego bitu GIE nie blokuje ustawiania flag wystąpienia niezamaskowanych przerwań przez układ sterowania mikrokontrolera. </b>
+</font>
+</p>
+
+
+<p>
+<b> Jeśli mikrokontroler jest w stanie uśpienia, gdy nadejdzie przerwanie jest on wybudzany, a następnie:  </b>
+<ol>
+    <li>Jeżeli GIE=1 wykonywana jest pierwsza instrukcja po rozkazie SLEEP, następnie zostaje wywołana (CALL) procedura obsługi przerwania z jednoczesnym wyzerowaniem bitu GIE do momentu wyjścia z procedury obsługi przerwania (RETFIE)
+    <br />
+    Aby zablokować wykonywanie pierwszej instrukcji po rozkazie sleep należy bezpośrednio po rozkazie SLEEP umieścić instrukcje NOP.</li>
+    <li>Jeżeli GIE=0 program wykonuje się od kolejnej instrukcji za rozkazem SLEEP, procedura obsługi przerwania nie jest wywoływana.</li>
+</ol>
+</p>
+
+
+
+
+</body>
+
+</html>

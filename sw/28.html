@@ -1,0 +1,76 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 28</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>28. NAPIĘCIE ZASILANIA TRYBY PRACY GENERATORA SYGNAŁU ZEGAROWEGO. REZONATORY KWARCOWE I CERAMICZNE. ZEWNĘTRZNY GENERATOR SYGNAŁU ZEGAROWEGO. OSCYLATOR RC</h2>
+<p>
+<b> Napięcie zasilania </b><br />
+
+<img src="/sw/img/28_1.jpg" />
+
+<br />
+Standardowe napięcie zasilające dla mikrokontrolerów PIC16 wynosi 5V. Jednak mikrokontrolery PIC16 mogą pracować w znacznie szerszym zakresie napięć wynoszącym od 2 do 6 V. Należy również pamiętać o tym, że mikrokontrolery pracujące z sygnałem zegarowym o częstotliwości 20 MHz, powinny być zasilane napięciem z przedziału od 4,5 do 6 V, a mikrokontrolery pracujące z częstotliwością 4 MHz &#8211; napięciem powyżej 4 V. Wyjątkiem jest seria mikrokontrolerów PIC16 oznaczona symbolem L (np. PIC16LF84), która może pracować już przy napięciu zasilającym równym 2V.
+</p>
+
+<p>
+<b> Generatory sygnału zegarowego </b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Mikrokontrolery PIC16 są przystosowane do pracy z 4 typami generatorów sygnału zegarowego:
+<ol><li>rezonator kwarcowy o niskiej częstotliwości (LP),</li>  
+<li>standardowy rezonator kwarcowy (XT), </li>
+<li>rezonator kwarcowy wysokiej częstotliwości (HS), </li>
+<li>zewnętrzny układ generatora RC (RC).</li>
+
+</ol>
+
+
+</p>
+
+<p>
+Wyboru generatora dokonuje się za pomocą dwóch bitów konfiguracyjnych FOSC1, FOSC0 w rejestrze konfiguracyjnym dostępnym tylko podczas programowania mikrokontrolera. <br />
+<br />
+<img src="/sw/img/28_2.jpg" /><br />
+
+Różnica pomiędzy trybami HS, XT i LP jest wynikiem zmiany wzmocnienia wewnętrznego wzmacniacza operacyjnego w mikrokontrolerze, co umożliwia uzyskanie różnych zakresów częstotliwości pracy generatora zegarowego.
+<br />
+<img src="/sw/img/28_3.jpg" /><br />
+
+
+</p>
+
+<p>
+<b> REZONATOR KWARCOWY I CERAMICZNY: </b>
+W trybach XT, LP i HS rezonator kwarcowy lub ceramiczny jest dołączony do wyprowadzeń OSC1 i OSC2 w celu stabilizacji częstotliwości sygnału zegarowego. Wewnętrzny generator mikrokontrolera wymaga zastosowania rezonatora o rezonansie równoległym:<br />
+<img src="/sw/img/28_4.jpg" /><br />
+Stosowanie rezonatorów szeregowych może spowodować różnicę częstotliwości generatora w stosunku do podanej przez producenta. 
+</p>
+
+
+<p>
+Jeżeli mikrokontroler jest sterowany sygnałem zegara ze źródła zewnętrznego, należy upewnić się, że w ustawieniach generatora jest wybrany tryb LP, XT lub HS. Zewnętrzny sygnał zegarowy powinien być dołączony do wyprowadzenia mikrokontrolera oznaczonego OSC1. Aby zredukować zakłócenia, wyprowadzenie OSC2 może zostać podłączone przez rezystor do masy, jednak może to spowodować zwiększenie poboru prądu przez mikrokontroler.
+</p>
+
+
+<p>
+<b> Podłączenie zewnętrznego źródła sygnału zegarowego: </b><br />
+<img src="/sw/img/28_5.jpg" /><br /><br />
+<b>Zewnętrzny układ generatora z rezonansem równoległym:</b><br />
+<img src="/sw/img/28_6.jpg" /><br />
+<b>Zewnętrzny układ generatora z rezonansem szeregowym:</b><br />
+<img src="/sw/img/28_7.jpg" /><br />
+<b>OSCYLATOR RC:</b><br />
+<img src="/sw/img/28_8.jpg" /><br />
+Wartość rezystora zewnętrznego REXT poniżej 2,2 kOm może spowodować niestabilność pracy generatora lub jego zatrzymanie. Wartości rezystancji REXT powyżej 1 M&#937; powodują wrażliwość układu na zakłócenia, wilgotność i upływności. Zalecana przez producenta wartość rezystora to od 3k&#937; do 100 k&#937;. Najtańszym rozwiązaniem jest zastosowanie jako generatora sygnału zegarowego prostego układu RC. Częstotliwość oscylatora jest funkcją napięcia zasilania, dołączonych wartości rezystancji i pojemności oraz temperatury pracy układu. Kolejną sprawą jest różnica w wykonaniu różnych egzemplarzy układu scalonego mikrokontrolera oraz różna tolerancja parametrów elementów pasywnych (RC). Oscylator może pracować bez dołączonego kondensatora zewnętrznego, jednak producent zaleca stosowanie kondensatora o wartości powyżej 20<br /><br />
+
+pF w celu eliminacji wpływu zakłóceń i poprawy stabilności pracy układu. Zbyt mała wartość pojemności może spowodować znaczne zmiany generowanej częstotliwości spowodowane zmianami pojemności zewnętrznych np. na płycie drukowanej lub obudowie mikrokontrolera. Częstotliwość oscylatora podzielona przez 4 jest dostępna na wyprowadzeniu OSC2/CLKOUT mikrokontrolera i może być wykorzystywana do synchronizacji innych układów współpracujących z mikrokontrolerem. Oscylator RC rozpoczyna pracę zaraz po tym, jak wartości napięć osiągną wymagany poziom określony w danych katalogowych. Czas startu oscylatora RC zależy przede wszystkim od:-wartości użytych elementów zewnętrznych RC;-szybkości narastania napięcia zasilającego;-temperatury otoczenia.<br />
+<br />
+
+
+</p>
+
+</body>
+
+</html>

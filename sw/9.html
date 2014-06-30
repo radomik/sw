@@ -1,0 +1,82 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 9</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>9. JĘZYK ASSEMBLERA MIKROKONTROLERÓW PIC16. ETYKIETY. MNEMONIKI. DYREKTYWY. MAKRODEFINICJE. OPERANDY. KOMENTARZE</h2>
+<p>
+    Asembler dla mikrokontrolerów PIC ma nazwę Microchip's Universal Assembler (MPASM). Dla trybu wiersza poleceń (środowiska MSDOS) jest przeznaczony program mpasm.exe, dla środowiska Windows -mpasmwin.exe. <br /><br />
+	Plik wejściowy z tekstem programu musi być z rozszerzeniem „.asm”. Asembler produkuje dwa pliki wyjściowe: 
+	<ol>
+		<li>plik obiektowy z rozszerzeniem „.o”</li>
+		<li>plik absolutnego kodu z rozszerzeniem „.hex”</li>
+	</ol>
+</p>
+
+<p>
+    Plik absolutnego kodu z rozszerzeniem „.hex” jest przeznaczony dla programatora, tj. urządzenia, które zapisuje program do programowej pamięci mikrokontrolera. Pliki obiektowe z rozszerzeniem „.o” zawierają kod przemieszczalny, który można dołączyć do innych podobnych plików w złożonym projekcie.
+</p>
+
+<p>
+<b>9.1. Format tekstu programu  </b>
+<br>Plik wejściowy z tekstem programu musi być z rozszerzeniem „.asm”. W tekście asemblerowym zezwolono korzystać tylko ze znaków ASCII (kody od 0 do 127).
+    Tekst programu w języku asemblera MPASM ma sztywny format.<br />
+    Każda instrukcja powinna zajmować odrębny wiersz z liczbą znaków nie więcej niż 255. Wiersz składa się z części nazywanych zwykle kolumnami, które są oddzielone separatorami. Separatorem może być spacja, dwukropek lub znak tabulacji.
+    <ul>
+		<li>Kolumna pierwsza jest przeznaczona na etykiety</li>
+		<li>Od kolumny drugiej mogą znajdować się mnemoniki i operandy instrukcji asemblera</li>
+		<li>Dyrektywy asemblera mogą znajdować się w każdą z kolumn</li>
+	</ul>
+</p>
+
+<p>
+<b> 9.2. Etykiety </b>
+<br>    Po etykiecie można użyć każdego separatora, nie tylko tradycyjnego dwukropka. Etykieta nie powinna mieć dwóch podkreśleń lub podkreślenia i cyfry z przodu. Jasne, że etykietą nie może być słowem kluczowym języka asemblera.<br />
+    Długość etykiety nie może być większa niż 32 znaki. Etykiety są czujne na wysokość liter.<br />
+        Etykiety pisane są w pierwszej kolumnie (label), służą do nazywania konkretnych adresów pamięci programu, istnieją jedynie na poziomie kodu asemblerowego.
+</p>
+
+
+<p>
+<b> 9.3. Mnemoniki </b>
+<br>Mnemoniki to skróty zastosowane do oznaczeń rozkazów procesora. Mnemoniki nie są czujne na wysokość liter.<br />
+    Mnemonik – słowa reprezentujące instrukcje, np. add, sub
+</p>
+
+
+<p>
+<b> 9.4. Operandy </b>
+<br>    Operand zawiera informację o tym, gdzie znajduje się dana. Operand musi być odseparowany od mnemonika spacją lub tabulacją.<br />
+Operand – wartość (argument) instrukcji, np. zmienna, stała, rejestr.
+</p>
+
+
+<p>
+<b> 9.5. Dyrektywy </b>
+<br>    Dyrektywy to instrukcji skierowane do asemblera. Dyrektywy nie są czujne na wysokość liter.<br />
+    Dyrektywy – komendy języka, które nie są bezpośrednio interpretowane przez mikroprocesor tylko przez kompilator dla ułatwienia programowania, np. 
+    <ul>
+		<li>PROCESSOR</li>
+		<li>BANKSEL (do wyboru aktywnego banku pamięci)</li>
+	</ul>
+</p>
+
+
+<p>
+<b> 9.6. Marodefinicje (makra) </b>
+<br>Makrodefinicje to zdefiniowane przez programistę grupy instrukcji asemblera. Asembler wpisuje tą grupę do kodu programu.
+</p>
+
+
+<p>
+<b> 9.7. Komentarze </b>
+<br>    Komentarz powinien być zapisany poza średnikiem i zajmować koniec wiersza. Komentarz może być napisany w języku narodowym.<br />
+    Zaczynają się od: ; nie są kompilowane, są to notatki ułatwiające zrozumienie danego fragmentu kodu.
+</p>
+
+</body>
+
+</html>

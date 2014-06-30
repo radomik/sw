@@ -1,0 +1,100 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+		<title>Nadzieja SW</title>
+		<script type="text/javascript">
+			var MAX_ZAD = 82;
+			
+			function loadContent(control_id, page_url) {
+				var xmlhttp;
+				if (window.XMLHttpRequest)
+				{// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp = new XMLHttpRequest();
+				}
+				else
+				{// code for IE6, IE5
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				
+				xmlhttp.onreadystatechange = function()
+				{
+					//console.log("xmlhttp.readyState="+xmlhttp.readyState+" xmlhttp.status="+xmlhttp.status);
+					//console.log("\tcontrol_id="+control_id+" page_url="+page_url);
+					if (xmlhttp.readyState==4 && xmlhttp.status==200)
+					{
+						document.getElementById(control_id).innerHTML=xmlhttp.responseText;
+					}
+				}
+				
+				// file exists in current folder
+				xmlhttp.open("GET", page_url, true);
+				xmlhttp.send();
+			}
+			
+			function loadXMLDoc() 
+			{ /// @url http://www.w3schools.com/ajax/tryit.asp?filename=tryajax_first
+				//console.log("loadXMLDoc");
+
+				var zad1_nr = document.getElementById("zad1_nr");
+				var zad1_nr_int = parseInt(zad1_nr.value);
+				if ((isNaN(zad1_nr_int)) || (zad1_nr_int < 1) || (zad1_nr_int > MAX_ZAD)) {
+					window.alert("Proszę o podanie numeru zadania od 1 do "+MAX_ZAD);
+					return;
+				} 
+				
+				//~ var zad2_nr = document.getElementById("zad2_nr");
+				//console.log("zad1_nr="+zad1_nr.value);
+				//~ console.log("zad2_nr="+zad2_nr.value);
+				
+				var zad1_url = "sw/"+zad1_nr.value+".html";
+				//~ var zad2_url = "sw/"+zad2_nr.value+".html";
+				
+				//console.log("zad1_url="+zad1_url);
+				//~ console.log("zad2_url="+zad2_url);
+				
+				var zad1_frame = document.getElementById("zad1_frame");
+				//console.log("zad1_frame="+zad1_frame);
+				
+				loadContent("zad1_content", zad1_url);
+				//loadContent("zad2_content", zad2_url);
+			}
+		</script>
+	</head>
+	
+	<body>
+	<h1>Nadzieja SW</h1>
+	Numer zadania&nbsp;&nbsp;<input type="text" id="zad1_nr" /><br/>
+<!--
+	Numer zad 2<input type="text" id="zad2_nr" /><br/>
+-->
+	
+	<button type="button" onclick="loadXMLDoc()">Wyświetl</button><br /><br />
+	
+	<b></b><a href="sw/">Lista zadań</a></b><br /><br />
+	<b></b><a href="sw/zadania_sw.pdf">Rozwiązania zadań PDF [~21MB]</a></b>
+	
+	<div id="zad1_content" />
+<!--
+	<div id="zad2_content" />
+-->
+	
+	
+	
+<!--<a href="async.html" class="link">Example: send a file to the console log (working)</a><br />
+		<a href="tryajax.html" class="link">Simple AJAX example (working)</a><br />
+		<a href="css_example.xhtml" class="link">CSS examples</a><br />
+		<a href="css_example_div.xhtml" class="link">CSS examples (2)</a><br />
+		<br />
+		
+
+		<form action="" id="formularz" >
+			<input type="text" name="x" /><br />
+			<input type="text" name="y" /><br />
+			<input type="submit" value="Oblicz" onclick="sendclick();" />
+		</form>
+		
+		<div id="wynik"></div>
+-->
+	</body>
+</html>

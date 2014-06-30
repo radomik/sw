@@ -1,0 +1,35 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 31</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>31. STRUKTURA PAMIĘCI PROGRAMU MIKROKONTROLERÓW PIC16F8X. STRUKTURA PAMIĘCI PROGRAMU MIKROKONTROLERA PIC16F877A</h2>
+<p>
+    Pamięć programu może mieć różną wielkość w zależności od wersji mikrokontrolera. Jest to ważny parametr, który w dużym stopniu przyczynia się do wyboru odpowiednie wersji układu. Maksymalny rozmiar pamięci programu w mikrokontrolerach PIC16 może wynosić 8K 14-bitowych słów. Adresowalną jednostką w pamięci programu jest 14-bitowe słowo rozkazowe. Rozmiar ten wynika z pojemności licznika rozkazów (PC). Pamięć programu jest podzielona na strony o wielkości 2K słów. Numer strony pamięci programu jest określony przez bity 4 i 3 w rejestrze PCLATH.<br />
+    <br /><br />
+    <h2>(PIC16F8X) Rozmiar pamięci: 1K słów 14-bitowych</h2>
+    <img src="/sw/img/31_1.png" /><br /><br />
+    <h2>(PIC16F877A) Rozmiar pamięci: 8K słów 14-bitowych (4 strony po 2K słów)</h2>
+    <img src="/sw/img/31_2.png" />
+</p>
+
+<p>
+<b> ORGANIZACJA PAMIĘCI PROGRAMU: </b>
+    W pamięci programu wyróżnione zostały dwa ważne adresy (rysunki) 
+Pierwszy z ich to adres 0000h nazywany wektorem restartu (zerowania) &#8211; Reset Vector
+Od tego adresu zaczyna się wykonanie programu po zerowaniu mikrokontrolera. Drugi wyróżniony adres to wektor przerwania 0004h &#8211; (Peripheral) Interrupt Vector, od tego adresu rozpoczyna się program obsługi przerwań.
+</p>
+
+<p>
+<b> Struktura pamięci programu mikrokontrolera PIC16F877A  </b>
+    Struktura pamięci programu w mikrokontrolerze PIC16F877A jest zbliżona do ogólnej struktury pamięci programu dla rodziny PIC16. Występuje tu 13-bitowy licznik rozkazów PC oraz 8&#8211;poziomowy stos. Wektor zerowania jest równy 0000h, natomiast wektor przerwania 0004h. Rozmiar pamięci programu jest równy 8KB. Pamięć jest podzielona na 4 strony, każda o rozmiarze 2KB.
+</p>
+
+
+
+</body>
+
+</html>

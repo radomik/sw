@@ -1,0 +1,61 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 54</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>54.1. WYŚWIETLACZ ALFANUMERYCZNY LCD. INFORMACJE OGÓLNE</h2>
+<p>
+    Wyświetlacz ciekłokrystaliczny LCD (ang. Liquid Crystal Display) jest to rodzaj wyświetlacza, w którym wykorzystywane jest zjawisko skręcenia płaszczyzny polaryzacji przez ciekłe kryształy. Światło jak każda fala elektromagnetyczna może być spolaryzowane, tzn. drgania ośrodka mogą odbywać się w jednej wyróżnionej płaszczyźnie.<br />
+    <br />
+        Elementem optycznym, który służy do polaryzowania światła jest filtr polaryzacyjny (polaroid). Niektóre substancje mają możliwość skręcania płaszczyzny polaryzacji. Jeżeli spolaryzowane światło zostanie przepuszczone przez polaroid o płaszczyźnie polaryzacji zgodnej z polaryzacją światła padającego, to zostanie ono przepuszczone. Jeżeli jednak płaszczyzna polaryzacji światła zostanie skręcona, to polaroid przepuści tylko tą część, która pozostanie zgodna z jego płaszczyzną polaryzacji. <br />
+        <br />
+            Ciekłe kryształy potrafią skręcać płaszczyznę polaryzacji światła, a dodatkowo kąt skręcenia może być ustalany za pomocą pola elektrycznego. Ta cecha została wykorzystana do budowy wyświetlacza LCD. Sterowanie zwykłym wyświetlaczem LCD jest dość skomplikowane, dlatego wielu producentów dostarcza układy sterowników, pozwalające na sterowanie wyświetlaczami za pomocą prostego interfejsu łączącego sterownik z mikrokontrolerem. <br />
+            <br />
+            <br />
+            Alfanumeryczny wyświetlacz LCD oparty na kontrolerze HD44780 stał się w tej dziedzinie standardem przemysłowym. Alfanumeryczny wyświetlacz LCD oparty na HD44780 pozwala na wyświetlenie maksymalnie 4 wierszy po 20 znaków każdy. Znaki mogą pochodzić z wewnętrznego generatora znaków, jak również z generatora znaków użytkownika (maksymalnie 8 znaków). Prosty interfejs łączący wyświetlacz z mikrokontrolerem wymaga od 6 do 11 linii sygnałowych w zależności od wybranego wariantu. Dodatkowo wyświetlacz wymaga podania napięcia zasilającego oraz napięcia sterującego kontrastem wyświetlacza<br />
+            <br />
+            <br />
+  <h2>54.2. INTERFEJS KOMUNIKACYJNY ZE STEROWNIKIEM HD44780. WARIANTY PODŁĄCZENIA WYŚWIETLACZA DO MIKROKONTROLERA. PODŁĄCZENIE WYŚWIETLACZA LCD DO MIKROKONTROLERA PIC16FX ZA POMOCĄ 4-BITOWEJ MAGISTRALI DANYCH I 2 SYGNAŁÓW STERUJĄCYCH E I RS</h2>               
+</p>
+
+<p>
+<b>     Komunikacja ze sterownikiem HD44780 odbywa się za pomocą dwukierunkowego interfejsu komunikacyjnego o poziomach TTL. Interfejs komunikacyjny składa się z następujących linii: </b>
+<ol>
+    <li>1. D0-D7 &#8211; dwukierunkowa magistrala danych; w przypadku pracy 8-bitowej wykorzystywane są wszystkie sygnały, dla 4-bitowej starszy półbajt (D4-D7); </li>
+    <li>2. RS (Register Select) &#8211; sygnał wyboru odbiorcy przesyłanych danych: gdy RS = 1 komunikacja odbywa się z rejestrem danych sterownika, dla RS = 0 zapisywane dane trafiają do rejestru konfiguracyjnego sterownika, odczyt następuje z rejestru stanu sterownika; </li>
+    <li>3. R/W (Read/Write) &#8211; sygnał wyboru kierunku transmisji danych; dla R/W = 1 dane są odczytywane z wyświetlacza, gdy R/W = 0 dane są przesyłane do wyświetlacza; </li>
+    <li>4. E (Enable) &#8211; sygnał strobujący magistrali danych; wartość E = 1 oznacza, że na magistrali danych są dane gotowe do odebrania. </li>
+
+</ol>
+</p>
+
+<p>
+<b>     Istnieje kilka wariantów podłączenia wyświetlacza do mikrokontrolera: </b>
+<ul>
+<li>8-bitowy interfejs danych wraz ze wszystkimi sygnałami sterującymi (11 linii sygnałowych), </li>
+<li>8-bitowy interfejs danych z sygnałami E i RS (10 linii sygnałowych), </li>
+<li>4 bitowy interfejs danych wraz ze wszystkimi sygnałami sterującymi (7 linii sygnałowych),</li>
+<li>4-bitowy interfejs danych z sygnałami E i RS (6 linii sygnałowych). </li>
+</ul>
+    Podłączenie wyświetlacza LCD do mikrokontrolera PIC16F84 za pomocą 4-bitowej magistrali danych i 2 sygnałów sterujących E i RS. Do poprawnej pracy wystarczy 6 linii: D4-D7 (interfejs 4-bitowy), RS oraz E. Sygnał R/W jest w takim przypadku na stałe podłączony do logicznego &#8222;0&#8221;, co oznacza, że można będzie wyłącznie wysyłać dane do sterownika wyświetlacza. W takiej konfiguracji nie jest możliwe odczytywanie danych z wyświetlacza, w tym m.in. sprawdzenie, czy wyświetlacz jest gotowy do przyjmowania kolejnych danych. <br />
+    <br />
+    Dlatego wszystkie operacje na wyświetlaczu wymagają opóźnień zgodnych z informacjami zawartymi w dokumentacji sterownika wyświetlacza.
+    <br />
+    <br />
+    <br />
+        Przykład podłączenia wyświetlacza LCD do mikrokontrolera za pomocą 4-bitowej magistrali danych i 2 sygnałów sterujących E i RS przedstawiony został na rysunku. Wszystkie sygnały sterujące zostały podłączone do portu B<br />
+        <br />
+        <br />
+        <br />
+        <img src="/sw/img/54_1.png" />
+
+
+</p>
+
+
+</body>
+
+</html>

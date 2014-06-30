@@ -1,0 +1,58 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 52</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>52.1. UKŁAD CZASOWY TIMER2. INFORMACJE OGÓLNE. SCHEMAT BLOKOWY UKŁADU CZASOWEGO TIMER2</h2>
+<p>
+Układ czasowy TIMER2 występuje w mikrokontrolerze PIC16F877A, natomiast nie występuje w mikrokontrolerze PIC16F84. Układ TIMER2 jest 8-bitowym czasomierzem składającym się z dwóch rejestrów: TMR2 i PR2. Rejestr TMR2 może być odczytywany, jak i zapisywany oraz jest zerowany podczas każdego restartu mikrokontrolera.<br />
+<br />
+<br />
+<img src="/sw/img/52_1.png" />
+</p>
+<h2>52.2. REJESTR T2CON. PRESKALER I POSTSKALER DLA UKŁADU TIMER2</h2>
+<p>
+<img src="/sw/img/52_2.png" /><br />
+<br />
+    
+    Wybór podziału częstotliwości preskalera odbywa się za pomocą bitów T2CKPS1, T2CKPS0 rejestru T2CON.<br /><br />Podział częstotliwości sygnału zegarowego odbywa się w stosunku 1:2N+1, gdzie N jest wartością binarną, w której bity 1 i 0 są określone wartościami bitów odpowiednio T2CKPS1 i T2CKPS0, przy czym dla N=2 i N=3 wartość podziału wynosi 16.<br />
+    <br />
+    
+</p>
+
+<p>
+<b> Układy preskalera i postskalera są zerowane w przypadku wystąpienia następujących sytuacji:   </b><br />
+<br />
+<ul>
+    <li>zapisu do rejestru TMR2; </li>
+    <li>zapisu do rejestru T2CON; </li>
+    <li>każdego typu zerowania mikrokontrolera (POR, MCLR, WDT lub BOR). </li>
+
+</ul>
+<br />
+<br />
+    Rejestr TMR2 nie jest zerowany w przypadku zapisu do rejestru T2CON. 
+<pre class="code">
+; program zlicza za pomocą TIMER2 
+; 125 impulsów zegara wewnętrznego 
+; z preskalerem 1/8 i postskalerem 1/4 
+ clrf    STATUS      ; bank 0 
+ movlw   B'0001101'  ; preskaler na 1/8 ; postskaler na 1/4 
+ movwf   T2CON       ; 
+ movlw   .125        ; licz do 125 
+ bsf     STATUS,RP0  ; bank 1 
+ movwf   PR2         ; 
+ bcf     STATUS,RP0  ; bank 0 
+ bsf     T2CON,TMR2ON ; włącz TIMER2
+
+</pre>
+</p>
+
+
+
+</body>
+
+</html>

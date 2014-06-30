@@ -1,0 +1,83 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 30</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>30. Określenie przyczyny restartu mikrokontrolera. Zawartość licznika rozkazów i rejestrów STATUS i PCON po wykonaniu zerowania. Tryb uśpienia.</h2>
+<p>
+    Przyczynę restartu mikrokontrolera można określić tylko w mikrokontrolerach PIC16F87x, ponieważ zawierają one rejestr specjalny PCON, którego dwa bity POR i BOR, w połączeniu z bitami TO i PD rejestru STATUS pozwalają jednoznacznie określić<br />
+    
+<b>przyczynę restartu mikrokontrolera:  </b><br />
+<img src="/sw/img/30_1.png" />
+
+</p>
+
+<p><br />
+<h2>Zawartość rejestrów STATUS, PCON oraz licznika rozkazów po wykonaniu różnych typów zerowania:</h2>
+
+<img src="/sw/img/30_1.png" /><br />
+    Ponadto jeżeli mikrokontroler jest uśpiony, a zostanie zgłoszone przerwanie, zostaje on wybudzony. Następnie wykonana zostaje pierwsza instrukcja po rozkazie SLEEP, po czym  następuje wywołanie (załadowanie PC wartości 0004h, z odłożeniem adresu powrotu na stosie) procedury obsługi przerwania.
+</p>
+
+<p>
+<b> Tryb uśpienia </b><br />
+Mikrokontroler wchodzi w tryb uśpienia w momencie wykonania rozkazu SLEEP. 
+Działania wykonywane w momencie przechodzenia w stan uśpienia:<br />
+<ol>
+<li> Jeżeli WDT jest aktywny wówczas jego licznik jest zerowany ale nadal pracuje</li>
+<li> Bit TO jest ustawiany, a PD zerowany</li>
+<li> Porty I/O zachowują swój stan sprzed wykonania rozkazu SLEEP</li><br />
+
+
+</ol>
+Aby zapewnić minimalny pobór mocy w trybie uśpienia należy zapewnić, że:
+
+<ul>
+<li>do pinów I/O nie są podłączone żadne układy mogące pobierać dodatkowy prąd</li>
+<li>przetwornik ADC jest wyłączony</li>
+<li>zewnętrzne oscylatory są wyłączone</li>
+<li>porty wejściowe są w stanie niskim lub wysokim, a nie pozostawione niepodłączone aby zapobiec występowaniu prądów przełączających spowodowanych niestabilnymi wejściami</li>
+<li>wejście TOCKI powinno być w stanie stabilnym: Vdd lub Vss</li>
+<li>rezystory podciągające portu B powinny być odłączone</li>
+<li>Pin MCLR powinien być w wysokim stanie logicznym</li><br />
+
+</ul>
+</p>
+
+<p>
+<b> Wybudzenie ze stanu uśpienia </b><br />
+
+Mikrokontroler może zostać wybudzony ze stanu uśpienia z powodu następujących zdarzeń:<br />
+<br />
+<ol>
+<li>podanie niskiego stanu logicznego na wejście MCLR</li>
+<li>wybudzenie przez układ timera WDT (jeśli WDT nie jest zablokowany)</li>
+<li>wystąpienie przerwania:<ul>
+                                        <li>zewnętrznego (zmiana na wejściu RB0/INT),</li>
+                                        <li>spowodowanego zmianą pinów RB0...RB3</li>
+                                        <li>od urządzeń peryferyjnych</li></ul>  </li>
+<br />
+
+
+
+</ol>
+<p>
+Podanie niskiego stanu na wejście MCLR powoduje restart mikrokontrolera. Wszystkie pozostałe zdarzenia są traktowane jako kontynuacja wykonania programu. Bity !TO i !PD rejestru STATUS mogą zostać użyte do określenia przyczyny resetu mikrokontrolera.
+</p><p>
+	Bit !PD, ustawiany w momencie włączenia zasilania jest zerowany w momencie wywołania instrukcji SLEEP. Bit !TO jest zerowany gdy licznik WDT się przepełni i spowoduje restart urządzenia.<br />
+</p>
+    <br />
+    <a href="/sw/16.html">Więcej szczegółów: zadanie 16</a>
+
+</p>
+
+
+
+
+
+</body>
+
+</html>

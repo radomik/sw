@@ -1,0 +1,103 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 56</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h1>56. Komendy sterujące. Dodatkowe parametry komend. Opis komend sterownika HD44780</h1>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Sterownik HD44780 posiada 8 komend sterujących, których kody zapisywane są w rejestrze IR. Identyfikacja komendy odbywa się poprzez ustalenie pozycji najstarszej jedynki w kodzie komendy. Wiele komend posiada dodatkowe parametry, które dołączane są do komendy na bitach młodszych, niż bit identyfikujący komendę.
+</p>
+
+<p>
+    <b>Komendy sterujące w skrócie (dla: RS=0, R/W=0)</b><br />
+    <table border="1" class="code">
+        <tr>
+            <th>bity D7 ... D0</th>
+            <th>Funkcja</th>
+        </tr>
+        <tr>
+            <td>0x01</td>
+            <td>Clear display</td>
+        </tr>
+        <tr>
+            <td>0x02</td>
+            <td>Cursor Home</td>
+        </tr>
+        <tr>
+            <td>0x04&nbsp;|&nbsp;I/D&nbsp;|&nbsp;S&nbsp;&nbsp;&nbsp;|</td>
+            <td>Entry Mode Set</td>
+        </tr>
+        <tr>
+            <td>0x08&nbsp;|&nbsp;D&nbsp;&nbsp;&nbsp;|&nbsp;C&nbsp;&nbsp;&nbsp;|&nbsp;B&nbsp;&nbsp;|</td>
+            <td>Włącz/wyłącz wyświetlacz / kursor / miganie</td>
+        </tr>
+        <tr>
+            <td>0x10&nbsp;|&nbsp;S/C&nbsp;|&nbsp;R/L&nbsp;|&nbsp;-&nbsp;&nbsp;|&nbsp;-&nbsp;&nbsp;|</td>
+            <td>Przesunięcie wyświetlacza/kursora</td>
+        </tr>
+        <tr>
+            <td>0x20&nbsp;|&nbsp;DL&nbsp;&nbsp;|&nbsp;N&nbsp;&nbsp;&nbsp;|&nbsp;F&nbsp;&nbsp;|&nbsp;-&nbsp;&nbsp;|&nbsp;-&nbsp;&nbsp;|</td>
+            <td>Funkcje podstawowe</td>
+        </tr>
+        <tr>
+            <td>0x40&nbsp;|&nbsp;{&nbsp;Adres&nbsp;CGRAM&nbsp;6bit&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</td>
+            <td>Ustawienie adresu CGRAM</td>
+        </tr>
+        <tr>
+            <td>0x80&nbsp;|&nbsp;{&nbsp;Adres&nbsp;DDRAM&nbsp;7bit&nbsp;}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</td>
+            <td>Ustawienie adresu DDRAM</td>
+        </tr>
+    </table>
+</p>
+<hr />
+<p>
+    <b>Komenda „Entry mode set” (kod 0x04)</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>I/D</b> – zwiększ(1)/zmniejsz(0) adres DDRAM po wpisaniu znaku<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>S</b> – włącz(1)/wyłącz(0) przesuwanie wyświetlacza przy zapisie znaku do DDRAM
+</p>
+<p>
+    <b>Komenda „Display on/off” (kod 0x08)</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>D</b> – włącz(1)/wyłącz(0) wyświetlacz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>C</b> – włącz(1)/wyłącz(0) kursor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>B</b> – włącz(1)/wyłącz(0) miganie znaku na pozycji kursora
+</p>
+<p>
+    <b>Komenda „Cursor/display shift” (kod 0x10)</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>S/C</b> – przesuń wyświetlacz(1)/kursor(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>R/L</b> – o jeden znak w prawo(1)/lewo(0)
+</p>
+<p>
+    <b>Komenda „Function set” (kod 0x20)</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>DL</b> – magistrala danych 4 bity(0)/8 bitów(1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>N</b> – jeden(0)/dwa(1) wiersze<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>F</b> – 5x8(0)/5x10(1) czcionka
+</p>
+<p>
+    <b>Komenda „Display Clear” (kod 0x01)</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Powoduje wyczyszczenie wyświetlacza (cała pamięć DDRAM jest wypełniana kodem spacji - 0x20), powrót kursora pod adres 0x00 oraz przywraca wyświetlanie od adresu 0x00 (likwiduje przesunięcie realizowane komendą Display Shift).
+</p>
+<p>
+    <b>Komenda „Return Home” (kod 0x02)</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Powoduje powrót kursora pod adres 0x00 oraz przywraca wyświetlanie od adresu 0x00 (likwiduje przesunięcie realizowane komendą Display Shift).
+</p>
+<p>
+    <b>Komenda „Set CGRAM” (kod 0x40)</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Służy do ustawiania adresu pamięci CGRAM, pod który będą zapisywane dane. Po wykonaniu tej komendy każdorazowe wysłanie danej do wyświetlacza powoduje zapisanie jej w pamięci CGRAM.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Po zapisaniu danej adres jest zwiększany lub zmniejszany w zależności od ostatnio ustawionej wartości bitu l/D komendy Entry Mode Set. Aby móc wpisywać dane do pamięci DDRAM należy wykonać komendę „Set DDRAM”.
+</p>
+<p>
+    <b>Komenda „Set DDRAM” (kod 0x80)</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Służy do ustawiania adresu pamięci DDRAM, pod który będą zapisywane dane. Pozwala ona na umieszczanie tekstu w dowolnym miejscu wyświetlacza.
+</p>
+<hr />
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Zapis danej do CGRAM lub DDRAM: RS=1, R/W=0, D7...D0 = zapisywana dana. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Wybór aktywnej pamięci (i adresu) dokonuje się poprzez wysłanie komendy ustawienia adresu CGRAM lub DDRAM.
+</p>
+
+</body>
+
+</html>

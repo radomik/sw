@@ -1,0 +1,71 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 45</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>45. PRZERWANIE OD UKŁADU TIMER0. ALGORYTM PROCEDURY OBSŁUGI PRZERWANIA OD UKŁADU TIMER0</h2>
+<p>
+<b>  </b>
+    Możliwość identyfikacji przerwania od układu czasowego TIMER0 istnieje zarówno w mikrokontrolerze PIC16F877A, jak i w mikrokontrolerze PIC16F84. Przerwanie jest generowane wówczas, gdy rejestr TMR0 zmieni swój stan z wartości FFh na 00h. <br />
+    <br />
+        Kiedy nastąpi przepełnienie licznika, zostaje ustawiony znacznik T0IF w rejestrze INTCON. Przerwanie to może zostać wyłączone poprzez wyzerowanie bitu T0IE w rejestrze INTCON, jednak nie blokuje to możliwości ustawienia znacznika T0IF podczas przepełnienia rejestru TMR0. Bit znacznika T0IF musi być wyzerowany w procedurze obsługi przerwania przed powtórnym włączeniem przerwań. 
+</p>
+
+<p>
+<b>Algorytm obsługi przerwania TIMER0 pokazano na przykładzie  </b>
+<pre class="code">
+w_temp      EQU 0x7D    ;   zmienne używane do zachowywania kontekstu 
+status_temp EQU 0x7E    ;   (zawartości rejestrów) 
+pclath_temp EQU 0x7F    ;    
+ORG   0x000             ; wektor zerowania 
+    nop                                 ; 
+    goto    MAIN        ; skok do głównego programu 
+ORG     0x004           ; wektor przerwania 
+    movwf   w_temp      ;   zapisz zawartości rejestrów: 
+    movf    STATUS,w    ; W 
+    movwf   status_temp ; STATUS 
+    movf    PCLATH,w    ; PCLATH 
+    movwf   pclath_temp ;   
+    banksel INTCON      ; przejdź do banku 0 
+
+    btfss   INTCON, T0IF ; sprawdź czy przyszło przerwanie od TIMER0 
+    goto    INT_END      ; jeśli nie to przejdź na koniec 
+    bcf     INTCON, T0IF ; jeśli tak to wyzeruj flagę T0IF 
+...                      ; obsłuż przerwanie
+...                      ;
+INT_END 
+    movf    pclath_temp,w ; przywróć poprzednie zawartości rejestrów
+    movwf   PCLATH        ; PCLATH 
+    movf    status_temp,w ; STATUS 
+    movwf   STATUS        ; W 
+    swapf   w_temp,f      ;
+    swapf   w_temp,w      ;
+    retfie                ; powrót z przerwania
+ 
+MAIN    ;   program główny 
+    ;; inicjalizacja preskalera 
+    bsf     STATUS, RP0    ; wybór banku 1 w celu uzyskania dostępu do OPTION_REG 
+    movf    OPTION_REG, 0 
+    andlw   b'10000000'    ; wyczyść wszystkie bity poza (7) 
+    iorlw   b'01000000'    ; INTEDG=1, T0CS=0, T0SE=0, PSA=0, PS = 1/2 
+    movwf   OPTION_REG 
+    bcf     STATUS, RP0    ; wybór banku 0
+
+    bsf     INTCON, GIE    ; włącz przerwania 
+    bsf     INTCON, T0IE   ; włącz przerwania od TMR0
+_E
+    movlw   .123       ; początkowa wartość licznika TMR0
+    movwf   TMR0       ; 
+    sleep              ; przejdź w tryb uśpienia do czasu wystąpienia przerwania
+    goto        _E     ; po obsłużeniu przerwania
+</pre>
+</p>
+
+
+
+</body>
+
+</html>

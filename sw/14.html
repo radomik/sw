@@ -1,0 +1,213 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 14</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h1>14. Instrukcje logiczne andlw, andwf, iorlw, iorwf, xorlw, xorwf i comf</h1>
+
+<br />
+<p>
+    <pre>
+    <b>14.1. ANDLW k</b>
+<i>Funkcja:</i>    Iloczyn logiczny stałej k i zawartości rej. W
+<i>Argumenty:</i>  0 &lt;= k &lt;= 255
+<i>Działanie:</i>  k &amp; W -&gt; W
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  11 1001 kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Do rejestru W przesyłany jest wynik iloczynu logicznego rejestru W i 8-bitowej stałej k.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ movlw  b'10101101' ; W := 10101101 (binarnie)
+ andlw  b'00001111' ; W := 00001111 & W
+ ; Po wykonaniu rozkazów:
+ ; W = b'00001101', Z = 0
+
+ movlw  b'00001010' ; W := 00001010 (binarnie)
+ andlw  b'11110000' ; W := 11110000 & W
+ ; Po wykonaniu rozkazów: 
+ ; W = b'00000000', Z = 1
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>14.2. ANDWF f, d</b>
+<i>Funkcja:</i>    Iloczyn logiczny zawartości rej. W i zawartości rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  (f) &amp; W -&gt; rejestr przeznaczenia określony bitem d
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  00 0101 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Do rejestru przeznaczenia przesyłany jest wynik iloczynu logicznego rejestru W i rejestru o adresie f<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ REG    equ 0x20
+ VAL    equ b'11011010'
+ movlw  VAL         ; W := VAL = b'11011010'
+ movwf  REG         ; REG := W = b'11011010'
+ swapf  REG, f      ; REG := b'10101101'
+ movlw  b'00001111' ; W := b'00001111'
+ andwf  REG, 0      ; W := b'00001101'  (starsza tetrada z VAL)
+ swapf  REG, f      ; REG := b'11011010'
+ movlw  b'00001111' ; W := b'00001111'
+ andwf  REG, 0      ; W := b'00001010'  (młodsza tetrada z VAL)
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>14.3. IORLW k</b>
+<i>Funkcja:</i>    Suma logiczna stałej k i zawartości rej. W
+<i>Argumenty:</i>  0 &lt;= k &lt;= 255
+<i>Działanie:</i>  k | W -&gt; W
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  11 1000 kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Do rejestru W przesyłany jest wynik sumy logicznej rejestru W i 8-bitowej stałej k.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ movlw  b'10101101' ; W := 10101101 (binarnie)
+ iorlw  b'00001111' ; W := 00001111 | W
+ ; Po wykonaniu rozkazów: 
+ ; W = b'10101111', Z = 0
+
+ movlw  b'00000000' ; W := 00000000 (binarnie)
+ iorlw  b'00000000' ; W := 00000000 | W
+ ; Po wykonaniu rozkazów: 
+ ; W = b'00000000', Z = 1
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>14.4. IORWF f, d</b>
+<i>Funkcja:</i>    Suma logiczna zawartości rej. W i zawartości rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  (f) | W -&gt; rejestr przeznaczenia określony bitem d
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  00 0100 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Do rejestru przeznaczenia przesyłany jest wynik sumy logicznej  rejestru W i rejestru o adresie f<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+
+<p>
+Przykład:&nbsp;&nbsp;&nbsp;&nbsp;<b class="code">IORWF RESULT, 0</b><br />
+Przed wykonaniem instrukcji:
+<pre class="code">
+    RESULT = 0x13
+    W      = 0x91
+</pre>
+Po wykonaniu instrukcji:
+<pre class="code">
+    RESULT = 0x13
+    W      = 0x93
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>14.5. COMF f, d</b>
+<i>Funkcja:</i>    Zaneguj zawartość rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  ~ (f) -&gt; rejestr przeznaczenia określony bitem d
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  00 1001 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Zawartość rejestru o adresie f jest negowana bitowo. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ movlw  b'10101101' ; W := b'10101101'
+ movwf  PORTA       ; PORTA := W = b'10101101'
+ call   delay_2s
+ comf   PORTA       ; PORTA := ~PORTA = b'01010010'
+    </pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>14.6. XORLW k</b>
+<i>Funkcja:</i>    Suma logiczna modulo 2 stałej k i zawartości rej. W
+<i>Argumenty:</i>  0 &lt;= k &lt;= 255
+<i>Działanie:</i>  k ^ W -&gt; W
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  11 1010 kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Do rejestru W przesyłany jest wynik sumy logicznej modulo 2 rejestru W i 8-bitowej stałej k.
+</p>
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ movlw  b'10101101' ; W := 10101101 (binarnie)
+ xorlw  b'00001111' ; W := 00001111 ^ W
+ ; Po wykonaniu rozkazów: 
+ ; W = b'10100010', Z = 0
+
+ movlw  b'11001110' ; W := 11001110 (binarnie)
+ xorlw  b'11001110' ; W := 11001110 ^ W
+ ; Po wykonaniu rozkazów: 
+ ; W = b'00000000', Z = 1
+    </pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>14.7. XORWF f, d</b>
+<i>Funkcja:</i>    Suma logiczna modulo 2 zawartości rej. W i zawartość rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  (f) ^ W -&gt; rejestr przeznaczenia określony bitem d
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  00 0110 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Do rejestru przeznaczenia przesyłany jest wynik sumy logicznej modulo 2 rejestru W i rejestru o adresie f. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+<p>
+Przykład:&nbsp;&nbsp;&nbsp;&nbsp;<b class="code">XORWF REG, 1</b><br />
+Przed wykonaniem instrukcji:
+<pre class="code">
+    REG  = 0xAF
+    W    = 0xB5
+</pre>
+Po wykonaniu instrukcji:
+<pre class="code">
+    REG  = 0x1A
+    W    = 0xB5
+</pre>
+</p>
+
+</body>
+
+</html>
+

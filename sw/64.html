@@ -1,0 +1,198 @@
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 64</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>64.1. Rejestry ADCON0 i ADCON1</h1>
+
+<p>
+    <b>Rejestr konfiguracyjny ADCON0</b><br />
+    <img src="/sw/img/64_1.png" /><br />
+    <ul>
+        <li>
+            bit 7-6: ADCS1:ADCS0: Wybór zegara taktującego układ przetwornika wspólnie z ADCON1&lt;ADCS2&gt;<br />
+            <table border="1">
+                <tr>
+                    <th>ADCON1&lt;ADCS2&gt;</th>
+                    <th>ADCON0&lt;ADCS1:ADCS0&gt;</th>
+                    <th>Częstotliwość</th>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>00</td>
+                    <td>Fosc/2</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>01</td>
+                    <td>Fosc/8</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>10</td>
+                    <td>Fosc/32</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>11</td>
+                    <td>FRC (wewnętrzny oscylator układu ADC)</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>00</td>
+                    <td>Fosc/4</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>01</td>
+                    <td>Fosc/16</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>10</td>
+                    <td>Fosc/64</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>11</td>
+                    <td>FRC (wewnętrzny oscylator układu ADC)</td>
+                </tr>
+            </table>
+        </li><br />
+        <li>
+            bity 5-3: CHS2:CHS0: Wybór wejściowego kanału analogowego<br />
+            <ul>
+                <li>000 – kanał 0 (AN0)</li>
+                <li>001 – kanał 1 (AN1)</li>
+                <li>010 – kanał 2 (AN2)</li>
+                <li>011 – kanał 3 (AN3)</li>
+                <li>100 – kanał 4 (AN4)</li>
+                <li>101 – kanał 5 (AN5)</li>
+                <li>110 – kanał 6 (AN6)</li>
+                <li>111 – kanał 7 (AN7)</li>
+            </ul>
+        </li><br />
+        <li>
+            bit 2 – GO/!DONE: Status konwersji ADC. Istotny gdy <b>ADON=1</b><br />
+            <ul>
+                <li>1 – konwersja aktualnie trwa, ustawienie tego bitu rozpoczyna konwersje, bit jest automatycznie czyszczony przez układ gdy konwersja się kończy</li>
+                <li>0 – brak aktywnej konwersji </li>
+            </ul>
+        </li><br />
+        <li>
+            bit 0: ADON<br />
+            <ul>
+                <li>1 – układ ADC jest włączony</li>
+                <li>0 – układ ADC wyłączony i nie pobiera żadnej mocy</li>
+            </ul>
+        </li>
+    </ul>
+</p><br />
+<p>
+    <b>Rejestr konfiguracyjny ADCON1</b><br />
+    <img src="/sw/img/64_2.png" /><br />
+    <ul>
+        <li>
+            bit 7 – ADFM – sposób zapisu wyniku konwersji
+            <ul>
+                <li>0 – wyjustowanie do <b>lewej strony</b>. Sześć bardziej znaczących bitów w ADRESL odczytywane jako 0</li>
+                <li>0 – wyjustowanie do <b>prawej strony</b>. Sześć bardziej znaczących bitów w ADRESH odczytywane jako 0</li>
+            </ul>
+        </li><br />
+        <li>
+            bit 6 – ADCS2: Wybór zegara taktującego układ przetwornika wspólnie z ADCON0&lt;ADCS1:ADCS0&gt; (patrz: ADCON0)
+        </li><br />
+        <li>
+            bity 3-0 – PCFG3:PCFG0 – konfiguracja portów wejściowych przetwornika
+        </li><br />
+    </ul>
+</p><br />
+<h2>64.2. Skonfigurowanie przetwornika A/C. Określenie trybu pracy wejść</h2>
+<p>
+<img src="/sw/img/64_3.jpg" /><br />
+A – wejście analogowe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D – cyfrowe wejście/wyjście<br />
+C/R – # wejściowych kanałów analogowych / # napięć odniesienia dla ADC<br />
+</p>
+<h2>64.3. Częstotliwość taktowania układu przetwornika A/C. Wybór wejścia, które zostanie poddane przetwarzaniu</h2>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Czas konwersji pojedynczego bitu oznaczany jest jako T_AD. Dla rozdzielczości 10-bitowej minimalny czas konwersji wynosi 12 T_AD. Źródło taktowania przetwornika ADC jest wybierane programowo. Istnieje siedem możliwych wartości T_AD:
+<ul>
+    <li>2 Tosc, 4 Tosc, 8 Tosc, 16 Tosc, 32 Tosc, 64 Tosc</li>
+    <li>przy użyciu wewnętrznego oscylatora RC układu ADC: T_AD = 2 – 6 µs</li>
+</ul><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Dla uzyskania poprawnego wyniku konwersji czas T_AD powinien wynieść minimum 1.6 µs.<br />
+<img src="/sw/img/64_4.jpg" /><br />
+</p>
+<p>
+<b>Konfiguracja analogowych wejść portów</b>
+&nbsp;&nbsp;&nbsp;&nbsp;Rejestry ADCON1 oraz rejestry TRISx kontrolują działanie wejść analogowych. Wejścia analogowe powinny mieć ustawione odpowiednie bity TRISx na 1 (tryb wejściowy). Jeżeli port jest w trybie wyjściowym konwersji zostanie poddany wyjściowy stan logiczny na tym porcie (V_OH lub V_OL)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Przy próbie <b>programowego odczytania</b> stanu pinów <b>analogowych</b> portów zostanie <b>zwrócone zawsze 0</b>.
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Podanie napięcia <b>analogowego</b> na wejścia skonfigurowane jako <b>cyfrowe</b> może spowodować, że przez wejściowe bufory przepłynie <b>prąd</b> który <b>przekracza dopuszczalny</b>.
+</p>
+<p>
+    <pre class="code">
+    <b>/* Przykład konfiguracji przetwornika ADC */</b>
+    ; Częstotliwość taktowania ADC: Fosc/8
+    ; wejście analogowe RA0/AN0
+    ; GO/DONE = 0 (nie przetwarza)
+    ; ADON=1, przetwornik włączony
+    banksel         ADCON0 
+    movlw           b'01000001' 
+    movwf           ADCON0
+
+    ; Częstotliwość taktowania ADC: Fosc/8
+    ; ADFM=0, starsza część wyniku w ADRESH, młodsze dwa bity w ADRESL
+    ; PCFG3...PCFG0 = 1110 – RA7...RA1 – cyfrowe, RA0 – analogowy, 
+    ; standardowe napięcia odniesienia (Vdd i Vss)
+    banksel         ADCON1 
+    movlw           b'00001110' 
+    movwf           ADCON1  
+
+    ; porty RA7...RA1 w trybie wyjściowym (cyfrowe) 
+    ; port  RA0 w trybie wejściowym (analogowy) 
+    banksel         TRISA 
+    movlw           b'00000001' 
+    movwf           TRISA
+
+    ; Konfiguracja przerwań
+    banksel     PIE1 
+    bsf         PIE1, ADIE       ; włączenie przerwania od przetwornika ADC 
+    banksel     PIR1 
+    bcf         PIR1, ADIF       ; wyczyszczenie flagi wystąpienia przerwania ADC 
+    
+    banksel     PORTA            ; przełączenie na bank 0     
+    bsf         INTCON, PEIE     ; zezwolenie na przerwania od urządzeń peryferyjnych 
+    bsf         INTCON, GIE      ; globalne zezwolenie na przerwania
+
+read_loop:
+    ; uruchomienie konwersji i oczekiwanie na jej zakończenie 
+    banksel     ADCON0 
+    bsf         ADCON0, GO_DONE  ; ustawienie bitu GO/DONE
+    btfsc       ADCON0, GO_DONE
+    goto        $-1              ; czekaj dopóki GO_DONE=1
+    banksel     PIR1 
+    bcf         PIR1, ADIF       ; wyczyszczenie flagi wystąpienia przerwania ADC
+    banksel     ADRESH 
+    movf        ADRESH, w        ; przenieś górny bajt wyniku do W 
+    banksel     PORTA
+    </pre>
+</p>
+
+</body>
+</html>
+
+
+
+
+
+
+

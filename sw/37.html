@@ -1,0 +1,46 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 37</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>37. REJESTR STATUS. STRUKTURA REJESTRU STATUS. BITY REJESTRU STATUS </h2>
+<p>
+<img src="/sw/img/37_1.png" />
+
+</p>
+
+<p>
+<b>     Rejestr STATUS zawiera różne ważne znaczniki systemowe np. określające wynik wykonanej przez jednostkę ALU operacji. </b>
+<ul>
+<li>bit 0 - C &#8211; znacznik przeniesienia, zostanie ustawiony (C=1), jeśli przy wykonaniu operacji wystąpi przeniesienie ze starszego bitu wyniku; </li>
+<li>bit 1 - DC &#8211; znacznik przeniesienia pomocniczego, zostanie ustawiony (DC=1), jeśli przy wykonaniu operacji wystąpi przeniesienie z młodszej tetrady wyniku (bitu 3);</li>
+<li>bit 2 - Z &#8211; znacznik wyniku zerowego, zostanie ustawiony (Z=1), jeśli wynik operacji jest równy zero; </li>
+<li>bit 3 - !PD &#8211; znacznik uśpienia mikrokontrolera, zostanie wyzerowany (PD=0) po wprowadzeniu mikrokontroler instrukcją SLEEP w tryb uśpienia; </li>
+<li>bit 4 - !TO &#8211; znacznik przepełnienia licznika nadzorcy WDT, zostanie wyzerowany  (TO=0) po przepełnieniu licznika WDT; </li>
+<li>bity 6 i 5 - RP1:RP0 &#8211; bity rozszerzenia adresu przy adresowaniu bezpośrednim pamięci danych. Bity te stanowią starszą część 9-bitowego adresu pamięci danych, wartość zapisana w tych bitach określa numer banku pamięci (0 - 3), do którego wykonuje się odwołanie. Młodsza 7-bitowa część adresu pobierana jest z kodu instrukcji i adresuje rejestr wybranego banku  pamięci; </li>
+<li>bit 7 - IRP &#8211; starszy 9-ty bit adresu przy adresowaniu pośrednim pamięci danych. Młodsze 8 bitów adresu przechowują się w rejestrze FSR. </li>
+
+</ul>
+Rejestr stanu STATUS może występować jako operand instrukcji oraz rejestr docelowy wyniku. W takim przypadku niemożliwa jest zmiana stanu bitów !PD i !TO, a bity znaczników C, DC oraz Z zostaną zmodyfikowane przez jednostkę ALU zgodnie z tym, czy powstały odpowiednie przeniesienia i czy otrzymany został wynik zerowy. <br />
+<br />
+<br />
+    Do programowej modyfikacji zawartości rejestru STATUS należy używać instrukcji, które nie zmieniają stanu znaczników (bcf, bsf, swapf, movwf). 
+</p>
+
+<p>
+<b> Odczyt i modyfikacja:   </b>
+<pre class="code">
+movf  STATUS,W     ; przenieś zawartość rejestru ; STATUS do W
+bcf   STATUS, RP0  ; wyzeruj bit RP0 rejestru STATUS 
+bsf   STATUS, RP1  ; ustaw bit RP1 rejestru STATUS
+</pre>
+</p>
+
+
+
+</body>
+
+</html>

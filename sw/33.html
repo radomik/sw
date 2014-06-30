@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 33</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>33. STRUKTURA PAMIĘCI DANYCH MIKROKONTROLERÓW PIC16F8X. REJESTRY SPECJALNE I UNIWERSALNE</h2>
+<p>
+    Pamięć danych mikrokontrolerów PIC16 ma organizację 8-bitową.  Instrukcje dostępu do pamięci umożliwiają odczyt i zapis poszczególnych bajtów pamięci. Pamięć danych ma organizację bankową, dzieli się na banki o rozmiarze 128 B każdy. Maksymalnie układ mikrokontrolera może posiadać do czterech banków pamięci. Rozmiar pamięci danych i liczba zaimplementowanych banków zależy od wersji mikrokontrolera.<br />
+    <br />
+    <br />
+    W pamięci danych umieszczone są rejestry dwóch rodzajów:<br />
+<ul>
+<li>rejestry specjalne SFR (Special Function Register);</li>
+<li>rejestry uniwersalne GPR (General Purpose Registers). Rejestry uniwersalne GPR służą do przechowywania danych, operandów instrukcji, a rejestry SFR &#8211; do komunikacji z blokami peryferyjnymi mikrokontrolera.</li>
+
+
+</ul>
+Rejestry SFR zajmują obszary o niskich adresach w poszczególnych bankach pamięci, powyżej obszaru SFR umieszczone są rejestry GPR. Umieszczenie rejestrów GPR i SFR w jednym obszarze adresowania pozwala na ujednolicenie sposobów dostępu tych funkcjonalnie różnych rejestrów. <br />
+<br />
+Najważniejsze, najczęściej wykorzystywane rejestry SFR powielane są w kilku bankach pamięci w celu zmniejszenia liczby przełączeń banków, przyśpieszenia dostępu tych rejestrów, usprawnienia sterowania blokami peryferyjnymi. <br />
+<br />
+Pole adresu  zawarte w kodzie instrukcji jest 7-bitowe i pozwala zaadresować do 128 B pamięci. Jeśli mikrokontroler posiada pamięć danych większą niż 128B, wykorzystuje się mechanizm podziału pamięci na banki rozmiarem 128B. <br />Bity RP1:RP0 w rejestrze STATUS przechowują numer aktywnego banku pamięci (0-3), 7-bitowy adres zawarty w kodzie instrukcji adresuje rejestr z aktywnego banku pamięci.
+
+</p>
+
+<p>
+<h2>STRUKTURA PAMIĘCI DANYCH MIKROKONTROLERÓW PIC16F8X</h2>
+<img src="/sw/img/33_1.jpg" />
+
+
+</p>
+
+
+
+</body>
+
+</html>

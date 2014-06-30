@@ -1,0 +1,68 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 76</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>76. Łączenie wyjść bramek za pomocy typów wand i wor. Typ sieci wand. Typ sieci wor. Wartości sygnałów w sieci</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Sieć (net) reprezentuje fizyczne połączenia pomiędzy elementami. Nie jest elementem pamiętającym (wyjątek: <b>trireg</b>). Wartość jest ustalana na podstawie sygnałów zasilających. Domyślna wartość portów we/wy: wire. Jeżeli nie ma <b>połączenia zasilającego</b>, to jest w stanie <b>wysokiej impedancji z (!)</b>.
+    </p>
+    <p>
+<b>Typy sieci:</b><br />
+<ul>
+    <li>wire, tri – węzeł, węzeł trójstanowy</li>
+    <li>supply0, supply1 – stała wartość logiczna</li>
+    <li>wand, wor – iloczyn, suma na drucie</li>
+    <li>trior, triand, tri0, tri1, trireg</li>
+</ul>
+    </p>
+    <h2>połączenie  WAND / TRIAND</h2>
+    <p>
+        <pre class="code">
+module wand_triand_module(input A, B, C, output wand Y);
+    assign Y = A & B; // przypisanie ciągłe do typu sieciowego
+    assign Y = B | C; // przypisanie ciągłe do typu sieciowego
+endmodule
+        </pre>
+    </p>
+    <h2>połączenie  WOR / TRIOR</h2>
+    <p>
+        <pre class="code">
+module wor_trior_module(input A, B, C, output wor Y);
+    assign Y = A & B;
+    assign Y = B | C;
+endmodule
+        </pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Połączenia WAND i WOR umożliwiają nam użycie na połączenie, dowolnych funkcji wynikowych za pomocą bramki AND lub OR np.:
+    </p>
+    <p>
+        <pre class="code">
+<b>// Dla funkcji WOR</b>
+wor      Y;
+assign Y = F & G;
+assign Y = B | C;
+// lub:
+assign Y = (F & G) | (B | C);
+
+<b>// Dla funkcji WAND</b>
+wand Y;
+assign Y = F & G;
+assign Y = B | C;
+// lub:
+assign Y = (F & G) & (B | C);
+        </pre>
+    </p>
+</body>
+
+</html>
+
+

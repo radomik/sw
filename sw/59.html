@@ -1,0 +1,179 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 59</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>59.1. Odczytywanie i zapisywanie danych do pamięci EEPROM</h1>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Zarówno mikrokontroler PIC16F84 jak i PIC16F877A posiada możliwość zapisu i odczytu pamięci EEPROM. Dla obu mikrokontrolerów operacja ta przebiega w identyczny sposób. Aby <b>odczytać dane z pamięci EEPROM</b> należy wykonać przedstawioną poniżej sekwencję kroków.
+<ol>
+    <li>Zapisać adres żądanej komórki pamięci do rejestru EEADR.</li>
+    <li>Wyzerować bit EEPGD=0 w rejestrze EECON1.</li>
+    <li>Ustawić bit RD=1 w rejestrze EECON1.</li>
+</ol>
+</p>
+<p>
+    <pre class="code">
+ ; program odczytuje z pamięci EEPROM komórkę 
+ ; o adresie podanym w zmiennej ADRES
+ bsf    STATUS,RP1      ; 
+ bcf    STATUS,RP0      ; przełącz się do banku 2 
+ movf   ADRES,W         ; przenieś adres 
+ movwf  EEADR           ; do rejestru EEADR 
+ bsf    STATUS,RP0      ; przełącz się do banku 3 
+ bcf    EECON1,EEPGD    ; wyzeruj bit EEPGD w EECON1 (EEPROM) 
+ bsf    EECON1,RD       ; ustaw bit RD w EECON1 (odczyt) 
+ bcf    STATUS,RP0      ; przełącz się do banku 2 
+ movf   EEDATA,W        ; przenieś odczytane dane do rejestru W
+    </pre>
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Aby <b>zapisać dane do pamięci EEPROM</b> należy wykonać przedstawioną poniżej sekwencję kroków.
+<ol>
+    <li>Zapisać adres komórki pamięci, w której chcemy zachować dane do rejestru EEADR.</li>
+    <li>Wpisać dane do rejestru EEDATA.</li>
+    <li>Wyzerować bit EEPGD=0 w rejestrze EECON1.</li>
+    <li>Ustawić bit WREN=1 w rejestrze EECON1.</li>
+    <li>Wyłączyć przerwania (jeśli są włączone).</li>
+    <li>Zapisać wartość 55h do rejestru EECON2 w dwóch krokach (najpierw do zapisujemy wartość 55h do rejestru W, potem zawartość rejestru W przenosimy do rejestru EECON2).</li>
+    <li>Zapisać wartość AAh do rejestru EECON2 w taki sam sposób</li>
+    <li>Ustawić bit WR=1 w rejestrze EECON1.</li>
+    <li>Włączyć przerwania. </li>
+    <li>Odczekać na przerwanie lub wyzerowanie bitu WR rejestru EECON1</li>
+    <li>Wyzerować bit WREN=0 w rejestrze EECON1.</li>
+</ol>
+</p>
+
+<p>
+    <pre class="code"><b>
+ ; program zapisuje do pamięci EEPROM zawartość zmiennej DANE do komórki o 
+ ; adresie podanym w zmiennej ADRES </b>
+ banksel    ADRES           ; przełącz na bank pamięci zmiennej ADRES
+ movf       ADRES, w        ; przenieś adres do w
+ banksel    EEADR           ; przełącz na bank pamięci rejestru EEADR
+ movwf      EEADR           ; zapisz adres komórki EEPROM do odczytania
+ banksel    DANE            ; przełącz na bank pamięci zmiennej DANE
+ movf       DANE, w         ; przenieś dane do w
+ banksel    EEDATA          ; przełącz na bank pamięci rejestru EEDATA
+ movwf      EEDATA          ; zapisz dane do zapisania w rejestrze EEDATA
+ bcf        INTCON, GIE     ; wyłącz przerwania
+ banksel    EECON1          ; przełącz się na bank pamięci rejestru EECON1
+ bcf        EECON1, EEPGD   ; zeruj bit EEPGD w rejestrze EECON1 (zapis do EEPROM) 
+ bsf        EECON1, WREN    ; ustaw zezwolenie na zapis
+
+ banksel    EECON2          ; przełącz się na bank pamięci rejestru EECON2
+ movlw      0x55
+ movwf      EECON2          ; zapisz 55h do EECON2 
+ movlw      0xAA
+ movwf      EECON2          ; zapisz AAh do EECON2 
+
+ banksel    EECON1          ; przełącz się na bank pamięci rejestru EECON1
+ bsf        EECON1,WR       ; ustaw bit WR aby zacząć zapis 
+ bsf        INTCON, GIE     ; włącz przerwania 
+
+ btfsc      EECON1,WR       ; poczekaj na zakończenie zapisu
+    goto    $-1             ; 
+
+ bcf        EECON1, WREN    ; zablokuj zapisywanie  
+    </pre>
+</p>
+<h2>59.2. Odczytywanie i zapisywanie danych do pamięci FLASH (PIC16F877A)</h2>
+
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Aby odczytać zawartość pamięci programu, użytkownik musi wpisać dwa bajty adresu do rejestrów EEADR i EEADRH, ustawić bit EEPGD rejestru EECON1 oraz ustawić bit RD rejestru EECON1.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Po ustawieniu bitu RD, kontroler pamięci flash zużywa dwa kolejne cykle rozkazowe na odczyt danych. Powoduje to zignorowanie dwóch instrukcji bezpośrednio występujących po: <b class="code">„bsf EECON1, RD”</b>.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Dane dostępne są do odczytu w rejestrach EEDATA i EEDATH i znajdują się tam do czasu kolejnej operacji odczytu lub zapisu.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Odczytywanie stanu przycisku. Po naciśnięciu przycisku program przechodzi do części oznaczonej w komentarzu „WCIŚNIĘTO”, gdzie można wykonać niezbędne operacje. Następnie program oczekuje na zwolnienie przycisku. Po zwolnieniu przycisku program wraca do początku pętli.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Odczyt pamięci programu</b>
+ bsf    STATUS, RP1
+ bcf    STATUS, RP0     ; bank 2
+ movlw  H_ADRES 
+ movwf  EEADRH          ; starszy bajt adresu do odczytu
+ movlw  L_ADRES 
+ movwf  EEADR           ; młodszy bajt adresu do odczytu
+ bsf    STATUS, RP0     ; bank 3
+ bsf    EECON1, EEPGD   ; EEPGD=1 odczyt danych z pamięci programu (FLASH)
+ bsf    EECON1, RD      ; rozpoczęcie odczytu pamięci FLASH
+<font color="#D00000">
+ ;                  
+    nop                 ; Dowolne instrukcje (muszą być dwie) są ignorowane
+    nop                 ; ponieważ pamięć programu jest wtedy odczytywana
+ ;
+</font>
+ bcf    STATUS, RP0     ; bank 2
+ movf   EEDATA, w       ; W = młodszy bajt odczytanych danych
+ movwf  L_DATA          ; przenieś odczytany bajt do zmiennej L_DATA
+ movf   EEDATH, w       ; W = starszy bajt odczytanych danych
+ movwf  H_DATA          ; przenieś odczytany bajt do zmiennej H_DATA
+</pre>
+</p>
+
+<p>
+    <pre class="code">
+<b>; Zapis pamięci programu
+; Podana procedura zapisująca zakłada, że:
+;       1. W ADDRH:ADDRL znajduje się prawidłowy początkowy adres 
+;            (najmniej znaczące dwa bity = '00')
+;       2. Przygotowano 8 bajtów do zapisu począwszy od adresu DATADDR
+;       3. ADDRH, ADDRL, i DATADDR są umieszczone w pamięci współdzielonej:
+;               0x70 – 0x7F
+;</b>
+ bsf    STATUS,RP1
+ bcf    STATUS,RP0  ; bank 2
+ movf   ADDRH,W     ; załaduj początkowy adres pamięci FLASH
+ movwf  EEADRH      ; starszy bajt do rejestru EEADRH
+ movf   ADDRL, W    ;
+ movwf  EEADR       ; młodszy bajt do rejestru EEADR
+ movf   DATADDR, W  ; początkowy adres danych do zapisu
+ movwf  FSR         ; do rejestru wskaźnikowego
+LOOP_WRITE:
+    movf   INDF, W       ; załaduj pierwszy bajt do zapisania
+    movwf  EEDATA        ; do młodszego bajtu słowa do zapisania
+    incf   FSR, F        ; inkrementuj wskaźnik
+    movf   INDF, W       ; załaduj drugi bajt do zapisania
+    movwf  EEDATH        ; do starszego bajtu słowa do zapisania
+    incf   FSR, F        ; inkrementuj wskaźnik
+    bsf    STATUS, RP0   ; bank 3
+    bsf    EECON1, EEPGD ; EEPGD=1, zapis do pamięci flash
+    bsf    EECON1, WREN  ; zezwól na zapis
+    bcf    INTCON, GIE   ; wyłącz przerwania (jeśli używane)
+<font color="#D00000">
+    movlw  0x55
+    movwf  EECON2        ; zapisz 55h do EECON2 
+    movlw  0xAA
+    movwf  EECON2        ; zapisz AAh do EECON2 
+    bsf    EECON1, WR    ; rozpoczęcie zapisu
+    nop                  ; dowolne dwie instrukcje (muszą być dwie)
+    nop                  ; ignorowane przez procesor 
+</font>
+    bcf    EECON1, WREN  ; zablokuj zapis
+    bsf    INTCON, GIE   ; włącz przerwania (jeśli używane)
+    bcf    STATUS, RP0   ; bank 2
+    incf   EEADR, F      ; inkrementuj adres komórki flash do zapisu
+    movwf  EEADR, W      ; Sprawdź czy najmłodsze dwa bity adresu = '00'
+    andlw  0x03          ; Wyzeruj wszystkie bity poza dwoma najmłodszymi w W
+    xorlw  0x00          ; 
+    btfss  STATUS, Z     ; wyjdź jeśli zapisano już 4 słowa
+    goto   LOOP_WRITE    ; kontynuuj jeśli zapisano mniej niż cztery słowa
+</pre>
+</p>
+</body>
+</html>
+

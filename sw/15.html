@@ -1,0 +1,190 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 15</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h1>15. Instrukcje zerowania rejestrów (clrf, clrw i clrwdt), instrukcje pracujące na pojedynczych bitach (bcf i bsf), instrukcje przesunięcia (rlf i rrf)</h1>
+
+<br />
+<p>
+    <pre>
+    <b>15.1. CLRF f</b>
+<i>Funkcja:</i>    Wyzeruj zawartość rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127
+<i>Działanie:</i>  00h -&gt; (f)  ;  1 -&gt; Z
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  00 0001 1fff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Wykonanie tej instrukcji spowoduje wyzerowanie zawartości rejestru o adresie f oraz ustawienie znacznika Z
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>15.2. CLRW</b>
+<i>Funkcja:</i>    Wyzeruj zawartość rej. W
+<i>Argumenty:</i>  brak
+<i>Działanie:</i>  00h -&gt; W  ;  1 -&gt; Z
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  00 0001 0xxx xxxx
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Wykonanie tej instrukcji spowoduje wyzerowanie zawartości rejestru W oraz ustawienie znacznika Z
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>15.3. BCF f, b</b>
+<i>Funkcja:</i>    Wyzeruj bit b rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; 0 &lt;= b &lt;= 7
+<i>Działanie:</i>  0 -&gt; (f)&lt;b&gt;
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  01 00bb bfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Instrukcja powoduje wyzerowanie bitu b w rejestrze o adresie f
+</p>
+
+<p>
+Przykład:&nbsp;&nbsp;&nbsp;&nbsp;<b class="code">BCF FLAG_REG, 7</b><br />
+Przed wykonaniem instrukcji:
+<pre class="code">
+    FLAG_REG = 0xC7
+</pre>
+Po wykonaniu instrukcji:
+<pre class="code">
+    FLAG_REG = 0x47
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>15.4. BSF f, b</b>
+<i>Funkcja:</i>    Ustaw bit b rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; 0 &lt;= b &lt;= 7
+<i>Działanie:</i>  1 -&gt; (f)&lt;b&gt;
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  01 01bb bfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Instrukcja powoduje ustawienie bitu b w rejestrze o adresie f
+</p>
+
+<p>
+Przykład:&nbsp;&nbsp;&nbsp;&nbsp;<b class="code">BSF FLAG_REG, 7</b><br />
+Przed wykonaniem instrukcji:
+<pre class="code">
+    FLAG_REG = 0x0A
+</pre>
+Po wykonaniu instrukcji:
+<pre class="code">
+    FLAG_REG = 0x8A
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>15.5. RLF f, d</b>
+<i>Funkcja:</i>    Przesuń cyklicznie w lewo zawartość rej. o adresie f ze znacznikiem C
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  <img src="/sw/img/15_1.jpg" />
+<i>Zm. znaczn:</i> C
+<i>Kod rozk.:</i>  00 1101 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Zawartość rejestru o adresie f jest przesuwana cyklicznie o jedną pozycję w lewo z uwzględnieniem znacznika przeniesienia C.<br />
+Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ ;; Przesunięcie w lewo liczby 16-bitowej
+ ;; Wejście 
+ ;; | TMP_B | TMP_A | - liczba 16-bitowa 
+ ;; W - wartość o jaka przesunąć (W > 0) 
+ ;; Wyjście:
+ ;; TMP_B:TMP_A = TMP_B:TMP_A &lt;&lt; W 
+ ;; Zmienia: LEN 
+<b>rlf_16bit: </b>
+ movwf      LEN 
+<b>rlf_16bit_loop: </b>
+ bcf        STATUS, C 
+ rlf        TMP_A, f 
+ rlf        TMP_B, f 
+ decfsz     LEN, f 
+ goto       <b>rlf_16bit_loop </b>
+ return
+    </pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>15.6. RRF f, d</b>
+<i>Funkcja:</i>    Przesuń cyklicznie w prawo zawartość rej. o adresie f ze znacznikiem C
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  <img src="/sw/img/15_2.jpg" />
+<i>Zm. znaczn:</i> C
+<i>Kod rozk.:</i>  00 1100 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Zawartość rejestru o adresie f jest przesuwana cyklicznie o jedną pozycję w prawo z uwzględnieniem znacznika przeniesienia C.<br />
+Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ ;; Przesunięcie w prawo liczby 16-bitowej
+ ;; Wejście 
+ ;; | TMP_B | TMP_A | - liczba 16-bitowa 
+ ;; W - wartość o jaka przesunąć (W > 0) 
+ ;; Wyjście:
+ ;; TMP_B:TMP_A = TMP_B:TMP_A &gt;&gt; W 
+ ;; Zmienia: LEN 
+<b>rrf_16bit: </b>
+ movwf      LEN 
+<b>rrf_16bit_loop: </b>
+ bcf        STATUS, C 
+ rrf        TMP_A, f 
+ rrf        TMP_B, f 
+ decfsz     LEN, f 
+ goto       <b>rrf_16bit_loop </b>
+ return
+    </pre>
+</p>
+
+
+<br />
+<p>
+    <pre>
+    <b>15.7. CLRWDT</b>
+<i>Funkcja:</i>    Wyzeruj zawartość licznika układu Watchdog
+<i>Argumenty:</i>  brak
+<i>Działanie:</i>  00h -&gt; WDT
+            00h -&gt; preskaler
+            1 -&gt; !TO
+            1 -&gt; !PD
+<i>Zm. znaczn:</i> !TO, !PD
+<i>Kod rozk.:</i>  00 0000 0110 0100
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Wykonanie tej instrukcji spowoduje wyzerowanie zawartości licznika watchdog. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Zerowany jest również preskaler, jeżeli jest przypisany do WDT.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Nie zmieniany jest współczynnik podziału preskalera.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bity !TO i !PD są ustawiane.<br />
+</p>
+
+</body>
+
+</html>
+
+

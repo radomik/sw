@@ -1,0 +1,51 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 35</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>35. STRUKTURA PAMIĘCI DANYCH MIKROKONTROLERA PIC16F877A i PIC16F84</h2>
+<p>
+    Pamięć danych w mikrokontrolerze PIC16F877A jest podzielona na 4 banki, które zawierają rejestry ogólnego przeznaczenia (GPR &#8211; General Purpose Registers) oraz specjalne rejestry funkcyjne (SFR &#8211; Special Function Registers).
+</p>
+
+<p>
+<b> Wybór banku pamięci: </b><br />
+    Każdy bank pamięci zawiera 128 bajtów danych. Pod najniższymi adresami w każdym banku są umieszczone rejestry specjalne SFR. Pod wyższymi adresami są rejestry ogólnego przeznaczenia GPR, zaimplementowane jako pamięć statyczna RAM. <br />
+    Wszystkie banki zawierają rejestry specjalne. Niektóre z rejestrów specjalnych są powielone w innych bankach, co  umożliwia redukcję kodu i szybszy dostęp do rejestru (nie trzeba przełączać się między bankami). <br />
+     Wybór aktywnego banku pamięci odbywa się za pomocą bitów RP1:RP0 rejestru
+</p>
+<table border="1">
+	<tr>
+		<th>RP1:RP0</th>
+		<th>Bank</th>
+	</tr>
+	<tr>
+		<td>00</td>
+		<td>0</td>
+	</tr>
+	<tr>
+		<td>01</td>
+		<td>1</td>
+	</tr>
+	<tr>
+		<td>10</td>
+		<td>2</td>
+	</tr>
+	<tr>
+		<td>11</td>
+		<td>3</td>
+	</tr>
+</table>
+
+<p>
+Każdy rejestr ogólnego przeznaczenia jest 8-bitowy i może być dostępny bezpośrednio lub pośrednio za pomocą rejestru FSR.
+</p>
+<a href="/sw/33.html">Struktura pamięci danych PIC16F84: patrz zadanie 33</a>
+
+
+</body>
+
+</html>

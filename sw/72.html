@@ -1,0 +1,84 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 72</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>72. Parametry. Notacja definicji modułu z parametrami. Przypisanie wartości parametrów</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Parametry pozwalają na wprowadzenie nazw symbolicznych dla wartości i wyrażeń, które będą stosowane w opisie modułu. Technika stosowania parametrów umożliwia definiowanie sparametryzowanych modułów, które mogą być używane w różnych sytuacjach. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Istnieje możliwość nie tylko ponownego użycia definicji modułu w innych projektach (np. z różną liczbą bitów dla portów wejścia-wyjścia), ale również można definiować parametry, których wartość można zmieniać podczas tworzenia instancji danego modułu.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Ogólnie specyfikacja parametru jest częścią definicji modułu. Notacja definicji modułu z parametrami jest następująca:
+    </p>    
+    <p>
+<pre class="code">
+module nazwa [lista_parametrów] [lista_portów];
+    deklaracje_i_instrukcje
+endmodule
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;gdzie <b><i>lista_portów</i><b> ma taką samą postać jak w przypadku definicji modułu bez parametrów, a lista_parametrów wygląda następująco:<br />
+<pre class="code">
+#(deklaracja_parametru {, deklaracja parametru})
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Z kolei <b><i>deklaracja_parametru</i></b> ma postać jedną z poniższych:<br />
+<pre class="code">
+<ol>
+    <li>parameter [signed] [zakres] lista_przypisań_parametrów;</li>
+    <li>parameter integer [zakres] lista_przypisań_parametrów;</li>
+    <li>parameter real [zakres] lista_przypisań_parametrów;</li>
+    <li>parameter realtime [zakres] lista_przypisań_parametrów;</li>
+    <li>parameter time [zakres] lista_przypisań_parametrów;</li>
+</ol>
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Występująca w powyższym zapisie <b><i>lista_przypisań_parametrów</i></b> może być określona następująco:<br />
+<pre class="code">
+nazwa_parametru=wartość {, nazwa_parametru=wartość}
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Ogólna postać utworzenia instancji modułu wraz z redefinicją wartości parametru jest taka, jak wyżej, gdzie <b><i>przypisania_wartości_parametrów</i></b> wyglądają następująco:<br />
+<pre class="code">
+#(lista_przypisań_parametru)
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;A <b><i>lista_przypisań_parametru</i></b> jest jednym z poniższych:<br />
+<pre class="code">
+<ol>
+    <li>Uporządkowane_przypisanie_parametru {, i uporządkowane_przypisanie_parametru}</li>
+    <li>Nazwane_przypisanie_parametru {, nazwane_przypisanie_parametru}</li>
+</ol>
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Podczas tworzenia instancji modułu, w celu zmiany domyślnej wartości parametrów można posłużyć się albo notacją pozycyjną, albo opartą na nazwach – identycznie jak dla terminali modułu
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Parametry mogą być również definiowane wewnątrz opisu modułu. Stanowią one wówczas rodzaj stałych symbolicznych, wykorzystywanych wewnątrz kodu. Każda instancja modułu może redefiniować (zmieniać) wartości parametrów. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Jeżeli chcemy uniknąć możliwości zmiany wartości parametru w sposób bezpośredni (np. za pomocą defparam z poziomu innego modułu), co może być przydatne chociażby w przypadku, gdy definiujemy nazwy symboliczne poszczególnych stanów automatu sekwencyjnego, to podczas definicji parametru zamiast słowa kluczowego parameter należy użyć localparam. Składnia definicji parametru ze słowem kluczowym localparam jest identyczna jak dla parameter. 
+    </p>
+</body>
+
+</html>
+
+
+
+

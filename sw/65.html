@@ -1,0 +1,102 @@
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 65</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>65.1. Układy logiki programowalnej. Zalety logiki programowalnej. Cechy systemów wbudowanych na układach programowalnych</h1>
+
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Ostatnio do budowy szybkich systemów wbudowanych najczęściej wykorzystuje się układy logiki programowalnej: FPGA, CPLD i SoPC. Dzięki dużej mocy funkcjonalnej i dużej liczbie wyprowadzeń zewnętrznych, układy te pozwalają, drogą konfiguracji swojej struktury wewnętrznej, realizować na jednym układzie scalonym całe systemy mikroprocesorowe z dużą liczbą urządzeń peryferyjnych.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Inną właściwością układów programowalnych jest to, że pozwalają one rozwiązywać specjalne zadania systemów wbudowanych nie programowo, za pomocą wykonywania szeregu rozkazów, a sprzętowo. Inaczej mówiąc, specjalne zadania przedstawiane są w postaci układu logicznego, który jest realizowany sprzętowo w układzie programowalnym.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Przy czym, szybkość rozwiązania zadania, w porównaniu z mikroprocesorami i mikrokontrolerami, jest kilka rzędów wyższa.
+</p>
+<p>
+    <b>ZALETY:</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Inną ważną cechą układów logiki programowalnej jest duża liczba wyprowadzeń zewnętrznych ogólnego przeznaczenia. Dzięki temu w wielu przypadkach można zrezygnować z multipleksowania sygnałów i wykorzystywania różnych standardowych interfejsów. 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Oprócz tego, układy logiki programowalnej wyróżniają się niskim poborem mocy, małymi gabarytami i ciężarem. 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Ostatnio pojawiła się tendencja do realizacji w układzie scalonym, razem z logiką programowalną, różnych urządzeń peryferyjnych, często wykorzystywanych przy budowie systemów wbudowanych: 
+<ul>
+    <li>bloków pętli sprzężenia fazowego (PLL)</li>
+    <li>przetworników ADC i DAC</li> 
+    <li>komparatorów sygnałów analogowych</li> 
+    <li>bloków mnożących itp.</li>
+</ul>
+</p>
+<h2>65.2. Poziomy projektowania systemów wbudowanych. Metodyka projektowania systemów wbudowanych. Synteza części sprzętowej. Kompilacja części programowej</h2>
+<p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Projektowanie niezawodnych</b> systemów sterujących opartych na mikroprocesorach jako urządzeniach zastępujących klasyczne regulatory wymaga <b>systematycznego podejścia</b> do procesu projektowania. Charakterystyczną cechą procesu projektowania komputerowych systemów sterujących jest możliwość <b>równoległego opracowania części sprzętowej i programowej</b>.
+</p>
+<img src="/sw/img/65_1.png" />
+<p>
+    <b>1. Analiza wymagań</b> - Pierwszy kluczowy etap powstawania projektu
+<ul>
+    <li>podstawowe funkcje</li>
+    <li>żądana dokładność</li> 
+    <li>szybkość i niezawodność działania</li> 
+    <li>ograniczenia dot. stosowanego sprzętu i oprogramowania</li>
+    <li>szacowane koszty projektu</li>
+    <li>spodziewane efekty wdrożenia</li>
+</ul>
+<b>Dokument: </b>specyfikacja wymagań<br />
+<b>Etap kończy: </b>opinia recenzentów.<br />
+</p>
+<p>
+    <b>2. Projektowanie systemu</b>
+<ul>
+    <li>określenie architektury</li>
+    <li>podział na podsystemy</li> 
+    <li>przypisanie funkcji poszczególnym podsystemom</li> 
+    <li>zdefiniowanie reguł współpracy podsystemów</li>
+    <li>plan testów systemu</li>
+</ul>
+<b>Etap kończy: </b>opinia recenzentów.<br />
+</p>
+<p>
+    <b>3. Projektowanie i implementacja podsystemów</b>
+<ul>
+    <li>współbieżna i niezależna realizacja sprzętu i oprogramowania podsystemów</li>
+    <li>wynikiem etapu jest zbiór programowych i sprzętowych komponentów systemu</li>
+</ul>
+</p>
+<p>
+    <b>4. Dokumentacja komponentów systemu</b>
+<ul>
+    <li><b>funkcjonalna</b> – czy wszystkie wymagania wymienione w specyfikacji są spełnione</li>
+    <li><b>fizyczna</b> – czy komponenty są spójne i w pełni udokumentowane</li> 
+</ul>
+<b>Etap kończy: </b>REWIZJA<br />
+</p>
+<p>
+    <b>5. Integracja, testowanie i ocena</b><br /><br />
+    <b>5.1. Testowanie i integracja systemu</b>
+    <ul>
+        <li>połączenie wszystkich komponentów systemu i testowanie zgodnie z planem testów</li>
+        <li>przegląd kwalifikacyjny</li> 
+    </ul>
+    <b>Wynik: </b>raport testowania<br /><br />
+    <b>5.2. Ocena i akceptacja</b> – etap realizowany przez użytkowników systemu.<br />
+</p>
+</body>
+</html>
+
+
+
+
+
+
+

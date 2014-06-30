@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 39</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>39. Architektura wyprowadzeń portu A. Funkcje wyprowadzeń portu A. Schemat blokowy wyprowadzeń RA3:RA0 portu A. Wyprowadzenie RA4. Schemat blokowy wyprowadzenia RA5 portu A dla mikrokontrolera PIC16F877A. </h2>
+<p>
+    Port A jest dwukierunkowym portem ogólnego przeznaczenia mikrokontrolerów PIC16. Dla mikrokontrolera PIC16F877A wyprowadzenia portu A są współdzielone z układami CCP oraz przetwornikiem analogowo-cyfrowym.
+</p><p>
+    Dla mikrokontrolera PIC16F877A szerokość portu to 6 bitów, a dla mikrokontrolera PIC16F84 &#8211; 5 bitów. Podczas czytania danych z rejestru PORTA sprawdzane są aktualne stany wyprowadzeń portu A, natomiast podczas zapisywania do rejestru PORTA &#8211; dane są zapamiętywane w zatrzaskach portu.
+</p><p>
+Podczas wszystkich operacji zapisu do rejestru wykonywana jest sekwencja kroków: czytaj, modyfikuj, zapisz. Czyli zapis do portu oznacza, że aktualny stan wyprowadzeń zostanie najpierw przeczytany, następnie zmodyfikowany przez CPU,  dopiero na końcu nowa wartość będzie zapisana do zatrzasków portu.
+</p>
+
+<p>
+<b>PIC16F8x </b><br />
+<br />
+<img src="/sw/img/39_1.png" /><br />
+
+<b>PIC16F87xA</b><br />
+<br />
+<img src="/sw/img/39_2.png" />
+</p>
+
+
+<p>
+<br />
+<h2>SCHEMAT BLOKOWY WYPROWADZEŃ RA3:RA0 PORTU A. WYPROWADZENIE RA4. SCHEMAT BLOKOWY WYPROWADZENIA RA5 PORTU A DLA MIKROKONTROLERA PIC16F877A.</h2>
+    Wyprowadzenie RA4 jest współdzielone z wejściem zegara modułu TIMER0. Wejście RA4/T0CKI posiada na wejściu przerzutnik Schmitta oraz wyjście z otwartym drenem.
+</p><p>    
+         Przerzutnik Schmitta ma dwa progi przełączania, przy których wyjście zmienia stan na przeciwny. Osiągnięcie przez napięcie wejściowe danego progu jest zależne od kierunku zmiany napięcia wejściowego. Dla napięcia narastającego właściwym jest próg górny, dla opadającego - dolny. Odległość między progami nazywana jest szerokością pętli histerezy.
+<br /><br />    
+<h2>Inicjalizacja portu A dla mikrokontrolera PIC16F877A </h2>
+        Dla mikrokontrolera PIC16F877A wyprowadzenia portu A są współdzielone z wejściami analogowymi przetwornika A/C. Podczas zerowania mikrokontrolera port A jest ustawiany w trybie wejścia analogowego i każdy odczyt z tego portu zwróci wartość równą zero.
+</p><p>
+	Dlatego należy pamiętać, aby w przypadku wykorzystywania portu A jako portu cyfrowego przełączyć go w tryb cyfrowy wpisując do rejestru ADCON1 wartość 06h.<br /><br /><b>Inicjalizację portu A pokazano na przykładzie:</b><br />
+        <br />
+<pre class="code">
+ bcf    STATUS, RP0 ; wybór banku 0
+ clrf   PORTA       ; inicjalizacja PORTA przez zerowanie zatrzasków wyjściowych
+ bsf    STATUS, RP0 ; wybór banku 1
+ movlw  B'00000110' ; przełączenie wejść na cyfrowe
+ movwf  ADCON1      ; poprzez odłączenie przetwornika A/C
+ clrf   TRISA       ; ustawienie wyprowadzeń PORTA na wyjścia
+        </pre>
+</p>
+
+<p>
+<b> Schemat portów RA0:RA3 </b><br />
+<br />
+<img src="/sw/img/39_3.png" /><br /><br />
+<b> Schemat portu RA4 </b><br />
+<br />
+<img src="/sw/img/39_4.png" />
+
+</p>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 74</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>74. Bufory. Bufory trójstanowe. Elementy logiczne definiowane przez użytkownika</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Bufory:</b> buf, not, bufif0, bufif1, notif0, notif1, pullup, pulldown
+    </p>
+    <img src="/sw/img/74_1.png" /><br />
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Składnia utworzenia instancji buforów jest następująca:<br />
+<pre class="code">
+    typ_bufora [siła] [opóźnienie] n_instancja_bufora {, n_instancja_bufora};
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;gdzie:<br />
+<ul>
+    <li><b>typ_bufora</b> jest jednym z symboli wymienionych w kategorii bufora, </li>
+    <li><b>siła</b> jest opcjonalnym elementem charakteryzującym pewne właściwości elektryczne obwodu wyjściowego (drivera) bufora (stosowane głównie do modelowania na poziomie przełączników),</li>
+    <li><b>opóźnienie</b> określa wartość czasu propagacji sygnału przez bufor (stosowane do celów symulacji),</li>
+</ul>
+    </p>
+    <p>
+<pre class="code">
+<b>n_instancja_bufora ma postać:</b>
+    [nazwa_instancji] (terminal_wyjściowy, terminal_wyjściowy {, terminal_wejściowy} )
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Sposób podłączenia terminali bazuje na notacji pozycyjnej. Dla buforów <b>not</b> i </b>buf ostatni</b> (prawy skrajny) terminal reprezentuje <b>wejście</b>, a <b>pozostałe</b> terminale to <b>wyjścia</b> (bufory not i buf mogą mieć wiele wyjść).
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Bufory bfif0, bufif1, notif0, notfif1 to bufory trójstanowe. Mają one dokładnie 3 terminale.:<br />
+<ol>
+    <li>
+        ostatni terminal (prawy skrajny) reprezentuje <b>wejście sterujące,</b> 
+    </li>
+    <li>
+        terminal środkowy stanowi <b>wejście sygnałowe, </b>
+    </li>
+    <li>
+        3. pierwszy z lewej terminal to <b>wyjście. </b>
+    </li>
+</ol> 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Bufory typu bufif0 i notif0 są aktywne, gdy wejście sterujące znajduje się w stanie niskim (notif0 ma dodatkowo zanegowane wyjście), zaś bufif1 i notfif1, gdy jest on wysoki (notfif1 ma zanegowane wyjście). Bufory pulldown i pullup mają tylko jeden terminal reprezentujący wyjście.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Każdy z terminali wymienionych buforów może być tylko 1-bitowym sygnałem lub wyrażeniem.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Podstawowe elementy logiczne definiowane przez użytkownika – UDP (user defined primitives) to elementy, które może zdefiniować i dołączyć samodzielnie. Język Verilog dostarcza specjalny mechanizm definicji i opisu takich elementów. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Można je również definiować w ramach jednostek projektowych (np. w module) i następnie używać ich w projekcie, tworząc odpowiednie instancje tych modułów. Jeśli używamy zintegrowanego środowiska projektowego (np. Xilinx ISE), mamy do dyspozycji szereg bibliotek elementów (m. in. multiplekserów, przerzutników, komparatorów itp.) zorganizowanych jako UDP.
+    </p>
+</body>
+
+</html>
+
+
+
+

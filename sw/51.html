@@ -1,0 +1,112 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 51</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>51.1. FUNKCJONOWANIE UKŁADU TIMER1 W TRYBIE CZASOMIERZA.</h2>
+<p>
+    Aby układ czasowy TIMER1 pracował w trybie czasomierza należy wyzerować bit TMR1CS w rejestrze T1CON. W tym trybie, wejściowym sygnałem zegarowym układu jest zegar systemowy, którego częstotliwość jest podzielona przez 4.<br /><br />
+    Ustawienie bitu kontroli synchronizacji T1SYNC w rejestrze T1CON, w tym przypadku nie ma żadnego znaczenia, gdyż sygnał wejściowy dla układu czasowego. Jest już synchroniczny z wewnętrznym zegarem systemowym.<br />
+    <br />
+    
+<b> Przykład </b><br />
+
+<pre class="code">
+; program zlicza za pomocą TIMER1 1250 impulsów zegara wewnętrznego 
+; z podzielnikiem 1/8 (10000 impulsów) 
+ clrf    STATUS        ; bank 0 
+ movlw   B'00110000'   ; ustaw tryb czasomierza, prescaler na 1/8 
+ movwf   T1CON
+ movlw   1Eh           ; licz do 1250 -> 65536 &#8211; 1250 = 64286 (0FB1Eh) 
+ movwf   TMR1L         ; załaduj młodszą część 
+ movlw   0FB           ; 
+ movwf   TMR1H         ; załaduj starszą część 
+ bsf     T1CON, TMR1ON ; włącz TIMER1
+</pre>
+</p>
+
+
+<b>51.2. FUNKCJONOWANIE UKŁADU TIMER1 W TRYBIE LICZNIKA SYNCHRONICZNEGO I ASYNCHRONICZNEGO</b>
+
+<p>
+    Układ czasowy TIMER1 może pracować w trybie synchronicznym lub asynchronicznym, zależnie od ustawienia bitu T1SYNC rejestrze T1CON. Gdy TIMER1 jest inkrementowany ze źródła zewnętrznego, jego wartości +1. Następuje przy narastającym zboczu sygnału. Po przełączeniu ukł czasowego w tryb licznika, ukł. musi odczytać jedno zbocze opadające przed rozpoczęciem zliczania zbocz narastających sygnału wejść. 
+</p>
+
+<p>
+    W przypadku pracy ukł. TIMER1 w trybie licznika asynch., UC jest inkrementowany przy każdym narastającym zboczu na wyprowadzeniu RC1/T1OSI/CCP2, kiedy bit T1OSCEN w rejestrze T1CON jest ustawiony na 1 oraz wyprowadzeniu RC0/T1OSO/T1CKI, gdy bit T1OSCEN jest 0. Jeżeli bit T1SYNC w rejestrze T1CON jest 0, to wejść. sygnał zegarowy jest synchronizowany z zegarem systemowym. 
+</p>
+    Synchronizacja jest wykonywana po podziale częstotl. syg. przez preskaler, który jest szeregowym licznikiem asynchr. Przy takiej konfiguracji, podczas trybu uśpienia, ukł. TIMER1 nie będzie inkrementowany nawet, gdy zewn. sygnał zegarowy jest obecny, ponieważ układ synchronizacji jest wyłączony. Jednakże układ preskalera dalej będzie kontynuował swoje działanie.<br />
+    <br />
+    <br />
+    
+<pre class="code">
+; program zlicza za pomocą TIMER1 1250 impulsów zewnętrznych 
+; z podzielnikiem 1/8 (10000 impulsów) 
+ clrf    STATUS      ; bank 0 
+ movlw   B'00111010' ; ustaw tryb licznika synchronicznego, 
+ movwf   T1CON       ; preskaler na 1/8   
+ movlw   1Eh         ; licz do 1250 -> 65536 &#8211; 1250 = 64286 (0FB1Eh) 
+ movwf   TMR1L       ; załaduj młodszą część 
+ movlw   0FB         ; 
+ movwf   TMR1H       ; załaduj starszą część 
+ bsf     T1CON, TMR1ON   ; włącz TIMER1
+</pre><br />
+<br />
+    Jeżeli bit T1SYNC w rejestrze T1CON jest ustawiony na jedynkę, wejściowy sygnał zegarowy nie jest synchronizowany z zegarem systemowym. Wówczas układ TIMER1 pracuje asynchronicznie w stosunku do zegara systemowego.<br /><br />Układ czasowy kontynuuje swoje działanie po wprowadzeniu mikrokontrolera w stan uśpienia i może wygenerować przerwanie przy przepełnieniu licznika, które wyprowadza mikrokontroler ze stanu uśpienia. W trybie asynchronicznym układ czasowy TIMER1 nie może być wykorzystywany jako podstawa czasu dla modułów CCP.
+</p>
+
+<p>
+
+<pre class="code">
+; program zlicza za pomocą TIMER1 1250 
+; impulsów zewnętrznych 
+; z podzielnikiem 1/8 (10000 impulsów) 
+ clrf    STATUS      ; bank 0 
+ movlw   B'00111110' ; ustaw tryb licznika asynchronicznego, 
+ movwf   T1CON       ; preskaler na 1/8   
+ movlw   1Eh         ; licz do 1250 -> 65536 &#8211; 1250 = 64286 (0FB1Eh) 
+ movwf   TMR1L       ; załaduj młodszą część 
+ movlw   0FB         ; 
+ movwf   TMR1H       ; załaduj starszą część 
+ bsf     T1CON, TMR1ON   ; włącz TIMER1
+</pre>
+</p>
+
+<br />
+<h2>51.3. ŹRÓDŁO SYGNAŁU ZEGAROWEGO DLA UKŁADU TIMER1. SPOSÓB PODŁĄCZENIA ELEMENTÓW DODATKOWYCH ŹRÓDŁA SYGNAŁU ZEGAROWEGO DLA UKŁADU CZASOWEGO TIMER1. ZEROWANIE UKŁADU TIMER1</h2>
+</body>
+<img src="/sw/img/51_1.png" />
+<p>
+Pomiędzy wyprowadzeniami T1OSI a T1OSO jest wbudowany oscylator kwarcowy, który może być uaktywniany poprzez ustawienie na jedynkę bitu T1OSEN w rejestrze T1CON. Jest to oscylator o niskim poborze mocy o częstotliwości do 200 kHz. Kontynuuje on także swoją pracę po wprowadzeniu mikrokontrolera w tryb uśpienia. Oscylator jest przystosowany do pracy z rezonatorem kwarcowym o częstotliwości 32 kHz.<br />
+<br />
+    Rejestry TMR1H i TMR1L nie są zerowane przy włączeniu zasilania (POR), ani przy żadnym innym trybie zerowania. Rejestry te są zerowane tylko przez moduły CCP. Rejestr T1CON jest zerowany przy włączeniu zasilania (POR) i podczas spadku napięcia zasilania (BOR). Każdy inny typ zerowania nie ma wpływu na zawartość tego rejestru.<br />
+    <br />
+    <br />
+        Jeżeli moduł CCP jest skonfigurowany w trybie komparatora i generuje specjalne zdarzenie (bity CCP1M3:CCP1M0 = 1011), to sygnał tego zdarzenia zeruje układ czasowy TIMER1. Operacja ta nie ustawia znacznika przerwania TMR1IF od układu TIMER1. Układ czasowy musi być w tym przypadku skonfigurowany jako czasomierz albo licznik synchroniczny.  <br />
+        <br />
+        Jeżeli układ TIMER1 pracuje w trybie licznika asynchronicznego, taka operacja zerowania może nie działać i nie powinna być używana. Jeżeli jest wykonywany zapis do układu TIMER1 i jednocześnie układ jest zerowany przez moduł CCP, pierwszeństwo ma operacja zapisu.<br />
+        <br />
+        
+</p>
+
+
+<p>
+<b>  </b>
+<pre>
+
+</pre>
+</p>
+
+
+
+<p>
+<b>  </b>
+<pre>
+
+</pre>
+</p>
+
+</html>

@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 10</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>10. STAŁE LICZBOWE I ZNAKOWE. PRZYKŁADY STAŁYCH. CIĄGI ZNAKÓW. SŁOWA ZAREZERWOWANE</h2>
+<p>
+<b>  Stałe liczbowe</b> mogą być określone w formacie dziesiętnym, szesnastkowym, ósemkowym lub binarnym. Co uwarunkowują  odpowiednie przedrostki:
+<ul>
+	<li>B – binarne (np. B'00111001', b'00111001' )</li>
+	<li>D – dziesiętne (np. D'100', d'100' lub .100 )</li>
+	<li>H – szesnastkowe ( np. H'9f', h'9f' lub 0x9f )</li>
+	<li>O – ósemkowe (np. O'777', o'777')</li>
+</ul>
+</p>
+
+<p>
+<b> Ciągiem znaków</b> (stałą łańcuchową) jest wszystko pomiędzy apostrofami lub cudzysłowami, co zawiera <b>więcej niż 4 znaki</b>. Stosuje się je w rozkazach takich jak DB/DW, INCLUDE i FNAME. Stałych łańcuchowych nie można stosować w zwykłych wyrażeniach.
+</p>
+
+<p>
+<b> Przykład deklaracji stałych znakowych w pamięci programu:</b>
+<br>
+    <pre class="code">
+    db "łańcuch w 'cudzysłowach' może zawierać apostrofy"
+    db 'a łańcuch w "apostrofach" może zawierać cudzysłowy'
+    </pre>
+</p>
+
+<p>
+<b>Stałe znakowe </b>podlegają takim samym regułom jak stałe łańcuchowe, lecz można je stosować w wyrażeniach. Mogą mieć długość do 4 znaków i są przechowywane w kolejności od najmłodszego bajtu. 
+</p>
+
+<p>
+Zatem stała 'A' jest traktowana jako 41h, 'AB' jako 4241h (lub 41h, 42h), 'ABC' jako 434241h (41h,42h,43h) i 'ABCD' jako 44434241h. 
+    W DB/DW stałe znakowe są zawsze traktowane jako stałe łańcuchowe, chyba że znajdują się wewnątrz wyrażenia.
+</p>
+
+<p>
+<b>Przykład:  </b>
+<br>    
+<pre class="code">
+    db  'abcd'          ; daje 'a','b','c','d'.
+    db  +"abcd",1+'a'   ; daje 'a','b'.
+    ; Ponieważ oba łańcuchy są wewnątrz wyrażenia, traktuje się je jako stałe znakowe.
+    db  ('abcd' >> 8)    ; daje 'b'
+</pre>
+</p>
+
+<p>
+<b> Słowo zarezerwowane </b>
+<br> to słowo (najczęściej pochodzenia angielskiego) lub jego fragment o znaczeniu określonym w definicji języka programowania, któremu nie można w programie nadać innego sensu. <br>
+    Przykłady słów zarezerwowanych: ADDRESS, AND, CALL, NOP, NOT, ...  (m.in. wszystkie mnemoniki i istniejące dyrektywy preprocesora)
+</p>
+
+
+
+
+</body>
+
+</html>

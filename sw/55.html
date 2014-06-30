@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 55</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>55.1. PAMIĘĆ STEROWNIKA HD44780. PAMIĘĆ DDRAM. PAMIĘĆ CGRAM</h2>
+<p>
+Sterownik HD44780 posiada trzy rodzaje pamięci: DDRAM, CGRAM i CGROM. 
+Pamięć DDRAM (ang. Display Data RAM) służy do  przechowywania kodów znaków wyświetlanych na wyświetlaczu. <br />
+<br />
+Pamięć CGRAM (ang. Character Generator RAM) przechowuje wzorce znaków definiowanych przez użytkownika. <br />
+<br />
+Pamięć CGROM (ang. Character Generator ROM) przechowuje wzorce znaków wyświetlanych na wyświetlaczu (208 znaków w rozmiarze 5x8 pikseli oraz 32 znaki w rozmiarze 5x10 pikseli). <br />
+<br />
+    Pamięć DDRAM ma rozmiar 80 bajtów. Sposób odwzorowania pamięci DDRAM na znaki wyświetlane na wyświetlaczu zależy od kilku czynników: liczba wyświetlanych wierszy (1 lub 2),  przesunięcie wyświetlania uzyskane za pomocą komendy &#8222;Cursor/Display Shift&#8221; lub podczas wpisywania danych przy ustawionym bicie S w komendzie &#8222;Entry Mode Set&#8221;. <br />
+    <br />
+    <br />
+        Pamięć CGRAM posiada rozmiar 64 bajtów, które pozwalają na przechowywanie wzorców do 8 znaków o rozmiarze 5x8 pikseli lub 4 znaków o rozmiarze 5x10 pikseli. Znaki zdefiniowane przez użytkownika można wyświetlać używając kodów od 0 do 7 (5x8) lub od 0 do 3 (5x10) wysyłanych do pamięci DDRAM<br />
+        <br />
+    
+</p>
+<h2>55.2. REJESTRY STEROWNIKA HD44780. REJESTRY INSTRUKCJI IR, DANYCH DR, STANU SR. WYBÓR REJESTRU, Z KTÓRYM BĘDZIE NASTĘPOWAŁA KOMUNIKACJA</h2>
+<p>
+<b>     Sterownik HD44780 posiada trzy rejestry: </b>
+<ol>
+    <li>rejestr instrukcji IR (ang. Instruction Register), </li>
+    <li>rejestr danych DR (ang. Data Register) oraz </li>
+    <li>rejestr stanu SR (ang. Status Register). </li>
+</ol>
+    Rejestr IR służy do konfiguracji i sterowania działaniem sterownika. Wysyłane są do niego kody instrukcji sterujących, takich jak instrukcja kasowania ekranu, czy przesunięcia wyświetlanego obszaru pamięci. Dane do rejestru IR mogą być wyłącznie zapisywane. <br />
+    <br />
+    Rejestr DR służy do komunikacji z pamięciami RAM sterownika. Jeżeli do rejestru DR jest zapisywana wartość, sterownik przepisuje ją z rejestru DR do pamięci DDRAM lub CGRAM zależnie od bieżących ustawień. Jeżeli za pomocą rejestru IR ustawiany jest adres pamięci DDRAM lub CGRAM do bieżących operacji, sterownik automatycznie umieszcza w rejestrze DR zawartość komórki pamięci spod ustawionego adresu. Odczyt rejestru DR powoduje zapisanie w nim zawartości komórki pamięci spod kolejnego adresu, co pozwala odczytać sekwencyjnie całą pamięć sterownika. <br />
+    <br />
+        Rejestr SR służy do sprawdzania stanu sterownika (rejestr tylko do odczytu). Znaczenie poszczególnych bitów rejestru przedstawiono poniżej: BF &#8211; flaga zajętości (ang. Busy Flag) sterownika wyświetlacza; gdy BF = 1, to sterownik wykonuje wewnętrzną operację i nie jest możliwa komunikacja z rejestrami IR i DR; gdy BF = 0, to sterownik jest gotowy do komunikacji z rejestrami IR i DR; <br />
+        <br />
+            AC0-AC6 &#8211; licznik adresu (ang. Address Count), zawiera adres aktualnie zapisywanej komórki pamięci DDRAM lub CGRAM<br />
+            <br />
+            
+| BF | AC6 | AC5 | AC4 | AC3 | AC2 | AC1 | AC0 |<br />
+<br />
+
+    Wybór rejestru, z którym będzie następowała komunikacja, jest realizowany poprzez ustawienie odpowiednich stanów na liniach RS i R/W.<br />
+    
+</p>
+
+
+</body>
+
+</html>

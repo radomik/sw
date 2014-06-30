@@ -1,0 +1,74 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 17</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h1>17. Instrukcje sterujące: skoku warunkowego (btfsc, btfss, decfsz, incfsz)</h1>
+
+<br />
+<p>
+    <pre>
+    <b>17.1. INCFSZ f, d  /  DECFSZ f, d</b>
+<i>Funkcja:</i>    Zwiększ / zmniejsz o 1 zawartość rej. o adresie f, 
+            jeśli wynik = 0 to pomiń kolejną instrukcję
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127, d = 0 lub 1
+<i>Działanie:</i>  (f) +1 -&gt; rejestr przeznaczenia określony bitem d,
+            jeśli wynik=0, to pomiń kolejną instrukcję: PC + 2 -&gt; PC
+            w przeciwnym wypadku: PC + 1 -&gt; PC
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  00 1111 dfff ffff  /  00 1011 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Zawartość rejestru o adresie f jest zwiększana (zmniejszana) o 1.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f.<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli w wyniku inkrementacji / dekrementacji do rejestru przeznaczenia zostanie przesłana 
+wartość <b>zerowa</b>, to następna instrukcja nie zostanie wykonana. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Ponieważ w trakcie wykonywania rozkazu INCFSZ / DECFSZ następna instrukcja została już pobrana do wykonania, to zamiast niej wykonana zostanie instrukcja NOP (rozkaz INCFSZ / DECFSZ wykonuje się w trakcie dwóch cykli rozkazowych) <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli natomiast wynik operacji będzie różny od 0, to rozkaz INCFSZ / DECFSZ jest wykonywany w jednym cyklu (brak modyfikacji licznika rozkazów)
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>17.2. BTFSC f, b</b>
+<i>Funkcja:</i>    Testuj bit b w rej. o adresie f,  
+            jeśli wyzerowany to pomiń kolejną instrukcję
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127, 0 &lt;= b &lt;= 7
+<i>Działanie:</i>  Jeśli f&lt;b&gt; = 0 to PC + 2 -&gt; PC
+            w przeciwnym wypadku: PC + 1 -&gt; PC
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  01 10bb bfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli bit b w rejestrze o adresie f jest wyzerowany, to następna instrukcja nie zostanie wykonana. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Ponieważ w trakcie wykonywania rozkazu BTFSC następna instrukcja została już pobrana do wykonania, to zamiast niej wykonana zostanie instrukcja NOP (rozkaz BTFSC wykonuje się w trakcie dwóch cykli rozkazowych)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli natomiast bit b e rejestrze f jest ustawiony, to rozkaz BTFSC jest wykonywany w jednym cyklu (brak modyfikacji licznika rozkazów)
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>17.3. BTFSS f, b</b>
+<i>Funkcja:</i>    Testuj bit b w rej. o adresie f,  
+            jeśli ustawiony to pomiń kolejną instrukcję
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127, 0 &lt;= b &lt;= 7
+<i>Działanie:</i>  Jeśli f&lt;b&gt; = 1 to PC + 2 -&gt; PC
+            w przeciwnym wypadku: PC + 1 -&gt; PC
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  01 11bb bfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli bit b w rejestrze o adresie f jest ustawiony, to następna instrukcja nie zostanie wykonana. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Ponieważ w trakcie wykonywania rozkazu BTFSS następna instrukcja została już pobrana do wykonania, to zamiast niej wykonana zostanie instrukcja NOP (rozkaz BTFSS wykonuje się w trakcie dwóch cykli rozkazowych)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli natomiast bit b e rejestrze f jest wyzerowany, to rozkaz BTFSS jest wykonywany w jednym cyklu (brak modyfikacji licznika rozkazów)
+</p>
+
+</body>
+
+</html>
+
+
+

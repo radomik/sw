@@ -1,0 +1,80 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 80</title>
+</head>
+<body>
+    <a href="/sw/index.html">Lista zadań</a><br />
+    <h1>80. Operatory relacji. Operatory porównania. Operatory logiczne.</h1>
+    <h2>Operatory relacji</h2>
+    <p>
+    <ol>
+        <li>większy (>)</li>
+        <li>większy lub równy (>=)</li>
+        <li>mniejszy (<)</li>
+        <li>mniejszy lub równy (<=)</li>
+    </ol>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Wynikiem działania operatorów relacji są zawsze dwie wartości: 0 (gdy dana relacja jest fałszywa) i 1 (gdy relacja jest prawdziwa). Identycznie jak w przypadku operatorów arytmetycznych, operandy typu <b>reg</b>  oraz <b>sieci</b> są traktowane jako <b>liczby bez znaku</b>. Operandy typu <b>real</b> i <b>integer</b> mogą być liczbami ze znakiem. Jeżeli jakikolwiek <b>bit operandu</b> jest nieistotny (<b>x lub z</b>), to wynik relacji jest <b>również nieistotny.</b>   
+    </p>
+    <h2>Moduł realizujący dodawanie lub odejmowanie</h2>
+    
+    <p>
+        <pre class="code">
+module komparator
+    #(parameter rozmiar=8)
+    (input [rozmiar-1:0] A, B, output Y);
+
+    assign Y=(A>B);
+endmodule
+        </pre>
+    </p>
+    <h2>Operatory porównania</h2>
+    <p>
+    <ul>
+        <li>równy (==)</li>
+        <li>różny (!=)</li>
+        <li>literalnie równy ( === )</li>
+        <li>literalnie różny ( !== )</li>
+    </ul>
+    </p>
+    
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Wynikiem działania operatorów porównania są również tylko dwie wartości, 0 (fałsz) lub 1 (prawda). Dla operatorów typu == oraz != w przypadku, gdy <b>którykolwiek</b> z bitów operandów  jest <b>nieistotny</b>, wynik porównania jest również <b>nieistotny</b>. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Literalne operatory porównania wprowadzono wraz ze standardem Verilog-2001 i  w ich przypadku <b>porównanie</b> następuje <b>również z wartościami x oraz z</b>. Aby wynik porównania był prawdziwy, wszystkie bity operandów muszą być identyczne. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Różnica w znaczeniu literalnych operatorów porównania oraz zwykłych operatorów porównania jest istotna w przypadku symulacji.<b>Podczas syntezy wszystkie literalne operatory porównania zamieniane są na zwykłe odpowiedniki.</b>  
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Identycznie jak w przypadku operatorów arytmetycznych i operatorów relacji, operandy typu reg oraz sieci są traktowane jako liczby bez znaku. Operandy typu real i integer mogą by liczbami ze znakiem.
+    </p>
+    <h2>Operatory logiczne</h2>
+    <p>
+    <ul>
+        <li>negacja logiczna ( ! )</li>
+        <li>suma logiczna ( || )</li>
+        <li>iloczyn logiczny ( && )</li>
+    </ul>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Wyrażenia z operatorami logicznymi generują wartości 1 albo 0 (pojedynczy bit) w zależności od tego, czy wyrażenie jest prawdziwe czy też fałszywe. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operator negacji logicznej przekształca niezerową wartość (prawda) w wartość równą 0 (fałsz), natomiast wartość 0 przekształca w 1. Operator iloczynu logicznego generuje wartość 1 tylko wtedy, gdy obydwa operandy są prawdziwe, w przeciwnym wypadku daje wartość 0. W przypadku operatora sumy logicznej, daje on wartość 1 gdy którykolwiek z operandów jest prawdziwy. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W przypadku, gdy operandy operatorów logicznych <b>zawierają bity</b>, które przyjmują wartość <b>nieistotną (x lub z)</b>, a pozostałe <b>bity</b> są <b>wyłącznie zerami</b>, wtedy <b>wynik</b> operacji logicznej jest <b>nieistotny. </b>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Dla operatorów logicznych operandy typu reg oraz sieci są traktowane jako liczby bez znaku. Operandy typu real i integer mogą być liczbami ze znakiem.
+    </p>
+
+</body>
+
+</html>
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 73</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>73. Podstawowe elementy logiczne. Bramki logiczne. Składnia instancji bramek</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Do celów modelowania strukturalnego w języku Verilog mamy do dyspozycji <b>26 podstawowych</b> elementów logicznych (<b>primitives</b>). Do tych elementów zaliczane są <b>bramki logiczne i przełączniki</b> (switches). Bardziej szczegółowo zbiór podstawowych elementów logicznych można podzielić na <b>trzy kategorie</b>. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Kategorie wraz z nazwami poszczególnych elementów:<br />
+<ol>
+    <li><b>Bramki logiczne</b>and, nand, or, nor, xor, xnor</li>
+    <li><b>Bufory:</b> buf, not, bufif0, bufif1, notif0, notif1, pullup, pulldown</li>
+    <li><b>Tranzystory:</b><br />
+        <ul>
+            <li>nmos, pmos, cmos</li>
+            <li>rnmos, rpmos, rcmos</li>
+            <li>tran, rtran</li>
+            <li>tranif0, tranif1</li>
+            <li>rtranif0, rtranif1</li>
+        </ul>
+    </li>
+</ol>
+    </p>
+    <img src="/sw/img/73_1.png"/><br />
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Modelując układ cyfrowy na poziomie bramek logicznych posługujemy się instancjami. Utworzenie instancji (instantiation) elementów takich jak bramki logiczne lub moduły oznacza ich użycie, utworzenie konkretnego egzemplarza i podłączenie z pozostałą częścią opisywanego układu (innymi bramkami, modułami, sygnałami itp.).  
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Sposób podłączenia podstawowych elementów logicznych wykorzystuje tzw. notację pozycyjną. Dla kategorii <b>bramek</b> logicznych <b>pierwszy z terminali</b> listy połączeń reprezentuje <b>wyjście</b> danej bramki, <b>pozostałe to wejścia</b> (bramki mogą mieć wiele wejść). Składnia utworzenia instancji bramek logicznych jest następująca:
+    </p>
+    <p>
+<pre class="code">
+typ_bramki [siła] [opóźnienie] n_instancja_bramki {, n_instancja_bramki };
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;gdzie:<br />
+<ul>
+    <li><b>typ_bramki</b> jest jednym z symboli wymienionych w kategorii bramki logiczne</li>
+    <li><b>siła</b> jest opcjonalnym elementem charakteryzującym pewne właściwości elektryczne obwodu wyjściowego (drivera) bramki (stosowane głównie do modelowania na poziomie przełączników),</li>
+    <li><b>opóźnienie</b> określa wartość czasu propagacji sygnału przez bramkę (stosowane do celów symulacji), </li>
+</ul>
+    </p>
+    <p>
+<pre class="code">
+<b>n_instancja_bramki</b> ma postać:
+[nazwa_instancji] (terminal_wyjściowy, terminal_wejściowy {, terminal_wejściowy} ) 
+</pre>
+    </p>
+</body>
+
+</html>
+
+
+
+

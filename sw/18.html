@@ -1,0 +1,96 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 18</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h1>18. Instrukcje sterujące: wywołania podprogramu (call), powrotu z podprogramu (return, retfie, retlw).</h1>
+
+<br />
+<p>
+    <pre>
+    <b>18.1. CALL k</b>
+<i>Funkcja:</i>    Wywołaj podprogram spod adresu programu k
+<i>Argumenty:</i>  0 &lt;= k &lt;= 2047
+<i>Działanie:</i>  PC+1 -&gt; STOS
+            k -&gt; PC&lt;10:0&gt;
+            PCLATH&lt;4:3&gt; -&gt; PC&lt;12:11&gt;
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  10 0kkk kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;W pierwszej kolejności na stos odkładany jest 13-bitowy adres powrotu, a następnie do licznika rozkazów PC na pozycje PC&lt;10:0&gt; jest przesyłanych jedenaście bitów bezpośredniego adresu z argumentu rozkazu. Dwa najbardziej znaczące bity licznika rozkazów są ładowane z rejestru PCLATH&lt;4:3&gt;.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Rozkaz jest wykonywany w dwóch cyklach rozkazowych.</b>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>18.2. RETURN</b>
+<i>Funkcja:</i>    Powrót z podprogramu
+<i>Argumenty:</i>  brak
+<i>Działanie:</i>  STOS -&gt; PC
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  00 0000 0000 1000
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;13-bitowy adres posrotny jest zdejmowany ze stosu i wpisywany do licznika rozkazów PC.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Rozkaz jest wykonywany w dwóch cyklach rozkazowych.</b>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>18.3. RETFIE</b>
+<i>Funkcja:</i>    Powrót z procedury obsługi przerwania
+<i>Argumenty:</i>  brak
+<i>Działanie:</i>  STOS -&gt; PC
+    1 -&gt; GIE
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  00 0000 0000 1001
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;13-bitowy adres jest zdejmowany ze stosu i wpisywany do licznika rozkazów PC. Automatycznie zostaje włączony układ przerwań (bit GIE=1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Rozkaz jest wykonywany w dwóch cyklach rozkazowych.</b>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>18.4. RETLW k</b>
+<i>Funkcja:</i>    Powrót z podprogramu ze stałą w rejestrze W
+<i>Argumenty:</i>  0 &lt;= k &lt;= 255
+<i>Działanie:</i>   k -&gt; W
+    STOS -&gt; PC
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  11 01xx kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;13-bitowy adres jest zdejmowany ze stosu i wpisywany do licznika rozkazów PC. Do rejestru W jest ładowana 8-bitowa stała k.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Rozkaz jest wykonywany w dwóch cyklach rozkazowych.</b>
+</p>
+	<a href="21.html">Dokładniejszy przykład: zadanie 21</a>
+<p>
+	
+    <pre class="code">
+<b>; Przykład:</b>
+HERE: 
+ call TABLE
+ ...
+TABLE: 
+ addwf  PCL, f
+ retlw  k1      ; początek tablicy
+ retlw  k2      ; 
+ ...
+ retlw  kn      ; koniec tablicy
+    </pre>
+</p>
+
+</body>
+
+</html>
+
+
+

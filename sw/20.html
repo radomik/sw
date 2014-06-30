@@ -1,0 +1,82 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 20</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>20. OBSŁUGA PRZERWAŃ</h2>
+<p>
+Można dodać jakiś opis ogólny działania przerwań, bitów zezwoleń i wystąpień przerwań, bitów: globalnego zezwolenia na przerwania i bitu zezwolenia na przerwania od urządzeń peryferyjnych &#8211; patrz <a href="42.html">zadanie 42</a>
+</p>
+
+<p>
+
+<pre class ="code">
+<b> ; Procedura obsługi przerwania </b>
+w_temp      equ 0x7D    ; deklaracja zmiennych tymczasowych 
+status_temp equ 0x7E 
+pclath_temp equ 0x7F 
+
+ org    0x0004          ; wektor przerwań 
+    goto    Proc_INT    ; przejście do procedury obsługi przerwań 
+Proc_INT                ; początek procedury obsługi przerwania 
+    movwf   w_temp      ; zachowanie wartości rejestrów 
+    swapf   STATUS, W 
+    movwf   status_temp 
+    movf    PCLATH, W 
+    movwf   pclath_temp     
+<b> ; Wykrycie źródła przerwania  </b>
+banksel INTCON 
+    btfsc   INTCON, T0IF    ; przerwanie od TIMER0 ? 
+    goto    T0_INT          ; skok do procedury obsługi przerwania od TIMER0 
+    btfsc   INTCON, INTF    ; przerwanie zewnętrzne ? 
+    goto    INT_INT         ; skok do procedury obsługi zewnętrznego przerwania 
+    btfsc   INTCON, RBIF    ; przerwanie od zmian na POTRB ? 
+    goto    PORTB_INT       ; skok do procedury obsługi przerwania RB 
+    btfsc   EECON1, EEIF    ; przerwanie po zakończonym zapisie do pamięci EEPROM
+    goto    EEPROM_INT      ; skok do proc. obsługi przerwania od EEPROM 
+
+; wykrycie innych przerwań
+. . . 
+INT_ERR: goto INT_ERR   ; pułapka na wypadek kiedy przerwanie przyjęto, 
+                        ; a nie wykryto źródła
+ 
+T0_INT                  ; obsługa przerwania TIMER0  
+    bcf   INTCON, T0IF  ; zerowanie znacznika zgłoszenia przerwania 
+    goto  END_INT 
+INT_INT                 ; obsługa zewnętrznego przerwania 
+    bcf   INTCON, INTF  ; zerowanie znacznika zgłoszenia przerwania 
+    goto  END_INT 
+PORTB_INT               ; obsługa przerwania RB  
+    bcf   INTCON, RBIF  ; zerowanie znacznika zgłoszenia przerwania 
+    goto  END_INT 
+EEPROM_INT              ; obsługa przerwania od EEPROM 
+    bcf   EECON1, EEIF  ; zerowanie znacznika zgłoszenia przerwania 
+    goto  END_INT       ; obsługa innych przerwań
+END_INT
+    movf  pclath_temp, W  ; przywrócenie wartości rejestrów 
+    movwf PCLATH 
+    swapf status_temp, W 
+    movwf STATUS 
+    swapf w_temp, F 
+    swapf w_temp, W 
+    retfie                ; wyjście z procedury obsługi przerwania
+
+</pre>
+</p>
+
+<p>
+
+<pre class ="code">
+    
+</pre>
+</p>
+
+
+
+
+</body>
+
+</html>

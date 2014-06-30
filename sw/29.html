@@ -1,0 +1,36 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 29</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>29. UKŁAD ZEROWANIA. SCHEMAT LOGICZNY WEWNĘTRZNEGO UKŁADU ZEROWANIA. RODZAJE ZEROWANIA. INICJALIZACJA REJESTRÓW PODCZAS ZEROWANIA</h2>
+<p>
+<b> RODZAJE ZEROWANIA: </b><br />
+
+<li>zerowanie po włączeniu zasilania Power-on Reset (POR);</li>
+<li>podanie niskiego stanu na wejście MCLR mikrokontrolera w trakcie normalnej pracy;</li>
+<li>podanie niskiego stanu na wejście MCLR mikrokontrolera podczas trybu uśpienia;</li>
+<li>zerowanie przez układ licznika nadzorcy (WDT) w takcie normalnej pracy;</li>
+<li>zerowanie przez układ licznika nadzorcy (WDT) podczas trybu uśpienia;</li>
+<li>zerowanie podczas spadku napięcia zasilania poniżej wymaganego poziomu (Brown-out Reset - BOR);</li>
+<li>zerowanie w przypadku błędu parzystości (Parity Error Reset - PER). </li>
+</p>
+
+<p>
+<b>  Inicjalizacja rejestrów podczas zerowania: </b><br />
+Po włączeniu zasilania zawartość większości rejestrów mikrokontrolera ma wartość nieznaną, a do niektórych z nich jest wpisywane są pewne wartości startowe ustalone przez producenta. Stan większości rejestrów nie ulega zmianie, jeżeli mikrokontroler zostanie wyprowadzony ze stanu uśpienia przez układ licznika nadzorcy WDT. Jeżeli mikrokontroler został wyzerowany, wówczas można określić przyczynę zerowania badając bity !TO i !PD w rejestrze STATUS mikrokontrolera oraz bity POR i BOR z rejestru PCON.
+</p>
+
+<p>
+<b>Schemat logiczny wewnętrznego układu zerowania  </b><br />
+<img src="/sw/img/29_1.jpg" />
+
+</p>
+
+
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 60</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>60. Przyciski. Odczytywanie stanu przycisku. Drganie (iskrzenie) przycisków</h1>
+<p>
+    <img src="/sw/img/60_1.jpg" /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Bardzo często istnieje potrzeba sterowania systemem wbudowanym za pomocą przycisku lub zestawu przycisków, a nawet klawiaturą. Przyciski najczęściej wykonywane są w postaci mikroprzełączników, które po naciśnięciu zwierają styki.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Ponieważ zwolniony przycisk stanowi rozwarcie, wejście mikrokontrolera należy wstępnie spolaryzować za pomocą rezystora podciągającego (ang. pull-up). 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Może to być rezystor zewnętrzny o wartości 10kΩ podłączony do źródła zasilania i wejścia mikrokontrolera, jak również wewnętrzny rezystor pull-up.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Mikrokontrolery PIC16 posiadają możliwość włączenia rezystorów podciągających na liniach portu PORTB za pomocą wyzerowania ustawienia bitu RBPU w rejestrze OPTION_REG. Żaden inny port nie posiada wbudowanych rezystorów podciągających. 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Odczytywanie wartości na wejściu mikrokontrolera wymaga wyłącznie sprawdzenia stanu odpowiedniego bitu rejestru PORTB. Należy zwrócić uwagę, że stan <b>naciśnięcia przycisku</b> sygnalizowany jest za pomocą <b>logicznego zera</b> (niskiego poziomu), natomiast stan zwolnienia przycisku za pomocą <b>logicznej jedynki</b> (wysokiego poziomu). 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Odczytywanie stanu przycisku. Po naciśnięciu przycisku program przechodzi do części oznaczonej w komentarzu „WCIŚNIĘTO”, gdzie można wykonać niezbędne operacje. Następnie program oczekuje na zwolnienie przycisku. Po zwolnieniu przycisku program wraca do początku pętli.
+</p>
+
+<p>
+    <pre class="code">
+MAIN: 
+   banksel  OPTION_REG 
+   bcf      OPTION_REG, NOT_RBPU ; włączenie pull-up na PORTB 
+   banksel  TRISB 
+   movlw    0xFF                 ; przełączenie portu B na wejścia 
+   movwf    TRISB 
+   banksel  PORTB 
+KB_READ 
+   btfsc    PORTB, RB0      ; czy naciśnięty przycisk? 
+   goto     $-1             ; nie – wróć o jeden wiersz w górę 
+                            ; WCIŚNIĘTO 
+    ; tutaj wykonujemy operacje po wciśnięciu przycisku 
+   btfss    PORTB, RB0      ; czy zwolniono przycisk? 
+   goto     $-1             ; nie – wróć o jeden wiersz w górę 
+   goto     KB_READ         ; pętla odczytywania stanu klawisza 
+END
+</pre>
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Drganie.:</b> Każdy przycisk w trakcie naciskania przez pewien moment <b>generuje ciąg zer i jedynek</b>. Stan taki, zwany <b>drganiem (iskrzeniem)</b>, jest normalnym zjawiskiem wynikającym z fizycznej budowy przełącznika.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Procedura sprawdzająca, czy przycisk został naciśnięty odczyta taki stan, jako wielokrotne naciśnięcie i zwolnienie przycisku. Stan iskrzenia trwa z reguły kilka milisekund. 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Aby zabezpieczyć się przed niepoprawnym odczytem stanu klawisza należy wprowadzić opóźnienia w trakcie odczytywania. W poniższym fragmencie kodu <b>po naciśnięciu przycisku</b> następuje <b>odczekanie przez 5 ms</b>, po którym iskrzenie praktycznie już nie występuje. Identyczna sytuacja ma miejsce przy zwalnianiu przycisku. 
+</p>
+<p>
+    <pre class="code">
+KB_READ 
+    btfsc   PORTB, RB0      ; czy naciśnięty przycisk? 
+    goto    $-1             ; nie – wróć o jeden wiersz w górę 
+    call    delay_5ms       ;odczekaj 5 ms – likwidacja iskrzenia 
+    ; tutaj wykonujemy operacje po wciśnięciu przycisku 
+    btfss   PORTB, RB0      ; czy zwolniono przycisk? 
+    goto    $-1             ; nie – wróć o jeden wiersz w górę 
+    call    delay_5ms       ; odczekaj 5 ms – likwidacja iskrzenia 
+    goto    KB_READ         ; pętla odczytywania stanu klawisza
+</pre>
+</p>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 82</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>82. Operator warunkowy. Operator sklejania (konkatenacji). Priorytet operatorów. Rozmiar bitowy wyrażenia</h1>
+    <p>
+        <b>Operator warunkowy</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Operator warunkowy ( ? : ) jest operatorem trójargumentowym, działającym podobnie jak instrukcja warunkowa if-then-else. Używany jest, w połączeniu z trzema operandami, w następujący sposób: wyrażenie_warunkowe ? wyrażenie_l : wyrażenie_2.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Jeżeli wyrażenie_warunkowe jest prawdziwe (wartość rożna od zera), to obliczana i zwracana jest wartość wyrażenie_l. W przeciwnym przypadku, gdy wartość wyrażenie_warunkowe jest fałszywa, obliczana i zwracana jest wartość wyrażenie_2.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Gdy wartość <b>wyrażenie_warunkowe</b> jest <b>nieistotna</b> (zawiera bity x i/lub z, a pozostałe bity są zerami), wówczas wartością całego wyrażenia jest <b><font color="red">specyficzna wartość złożona z wartości obydwu wyrażeń wyrażenie_l oraz wyrażenie_2</font></b> w następującym porządku bitowym:
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;jeżeli bity na tych samych pozycjach (o tych samych wagach) w obydwu wyrażeniach mają identyczną wartość, to zwracana jest ta wartość bitów (na danych pozycjach), jeżeli bity różnią się, to na tych pozycjach zwracana jest wartość x.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Wyrażenia z operatorem warunkowym mogą być zagnieżdżane, np. tak, jak to zilustrowano na listingu 1.24. Na tym listingu jest pokazany opis bardzo prostej jednostki arytmetyczno-logicznej wykonującej 5 podstawowych operacji arytmetycznych i bitowych.
+    </p>
+    <p>
+    <pre class="code">
+List. 1.24. Przykład użycia zagnieżdżonego operatora warunkowego
+module miniALU(input [7:0] a,b, input[2:0] op, output [7:0] result);
+    parameter ADD=3'h0,SUB=3'hi,AND=3'h2, OR=3'h3, XOR=31h4;
+    assign result = ((op == ADD) 
+        ? a+b 
+        : ((op== XOR) 
+            ? a^b 
+            : (a) )))));
+endmodule
+    </pre>
+    </p>
+    <p>
+<b>Operator sklejania (konkatenacji)</b>
+&nbsp;&nbsp;&nbsp;&nbsp;Dzięki temu operatorowi możliwe jest złożenie (sklejenie) jednego lub kilku wyrażeń w celu uformowania wektora o większej liczbie bitów. Operator sklejania może być zastosowany zarówno po prawej, jak i po lewej stronie operatora przypisania (tak ciągłego, jak i proceduralnego). Użycie tego operatora polega na wylistowaniu wszystkich sklejanych wyrażeń przedzielonych znakiem przecinka i ujęcie ich w nawiasy klamrowe: {wyr_l, wyr_2, ... , wyr_n). Sklejane wyrażenia mogą być dowolnymi wyrażeniami z wyjątkiem stałych, dla których nie jest podany ich rozmiar bitowy.
+    </p>
+    <p>
+<b>Operator sklejania (konkatenacji)</b>
+&nbsp;&nbsp;&nbsp;&nbsp;Dzięki temu operatorowi możliwe jest złożenie (sklejenie) jednego lub kilku wyrażeń w celu uformowania wektora o większej liczbie bitów. Operator sklejania może być zastosowany zarówno po prawej, jak i po lewej stronie operatora przypisania (tak ciągłego, jak i proceduralnego). Użycie tego operatora polega na wylistowaniu wszystkich sklejanych wyrażeń przedzielonych znakiem przecinka i ujęcie ich w nawiasy klamrowe: {wyr_l, wyr_2, ... , wyr_n). Sklejane wyrażenia mogą być dowolnymi wyrażeniami z wyjątkiem stałych, dla których nie jest podany ich rozmiar bitowy.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Pewnym szczególnym przypadkiem operatora sklejania jest operator replikacji „{{}}”. Dla tego operatora używa się dwóch par nawiasów klamrowych oraz liczby określającej, ile razy dana wartość ma być powtórzona: {liczba{wyr_l, wyr_2, ... , wyr_n}}.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Działanie operatora sklejania bardziej szczegółowo wyjaśnimy na przykładzie ( List. 1.25 ) 
+List. 1.25. Fragment kodu ilustrujący użycie operatora sklejania
+    </p>
+    <p>
+    <pre class="code">
+wire[3:0]   a,b;
+wire[7:0]   c,d;
+wire[11:0]  e,f;
+assign c = {a, b};      //(1)
+assign e = {b,a,b};         //(2)
+assign f = {3 {a}};         //(3)
+assign b = {4{e==f}};   //(4)
+assign f = {a,d};           //(5)
+assign e = {2{l'bl,a,l'b0}};    //(6)
+assign {a, b} = d;                  //(7)
+assign {a,b,f} = {e,d]+l;       //(8)
+    </pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W linii (1) po prawej stronie operatora przypisania, dzięki użyciu operatora sklejania, otrzymaliśmy wektor o rozmiarze równym sumie rozmiarów wektorów a i b. Czyli w tym przypadku 8. Tyle samo wynosi rozmiar wektora, do którego przypisujemy sklejenie wektorów a i b. Najstarsze bity wektora c (o numerach od 4 do 7) otrzymują wartość bitów wektora a, z kolei młodszym bitom wektora c nadawana jest wartość wektora b. 
+    </p>
+    <p>
+    Podobna sytuacja ma miejsce w linii (2), z tym że 12-bitowemu wektorowi przypisujemy sklejenie trzech wektorów 4-bitowych.  
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W linii (3) zastosowaliśmy operator sklejenia z powtórzeniem (replikacją). Równoważny zapis tej linii byłby następujący:  
+    </p>
+    <p>
+    <pre class="code">
+assign f = {a,a,a}; //(3)
+    </pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Podobnie linię (4) moglibyśmy zapisać jako:
+    </p>
+    <p>
+    <pre class="code">
+assign b = {(e==f), (e==f),(e==f),(e==f)}; //(4)
+    </pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W linii (4) wszystkim bitom wektora b jest nadawana wartość wyniku porównania (1 bit) wektorów e i f.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Przypadek w linii (5) jest analogiczny do tych omawianych już w liniach (1) i (2). 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W kolejnym przypisaniu - linia (6) - w wyniku otrzymujemy wektor, którego bity mają następującą wartość: 1 a3a2a ja(/)l a^a2 a ia(P> gdzie ai oznacza i-ty bit wektora a. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W liniach (7) i (8) mamy do czynienia z użyciem operatora sklejania również po lewej stronie przypisania.
+    </p>
+    <h2>82.2. PRIORYTET OPERATORÓW. ROZMIAR BITOWY WYRAŻENIA</h2>
+    <p>
+<b>Priorytet operatorów</b>
+&nbsp;&nbsp;&nbsp;&nbsp;W przypadku, gdy mamy do czynienia ze złożonymi wyrażeniami zawierającymi pewną liczbę wymienionych wyżej operatorów, istotny jest sposób, w jaki zostanie wyliczona wartość tego wyrażenia. Czyli ważna jest informacja, który operator zostanie wykonany jako pierwszy, a który jako następny itd. O kolejności wykonywania operatorów decyduje ich priorytet. Podczas tworzenia wyrażeń z operatorami znajomość ich priorytetów nie jest warunkiem koniecznym. Bez informacji o priorytetach można się zawsze obejść, stosując nawiasy okrągłe.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Jednak wiedza na temat priorytetów czasem bywa bardzo przydatna. Poniższa tabela przedstawia priorytety operatorów języka Verilog, <b>pierwszy wiersz ma priorytet najwyższy, ostatni - najniższy.</b> Operatory znajdujące się w tej samej linii mają ten sam priorytet
+    </p>
+    <table border="1">
+        <tr>
+            <th><b>Operator</b></th>
+            <th><b>Opis</b></th>
+        </tr>
+        <tr>
+            <td> [ &nbsp;&nbsp;&nbsp;&nbsp; ] </td>
+            <td>Selekcja bitu, częściowa selekcja</td>
+        </tr>
+        <tr>
+            <td> ( &nbsp;&nbsp;&nbsp;&nbsp; ) </td>
+            <td>nawias okrągły</td>
+        </tr>
+        <tr>
+            <td> ! &nbsp;&nbsp;&nbsp;&nbsp; ~ </td>
+            <td>negacja logiczna i bitowa</td>
+        </tr>
+        <tr>
+            <td> &amp; &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; ~&amp; &nbsp;&nbsp;&nbsp;&nbsp; ~|  &nbsp;&nbsp;&nbsp;&nbsp;  ^  &nbsp;&nbsp;&nbsp;&nbsp;  ~^  &nbsp;&nbsp;&nbsp;&nbsp;  ^~ </td>
+            <td>operatory redukcji</td>
+        </tr>
+        <tr>
+            <td>+  &nbsp;&nbsp;&nbsp;&nbsp;  -</td>
+            <td>jednoargumentowe operatory zmiany znaku</td>
+        </tr>
+        <tr>
+            <td>{  &nbsp;&nbsp;&nbsp;&nbsp;  }</td>
+            <td>operator sklejania</td>
+        </tr>
+        <tr>
+            <td>**</td>
+            <td>potęgowanie</td>
+        </tr>
+        <tr>
+            <td>*  &nbsp;&nbsp;&nbsp;&nbsp;  /  &nbsp;&nbsp;&nbsp;&nbsp;  %</td>
+            <td>operatory arytmetyczne (dwuargumentowe)</td>
+        </tr>
+        <tr>
+            <td>+  &nbsp;&nbsp;&nbsp;&nbsp;  -</td>
+            <td>operatory arytmetyczne (dwuargumentowe)</td>
+        </tr>
+        <tr>
+            <td>&lt;&lt;  &nbsp;&nbsp;&nbsp;&nbsp;  &gt;&gt;  &nbsp;&nbsp;&nbsp;&nbsp;  &lt;&lt;&lt;  &nbsp;&nbsp;&nbsp;&nbsp;  &gt;&gt;&gt;</td>
+            <td>przesunięcia bitowe</td>
+        </tr>
+        <tr>
+            <td>&lt;  &nbsp;&nbsp;&nbsp;&nbsp;  &lt;=  &nbsp;&nbsp;&nbsp;&nbsp;  &gt;  &nbsp;&nbsp;&nbsp;&nbsp;  &gt;=  </td>
+            <td>operatory relacji arytmetycznych</td>
+        </tr>
+        <tr>
+            <td>==  &nbsp;&nbsp;&nbsp;&nbsp;  !=  &nbsp;&nbsp;&nbsp;&nbsp;  ===  &nbsp;&nbsp;&nbsp;&nbsp;  !==  </td>
+            <td>operatory porównania</td>
+        </tr>
+        <tr>
+            <td>&amp;</td>
+            <td>iloczyn bitowy</td>
+        </tr>
+        <tr>
+            <td>^  &nbsp;&nbsp;&nbsp;&nbsp;  ~^  &nbsp;&nbsp;&nbsp;&nbsp;  ^~</td>
+            <td>XOR bitowy, XNOR bitowy</td>
+        </tr>
+        <tr>
+            <td>|</td>
+            <td>suma bitowa</td>
+        </tr>
+        <tr>
+            <td>||</td>
+            <td>suma logiczna</td>
+        </tr>
+        <tr>
+            <td>&nbsp; ? &nbsp; : </td>
+            <td>operator warunkowy (trójargumentowy)</td>
+        </tr>
+    </table>
+    <p>
+    Wszystkie operatory w języku Verilog, z wyjątkiem operatora warunkowego, są łączne lewostronnie (w uproszczeniu: obliczane są od lewej strony do prawej). Jedynie operator warunkowy ma łączność prawostronną.
+    </p>
+    <p>
+<b>Rozmiar bitowy wyrażenia</b>
+&nbsp;&nbsp;&nbsp;&nbsp;Rozmiar (liczba bitów) wyrażenia jest zależna od rozmiaru operandów oraz typu operacji (zastosowanych operatorów). W ramach podsumowania zagadnień związanych z operatorami, w tabeli 1.6 przedstawiono rozmiar wyrażenia w zależności od typu operatora. Oznaczenie <b>L(i) oznacza rozmiar (liczbę bitów) operandu i.</b>
+    </p>
+    <img src="/sw/img/82_1.png"/>
+</body>
+
+</html>

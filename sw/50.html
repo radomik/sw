@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 50</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>50. Układ czasowy TIMER1. Informacje ogólne. Schemat blokowy układu czasowego TIMER1. Rejestr T1CON. Bity rejestru T1CON</h2>
+<p><br />
+<img src="/sw/img/50_1.png" /><br />
+<br />
+
+Układ czasowy TIMER1 występuje w mikrokontrolerze PIC16F877A, natomiast nie występuje w mikrokontrolerze PIC16F84. Układ TIMER1 jest 16-bitowym licznikiem lub czasomierzem składającym się z dwóch rejestrów: TMR1H i TMR1L.<br /><br />Możliwy jest oczywiście zarówno odczyt, jak i zapis tych rejestrów. Para rejestrów TMR1H:TMR1L jest inkrementowana od wartości 0000h do FFFFh i po przepełnieniu &#8211; licznik zaczyna liczyć z powrotem od 0000h.  <br />
+<br />
+    Układ posiada preskaler, który może wstępnie podzielić częstotliwość zliczanych impulsów przez wartość 1, 2, 4 lub 8. Wszystkie instrukcje zapisujące do rejestrów TMR1H i TMR1L zerują preskaler.<br />
+    <br />
+        Układ TIMER1 ma możliwość zgłaszania przerwania, które jest generowane przy przepełnieniu licznika. Przerwanie jest sygnalizowane poprzez ustawienie na jedynkę bitu TMR1F w rejestrze PIR1.
+        <br /><br />
+        Przerwanie to może być aktywowane lub maskowane za pomocą ustawiania lub zerowania bitu TMRIE w rejestrze PIE1. Układ czasowy TIMER1 może pracować w dwóch trybach: w trybie czasomierza i w trybie licznika. Tryb pracy jest wybierany za pomocą bitu TMR1CS w rejestrze T1CON.   <br />
+        <br />
+        W trybie czasomierza (TMR1CS=0) układ czasowy jest inkrementowany w każdym cyklu rozkazowym. W trybie licznika układ czasowy zwiększa swoją zawartość o 1 przy nadejściu każdego narastającego zbocza zewnętrznego sygnału zegarowego. 
+    Układ czasowy TIMER1 może być włączany lub wyłączany poprzez ustawianie lub zerowanie bitu TMR1ON w rejestrze T1CON. Układ czasowy TIMER1 posiada także wewnętrzne wejście zerujące.    <br />
+    <br />
+        Sygnał Reset może być generowany przez jeden z dwóch modułów CCP (Capture, Compare, PWM). W przypadku, gdy włączony jest oscylator zewnętrzny układu TIMER1 (bit T1OSCEN w rejestrze T1CON ustawiony na jedynkę), wyprowadzenia RC1/T1OSI/CCP2 i RC0/T1OSO/T1CKI stają się wejściami. Wówczas zawartość bitów nr 1 i nr 0 rejestru TRISC jest ignorowana i z wyprowadzeń tych jest zawsze odczytywana wartość zero.
+</p>
+
+<p>
+<b>REJESTR T1CON. BITY REJESTRU T1CON  </b><br />
+<br />
+
+<img src="/sw/img/50_2.png" /><br /><br />
+<ul>
+    <li>T1CKPS1, T1CKPS0 &#8211; wybór podziału częstotliwości przez preskaler; podział częstotliwości odbywa się w stosunku 1:2N, gdzie N jest wartością binarną, w której bity 1 i 0 są określone wartościami bitów odpowiednio T1CKPS1 i T1CKPS0; </li>
+    <li>T1OSCEN &#8211; włączenie (wartością 1) lub wyłączenie (wartością 0) układu generatora zegarowego na wyprowadzeniach T1OSI i T1OSO; gdy generator nie jest potrzebny należy go wyłączyć w celu zmniejszenia poboru prądu przez układ;</li>
+    <li>T1SYNC &#8211; włączenie (wartością 0) lub wyłączenie (wartością 1) synchronizacji sygnału zewnętrznego z wewnętrznym układem taktującym; gdy TMR1CS = 0 wartość tego bitu nie ma znaczenia (źródłem impulsów jest zegar systemowy); </li>
+    <li>TMR1CS &#8211; wybór źródła impulsów, które będzie zliczał TIMER1; gdy TMR1CS = 1 źródłem impulsów jest wyprowadzenie T1CKI, dla TMR1CS = 0 impulsy pochodzą od zegara systemowego; </li>
+    <li>TMR1ON &#8211; włączenie (wartością 1) lub wyłączenie (wartością 0) układu TIMER1.</li>
+</ul>
+</p>
+
+</body>
+
+</html>

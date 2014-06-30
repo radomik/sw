@@ -1,0 +1,112 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 70</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>70. Moduł i lista portów wejścia-wyjścia. Moduł. Definicja modułu. Porty. Przykłady deklaracji
+portów. Opis modułu z nowym stylem deklaracji portów. Opis modułu ze starym stylem
+deklaracji portów</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Moduł</b> - podstawowa jednostka projektu w języku Verilog, opisywany w tym języku system cyfrowy składa się ze zbioru modułów. Oprócz nazwy, ma tzw. Porty we-wy, czyli pewne sygnały umożliwiające komunikację z otoczeniem. Każdy moduł ma interfejs do innych modułów i opis architektury. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Reprezentuje logiczną jednostkę, która może zostać opisana poprzez specyfikację wewnętrznej struktury logicznej (bramki) lub przez opis sposobu zachowania (język programowania). Moduły mogą być łączone ze sobą przez sieci (nets), co umożliwia ich wzajemną komunikację.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Moduły przypominają nieco procedury lub funkcje w językach programowania oprogramowania.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Ogólna definicja modułu</b><br />
+<pre class="code">
+module nazwa [lista portów];
+    [deklaracje i instrukcje]
+endmodule
+</pre><br />
+gdzie <b>lista_portów</b> ma postać:<br />
+<pre class="code">
+{port {,port} }
+</pre>
+    </p>
+    <h2>70.2. PORTY. PRZYKŁADY DEKLARACJI PORTÓW. OPIS MODUŁU Z NOWYM STYLEM DEKLARACJI PORTÓW. OPIS MODUŁU ZE STARYM STYLEM DEKLARACJI PORTÓW</h2>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Port może być pewnym wyrażeniem, najczęściej jednak wygląda następująco:
+<pre class="code">
+    typ_portu [zakres] nazwa_portu {,nazwa_portu}
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;gdzie <b>typ_portu</b> może być jednym ze słów kluczowych:<br />
+<ul>
+    <li><b>input</b> (wejście)</li>
+    <li><b>output</b> (wyjście)</li>
+    <li><b>inout</b> (port dwukierunkowy)</li>
+</ul>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;za którym występuje nazwa typu danych:<br />
+<ul>
+    <li><b>reg</b> (tylko dla output)</li>
+    <li><b>wire</b> (domyślny)</li>
+</ul>
+    </p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Dodatkowo pomiędzy typem portu a listą nazw sygnałów może wystąpić <b>specyfikator zakresu</b> (dany port może być <b>pojedynczym bitem</b>, może też być <b>wektorem – magistralą</b> o zadanej liczbie bitów).<br />
+Specyfikatora zakresu używa się również podczas definicji zmiennych (sygnałów-magistral) dla danego modułu. Forma użycia specyfikatora zakresu jest następująca:
+<pre class="code">
+    [msb:lsb]
+</pre>
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;gdzie:<br />
+<ul>
+    <li>msb – pozycja najbardziej znaczącego bitu</li>
+    <li>lsb – pozycja najmniej znaczącego bitu</li>
+</ul>
+    </p>
+    
+    
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Oba muszą być wyrażeniami stałymi, nieujemnymi. Nawiasy kwadratowe stanowią część opisu składni i nie oznaczają elementu opcjonalnego. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Przykład (<font color="green"><b>nowy styl deklaracji modułu</b></font> – jak w C)<br />
+<pre class="code">
+module sum1 (input A, B, Cin,
+             output Y, Cout);
+    wire g1_o,g2_o,g3_o,g4_o;
+
+    and g1(g1_o,A,B);
+    xor g4(g4_o,A,B);
+    and g2(g2_o,Cin,g4_o);
+    or g3(Cout,g1_o,g2_o);
+    xor g5(Y,Cin,g4_o);
+endmodule
+</pre><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Zdefiniowaliśmy 5 portów we-wy: 3 porty wejściowe o nazwie A, B, Cin oraz dwa porty wyjściowe o nazwach Y oraz Cout. Nie określiliśmy tu jawnie typu danych sygnałów (wire czy reg), a jedynie ich kierunek (we/wy).
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Przykład (<font color="green"><b>stary styl deklaracji modułu</b></font>)<br />
+<pre class="code">
+module sum1(A, B, Cin, Y, Cout);
+    input       A, B, Cin;
+    output      Y, Cout;
+    reg         Y, Cout;
+    wire        A, B, Cin;
+(...)
+</pre><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Czyli po prostu w nawiasie tylko nazwy a specyfikacja typów niżej.
+    </p>
+
+</body>
+
+</html>
+
+
+
+

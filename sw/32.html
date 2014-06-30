@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 32</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>32. REJESTRY PCL I PCLATH. ZMIANA ZAWARTOŚCI LICZNIKA ROZKAZÓW PC. STOS</h2>
+<img src="/sw/img/32_1.jpg" />
+<p>
+Pamięć programu jest adresowana z pomocą 13-bitowego licznika rozkazów PC (Program Counter), który przechowuje adres rozkazu pobieranego z pamięci Osiem mniej znaczących bitów licznika rozkazów PC<7:0> jest zawarta w rejestrze specjalnym PCL, natomiast starsze bity PC<12:8> są określane zawartością bitów<4:0> rejestru specjalnego PCLATH (Program Counter Latch Register).
+</p>
+
+<p>
+<b> FORMAT LICZNIKA ROZKAZÓW PC: </b><br />
+Cechy:
+<br />
+<ul>
+<li>wykonanie operacji arytmetycznych i logicznych, czyli może on być operandem docelowym instrukcji, w odróżnieniu od większości innych architektur, gdzie licznik PC może być modyfikowany tylko za pomocą instrukcji skoków oraz wywołania podprogramów. </li>
+<li>13-bit licznik instr. PC pozwala zaadresować max do 8K słów rozkazowych </li>
+<li>zawijania adresów (starsze niewykorzystane bity -  ignorowane).</li>
+</ul>
+
+    Pamięć programu mikrokontrolerów PIC16 dzieli się na strony rozmiarem 2K słów. Numer strony jest określany przez bity PCLATH<4:3>. Związane z tym jest wykonanie rozkazu skoku GOTO oraz rozkazu wywołania podprogramu CALL. <br />
+    <br />
+    Przekazanie sterowania do innej strony pamięci powinno być poprzedzone modyfikacją bitów PCLATH<4:3>.
+</p>
+
+<p>
+<b> STOS:  </b>
+W PIC16 zrealizowano 8-elementowy stos sprzętowy jako bufor ośmiu 13-bitowych rejestrów. Na stosie przechowywane są 13-bitowe adresy powrotu (zawartość licznika rozkazów PC) z podprogramów. Stos mikrokontrolerów PIC16 wykorzystuje się wyłącznie do przechowywania adresów powrotu z procedur i programu obsługi przerwań. <br />
+<br />
+    Stos zorganizowany jest jako bufor cykliczny, dlatego poziom zagnieżdżenia podprogramów jest ograniczony do ośmiu. Odłożenie na stosie więcej niż ośmiu adresów spowoduje nadpisanie przechowywanych danych i doprowadzi do naruszenie prawidłowego wykonania programu. 
+    </p><p><b>Przepełnienie stosu</b> nie jest w żaden sposób sygnalizowane, o to aby tego nie dopuścić powinien zadbać programista. Wskaźnik stosu także nie jest programowo dostępny.
+</p>
+
+
+</body>
+
+</html>

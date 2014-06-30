@@ -1,0 +1,50 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 79</title>
+</head>
+<body>
+    <a href="/sw/index.html">Lista zadań</a><br />
+    <h1>79. Operatory (statements). Tablica operatorów języka Verilog. Operatory arytmetyczne.</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operatory identyfikują rodzaj operacji wykonywanej na operandach w celu uzyskania odpowiedniej wartości wyrażenia. Operandy są to argumenty operatorów. W języku Verilog operandami mogą być:
+    <ol>
+        <li>liczby,</li>
+        <li>sieci,</li>
+        <li>zmienne reg (także dane innych typów, jak. np. integer),</li>
+        <li>selekcja bitu, </li>
+        <li>częściowa selekcja</li>
+        <li>wywołania funkcji</li>
+    </ol>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Z kolei wyrażenie składa się z jednego lub wielu operandów przedzielonych operatorami. Wyrażenia używane są wszędzie tam, gdzie wymagana jest wartość w języku Verilog.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Większość występujących w języku Verilog operatorów jest operandami jedno- lub dwuargumentowymi. Wyjątek stanowi <b>operator warunkowy (trójargumentowy)</b> oraz <b>operator sklejania (wieloargumentowy)</b>.
+    </p>
+    <h2>Operatory arytmetyczne</h2>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Realizują podstawowe operacje arytmetyczne, jak:
+    <ul>
+        <li>dodawanie (+)</li>
+        <li>odejmowanie (-)</li>
+        <li>mnożenie (*)</li>
+        <li>dzielenie (/)</li>
+        <li>potęgowanie (**)</li>
+        <li>reszta z dzielenia (%)</li>
+    </ul>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operandy typu <b>reg</b> oraz <b>sieci</b> (wire, wand, wor, itd.) są traktowane jako liczby bez znaku. Jeżeli mamy do czynienia z operandami typu <b>real</b> lub <b>integer</b>, to <b><u>mogą</u></b> być one traktowane jako <b>liczby ze znakiem</b>. Operator ‘-‘  może być dwuargumentowy lub jednoargumentowy. W tym drugim przypadku użycie tego operatora oznacza zmianę znaku operandu.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operator potęgowania działa zgodnie z zależnością: wynik=podstawa**wykładnik. Jeżeli jakikolwiek bit operandu operatorów arytmetycznych jest <b>nieistotny</b>  – ma wartość <b>x – don’t care</b> lub <b>z – wysoka impedancja</b>) wówczas <b>wynik jest również nieistotny (wartość x)</b>.
+    </p>
+    
+    <img src="/sw/img/79_1.png"/>
+</body>
+
+</html>
+

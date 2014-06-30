@@ -1,0 +1,50 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 58</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>58.1. PAMIĘĆ EEPROM I FLASH. INFORMACJE OGÓLNE. REJESTRY ADRESU I DANYCH</h2>
+<p>
+	Mikrokontrolery PIC16 posiadają pamięć danych EEPROM oraz pamięć programu FLASH, które można czytać lub zapisywać podczas normalnej pracy mikrokontrolera. Pamięć EEPROM służy do przechowywania danych, natomiast pamięć FLASH jest pamięcią programu. 
+	<br />Pamięci te nie są bezpośrednio mapowane w przestrzeni adresowej pamięci danych, natomiast są one adresowane pośrednio za pomocą rejestrów specjalnych SFR. <br />
+	<br />
+  	W mikrokontrolerach PIC16 używanych jest 6 rejestrów do obsługi pamięci EEPROM i FLASH: EECON1; EECON2; EEDATA; EEDATAH; EEADR; EEADRH; Mikrokontroler PIC16F84 nie umożliwia dostępu do pamięci programu FLASH podczas normalnej pracy mikrokontrolera. Dostęp do pamięci EEPROM w mikrokontrolerze PIC16F84 odbywa się w taki sam sposób jak dla mikrokontrolera PIC16F877A.  <br />
+	<br />
+			Mikrokontroler PIC16F877A posiada 256 8-bitowej pamięci EEPROM o adresach od 0 do FFh. Pamięć FLASH w mikrokontrolerze PIC16F877A ma rozmiar 8K słów, gdzie każde słowo jest 14-bitowe. Powoduje to konieczność użycia dwóch rejestrów danych EEDATAH:EEDATA. <br />
+			<br />
+				Adres do pamięci FLASH jest 13 bitowy i także wymaga użycia dwóch rejestrów EEADRH:EEADR. Pamięć EEPROM umożliwia odczyt i zapis pojedynczego bajta danych. Pamięć FLASH umożliwia odczyt tylko pojedynczego bajta danych, ale pozwala na zapis jednocześnie bloku 4 słów. <br />
+				<br />
+				Podczas zapisu danych komórki pamięci EEPROM i FLASH są automatycznie kasowane. Rejestry adresu i danych: Mikrokontroler PIC16F877A posiada dwa rejestry adresu &#8211; EEADRH i EEADR. Za ich pomocą można zaadresować maksymalnie 256 bajtów danych pamięci EEPROM oraz 8K słów pamięci FLASH.
+				<br />Przy wyborze adresu pamięci danych EEPROM tylko mniej znaczący bajt adresu jest zapisywany do rejestru EEADR, a  przy wyborze adresu pamięci programu FLASH dodatkowo bardziej znaczący bajt adresu zapisuje się do rejestru EEADRH<br />
+				<br />
+			Mikrokontroler PIC16F877A posiada dwa rejestry danych &#8211; EEDATAH i EEDATA. Za ich pomocą przesyła się dane do pamięci przy zapisie oraz odbiera się dane z pamięci przy odczycie. Przy odczycie pamięci danych EEPROM &#8211; 8-bitowe dane trafiają tylko do rejestru danych EEDATA, natomiast przy odczycie pamięci programu FLASH &#8211; 14-bitowe dane są umieszczone odpowiednio &#8211; starsza część słowa &#8211; w rejestrze EEDATAH, a młodsza część słowa &#8211; w rejestrze EEDATA.<br />
+			<br />
+			<br />
+		Mikrokontroler PIC16F84 nie umożliwia dostępu do pamięci programu FLASH, dlatego wykorzystywane są tylko rejestr adresu EEADR do adresowania pamięci danych EEPROM oraz rejestr EEDATA do transmisji danych.<br />
+		<br />
+			 		. 	
+</p>
+
+<p>
+<b> 58.2. REJESTRY STERUJĄCE EECON1 I EECON2. ZNACZENIE POSZCZEGÓLNYCH BITÓW W REJESTRZE EECON1 </b>
+	Dostęp do pamięci EEPROM i FLASH jest kontrolowany za pomocą dwóch rejestrów konfiguracyjnych: EECON1 i EECON2. Podstawowym rejestrem konfiguracyjnym jest rejestr EECON1. Rejestr EECON2 nie jest fizycznym rejestrem. W wyniku odczytania tego rejestru zawsze otrzymamy 0. Rejestr EECON2 jest używany przy zapisywaniu danych do pamięci EEPROM lub FLASH. Jednym z kroków operacji zapisu jest wpisanie do rejestru EECON2 wartości: 55h i AAh.<br />
+	<br />
+	<img src="/sw/img/58_1.png" /><br />
+	<br />
+	<br />
+	<ul>
+		<li>bit 7 - EEPGD: bit umożliwiający wybór pamięci: 1 &#8211; pamięć programu FLASH, 0 &#8211; pamięć danych EEPROM</li>
+		<li>bit 3 - WRERR: flaga błędu zapisu do pamięci EEPROM/FLASH: 1 &#8211; zapis do pamięci EEPROM/FLASH został przerwany (przez zerowanie niskim poziomem na wejściu MCLR lub przez układ licznika nadzorcy WDT), 0 &#8211; operacja zapisu przebiegła pomyślnie;</li>
+		<li>bit 2 - WREN: bit zezwalający na zapis do pamięci EEPROM/FLASH: 1 &#8211; zezwolenie na zapis, 0 &#8211; zapis zabroniony; </li>
+		<li>bit 1 - WR: bit kontroli zapisu: 1 &#8211; inicjuje cykl zapisu, bit jest zerowany kiedy zapis zostanie zakończony, bit może być ustawiony na 1 tylko programowo, 0 &#8211; cykl zapisu do pamięci został zakończony; </li>
+		<li>bit 0 - RD: bit kontroli odczytu: 1 &#8211; inicjuje cykl odczytu, bit jest zerowany kiedy odczyt zostanie zakończony, bit może być ustawiony na 1 tylko programowo, 0 &#8211; nie inicjuje cyklu odczytu.</li>
+	
+	</ul>
+</p>
+
+</body>
+
+</html>

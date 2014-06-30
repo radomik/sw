@@ -1,0 +1,113 @@
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 62</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>62.1. Dołączenie klawiatury komputera PC do mikrokontrolera. Przesyłanie danych do klawiatury. Przesyłanie danych z klawiatury do mikrokontrolera</h1>
+
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Klawiatura jest elementem często stosowanym w układach sterowania. Jednak styki klawiatury są elementami mechanicznymi dlatego styki podczas przełączania drgają, powodując powstanie serii impulsów. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Drgania te mogą trwać od 100 us do 15 ms. Drganie musi być eliminowane tak, aby po naciśnięciu klawisza mógł być odczytany jego stabilny stan.
+    <ol>
+        <li>Algorytm obsługi klawiatury</li>
+        <li>Czekanie na puszczenie przycisku</li>
+        <li>Czekanie na przyciśnięcie przycisku</li>
+        <li>Odliczanie opóźnienia eliminującego drgania styków (ok. 20 ms)</li>
+        <li>Sprawdzenie stanu klawiatury. Jeżeli żaden przycisk nie jest wciśnięty, to powrót do punktu 2 (wykryto zakłócenie). Inaczej (wykryto wciśnięcie) generowanie kodu przyciśniętego klawisza.</li>
+        <li>Czekanie na puszczenie przycisku. </li>
+    </ol>
+</p>
+<p>
+    <pre class="code">
+<b>; Obsługa klawiatury PC</b>
+;   Przyciski podłączone do linii RB4...RB7 
+;   kod przycisku jest zwracany w rejestrze W 
+pom equ 0x000C ; zmienna pomocnicza 
+_klawiatura                         ; 1. Czekanie na puszczenie przycisku 
+   movf         PORTB,W  
+   andlw        0xf0                ; znalezienie przyciśniętego klawisza 
+   xorlw        0xf0                ; inwersja wyniku 
+   btfss        STATUS,Z            ; jeżeli zero, to nie ma naciśniętych klawiszy
+   goto         _klawiatura 
+p_klawisz                           ; 2. Czekanie na przyciśniecie klawisza 
+   movf         PORTB, W     
+   andlw        0xf0 
+   xorlw        0xf0 
+   btfsc        STATUS, Z           ; jeżeli zero, klawisz naciśnięty 
+   goto         p_klawisz           ; 
+; 3. Odliczanie opóźnienia eliminującego drgania styków (ok. 20 ms).
+   movlw        .20      
+   call         delay_msek          ; likwidacja drgań styków        
+; 4. Ponowne sprawdzenie klawiatury 
+   movlw        PORTB,W  
+   andlw        0xf0         
+   xorlw        0xf0 
+   btfsc        STATUS,Z            ; jeżeli zero, klawisz naciśnięty 
+   goto         p_klawisz           ; czekaj na przyciśniecie klawisza 
+; 5.1. generowanie kodu przyciśniętego klawisza 
+   movf         PORTB,W             ; pobranie wartości portu B 
+   movwf        pom                 ; zachowujemy w pom 
+   rrf          pom,f               ; przesunięcie w prawo o 4 bity 
+   rrf          pom,f 
+   rrf          pom,f 
+   rrf          pom,f 
+   comf         pom,f               ; negacja wyniku
+; 5. Czekanie na przyciśniecie klawisza 
+z_klawisz   
+   movf         PORTB,W  
+   andlw        0xf0 
+   xorlw        0xf0 
+   btfss        STATUS,Z            ; nie ma naciśniętych klawisz 
+   goto         z_klawisz 
+; 6. Ładowanie wyniku do akumulatora 
+   movf         pom,w 
+   andlw        0x0f                ; czyść w W starsze bity 
+return
+
+; przykład zastosowania procedury odczytu stanu klawiatury 
+ org 00h
+ banksel    TRISB ; inicjalizacja portów 
+ movlw      TRISB 
+ clrf       TRISA 
+ banksel    PORTA 
+ clrf       PORTA 
+_et             
+    call    _klawiatura ; czytanie klawiatury 
+    movwf   PORTA
+    goto    _et
+    </pre>
+</p>
+<h2>62.2. Algorytm procedury odczytania kodu przycisku klawiatury PC</h2>
+
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Przy wysyłaniu danych do mikrokontrolera sterownik klawiatury generuje sygnał zegarowy i dane pojawiają się synchronicznie na linii Data. Dane na linii Data muszą być stabilne w momencie opadającego zbocza na linii zegarowej Clock. 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Sterownik może wysłać kod sterujący klawiatury, a klawiatura odsyła kod potwierdzenia. Po naciśnięciu przycisku klawiatura wysyła do sterownika kod przyciśniętego klawisza. Jeżeli przycisk jest cały czas trzymany, to po określonym czasie wysyłany jest ponownie jego kod, aż do momentu puszczenia klawisza. 
+</p><br />
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Po puszczeniu klawisza wysyłany jest kod F0h. Jeżeli nie zależy nam na wysyłaniu poleceń do klawiatury, to można nie wysyłać do niej żadnych komend. Kody podstawowych klawiszy mają zawsze długość jednego bajtu, a każdy klawisz ma przypisany tylko jeden kod.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Rozróżnienie pomiędzy dużymi i małymi literami musi być realizowano programowe za pomocy sprawdzenia, czy przed naciśnięciem klawisza był przyciśnięty klawisz Shift lub Caps Lock.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Kontroler klawiatury obsługuje także przyciski z numerycznej i kursorowej części klawiatury. Kody tych przycisków mają długość 2 bajtów, z wyjątkiem trzech klawiszy: PrtScr, ScrLck i Break.
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Po odebraniu kodu prefiksu E0h trzeba odebrać jeszcze jeden kod i dopiero te dwie wartości określają jednoznacznie wciśnięty przycisk. 
+</p>
+<p>
+&nbsp;&nbsp;&nbsp;&nbsp;Procedura odczytuje z klawiatury 11 bitów ramki wysyłanej z klawiatury i umieszcza je w rejestrach kod_0 i kod_1. Linia danych Data jest podłączona do wyprowadzenia RA2 mikrokontrolera, a linia zegarowa Clock – do wyprowadzenia RA3. Po odebraniu wszystkich jedenastu bitów są sprawdzane bity startu i stopu. Jeżeli bity ramki są prawidłowe, to do rejestru W wpisywany jest odebrany kod klawisza. W przeciwnym przypadku rejestr W jest zerowany.
+</p>
+
+</body>
+</html>

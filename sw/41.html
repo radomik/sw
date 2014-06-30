@@ -1,0 +1,116 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 41</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>41. Dołączenie klawiszy do mikrokontrolera. Algorytm obsługi klawiatury. Procedura obsługi klawiatury </h2>
+<p>
+    Klawiatura jest elementem często stosowanym w układach sterowania. Jednak styki klawiatury są elementami mechanicznymi dlatego styki podczas przełączania drgają, powodując powstanie serii impulsów. Drgania te mogą trwać od 100 us do 15 ms.
+</p><p>
+Drganie musi być eliminowane tak, aby po naciśnięciu klawisza mógł być odczytany jego stabilny stan. 
+</p>
+
+<p>
+<b>Algorytm obsługi klawiatury.   </b>
+<ol>
+    <li>Czekanie na puszczenie przycisku.</li>
+    <li>Czekanie na przyciśnięcie przycisku.</li>
+    <li>Odliczanie opóźnienia eliminującego drgania styków (ok. 20 ms).</li>
+    <li>Sprawdzenie stanu klawiatury:<ul>
+        <li>Jeżeli żaden przycisk nie jest wciśnięty, to powrót do punktu 2 (wykryto zakłócenie). </li>
+        <li>Inaczej (wykryto wciśnięcie) generowanie kodu przyciśniętego klawisza.</li>
+    </ul></li>
+    <li> Czekanie na puszczenie przycisku.</li>
+</ul>
+</p>
+
+<pre class="code">
+<b>; Przyciski podłączone do linii RB3...RB0</b>
+; 1. Czekanie na puszczenie przycisku
+;       znalezienie przyciśniętego klawisza
+;       inwersja wyniku
+;       jeżeli zero, to nie ma naciśniętych klawiszy
+; 2. Czekanie na przyciśniecie klawisza
+;        jeżeli zero, klawisz naciśnięty
+; 3. Czekanie na opóźnienie 20 ms
+;       likwidacja drgań styków
+; 4. Ponowne sprawdzenie klawiatury 
+;       jeżeli zero, klawisz naciśnięty
+;       czekaj na przyciśniecie klawisza 
+;       generowanie kodu przyciśniętego klawisza 
+;       pobranie wartości portu B
+;       zachowujemy w pom 
+;       negacja wyniku
+; 5. Czekanie na przyciśnięcie klawisza 
+;       nie ma naciśniętych klawisz
+;       ładowanie wyniku do akumulatora 
+;       czyść w W starsze bity
+<b>; przykład zastosowania procedury 
+; odczytu stanu klawiatury</b>
+
+org 00h
+
+main:
+ ; inicjalizacja portów
+ banksel TRISB  
+ movlw   b'00001111'
+ movwf   TRISB
+ clrf    TRISA 
+ banksel PORTA 
+ clrf    PORTA 
+
+_et:
+ call    _klawiatura ; czytanie klawiatury 
+ movwf   PORTA
+ goto    _et
+ 
+; Procedura odczytu klawiatury
+pom equ 0x000C  ; zmienna pomocnicza 
+_klawiatura:    ; czekaj dopóki wciśnięty:
+ movf   PORTB,W ; tzn.: RB3...RB0 != 1111
+ andlw  0x0f  
+ xorlw  0x0f  
+ btfss  STATUS,Z   
+ goto   _klawiatura ; RB3...RB0 != 1111
+                    ; RB3...RB0 == 1111
+p_klawisz:  ; czekaj dopóki odpuszczony:
+ movf   PORTB,W     ; tzn.: RB3...RB0 == 1111
+ andlw  0x0f 
+ xorlw  0x0f 
+ btfsc  STATUS,Z   
+ goto   p_klawisz     ; RB3...RB0 == 1111
+ ; wciśnięto klawisz: ; RB3...RB0 != 1111
+ movlw  .20        ; czekaj 20 ms ...
+ call   delay_msek ;  ... drgania styków
+
+ movf   PORTB,W        
+ andlw  0x0f       
+ xorlw  0x0f 
+ btfsc  STATUS,Z   
+ goto   p_klawisz
+ movf   PORTB,W     
+ movwf  pom
+ comf   pom,f   ; negacja wyniku 
+                ; (kod w młodszych 4-bitach)
+z_klawisz:      ; czekaj dopóki wciśnięty:
+ movf PORTB,W     
+ andlw  0x0f 
+ xorlw  0x0f 
+ btfss  STATUS,Z   
+ goto   z_klawisz ; RB3...RB0 != 1111
+                  ; RB3...RB0 == 1111
+ movf   pom,w     ; przenieś wynik do W
+ andlw  0xf0      ; i wyzeruj górny półbajt
+ return           ; koniec procedury
+                  ; _klawiatura
+
+</pre>
+
+
+
+</body>
+
+</html>

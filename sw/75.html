@@ -1,0 +1,73 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 75</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>75. Typy danych. Typ wire i jego pochodne. Typ reg. Typy liczbowe.</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W języku Verilog występują <b>dwa podstawowe</b> typy danych: <b>wire i reg. </b>.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Wire</b> reprezentuje fizyczne połączenia (przewody) w opisywanym układzie. Dane (sygnały) zadeklarowane jako wire często nazywane są sieciami (nets). Dane tego typu, w przeciwieństwie do zmiennych typu reg, nie przechowują swojej wartości, lecz za pomocą sygnałów zadeklarowanych jako wire dokonuje się połączenie między instancjami elementów takich jak bramki logiczne oraz instancjami modułów. Dane zadeklarowane jako wire mogą być sterowane na dwa sposoby:<br />
+<ol>
+    <li>poprzez dołączenie sygnałów tego typu do wyjścia bramki lub modułu,</li>
+    <li>poprzez przypisanie wartości za pomocą tzw. przypisania ciągłego (continuous assigments).</li>
+</ol>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W języku Verilog występują <b>dwa podstawowe</b> typy danych: <b>wire i reg. </b>.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Danych typu wire nie można przypisać wartości z wnętrza funkcji lub bloku begin... end (w tym z wnętrza bloku always), wartość tę można jednak odczytać.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Typ wire jest w języku Verilog typem domyślnym. Oznacza to, że nie ma konieczności jawnego deklarowania danych skalarnych jako wire (deklarację możemy zwyczajnie pominąć).
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W języku Verilog występuje jeszcze kilka typów <b>pochodnych</b> od typu <b>wire</b>. Są to <b>wand, wor, tri, triand, trior, tri1, tri0, trireg, supply1, supply0.</b><br />
+<ul>
+    <li>
+        Typ wand oraz triand reprezentują funkcję logiczną AND na przewodzie (wired AND). Użycie danych tego typu przypomina nieco logikę układów z otwartym kolektorem- jeżeli którykolwiek z sygnałów ma wartość 0, rezultatem jest również 0.
+    </li>
+    <li>
+        Typ danych wor oraz trior reprezentują z kolei logikę typu OR na przewodzie: jeżeli którykolwiek z sygnałów ma wartość 1, rezultatem jest również 1. 
+    </li>
+    <li>
+        Typy tri1 i tri0 stosowane są w przypadku, gdy ważna jest domyślna wartość sygnału, który nie jest sterowany przez żadnego wyjście. Domyślną wartością sygnału tri1 jest 1, a sygnału tri0 jest 0. 
+    </li>
+    <li>
+        Typ supply1 oraz supply0 modelują linie zasilania. 
+    </li>
+    <li>
+        Typ trireg jest stosowany w modelu na poziomie przełączników (switch level) i nie ma istotnego znaczenia dla celów syntezy logicznej.
+    </li>
+</ul> 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Typ danych <b>reg</b> reprezentuje zmienne w języku Verilog. Danych tego typu używa się wewnątrz bloków proceduralnych (w tym bloku always). Użycie danych typu reg nie zawsze musi oznaczać, że modelowane będą rejestry (przerzutniki typu flip-flop lub zatrzaski). Ten typ danych jest stosowany również do modelowania układów czysto kombinacyjnych.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Zarówno danego typ wire jak i reg mogą mieć postać sygnałów skalarnych (o szerokości 1 bitu) oraz mogą być wektorami (wielobitowymi magistralami).
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Oprócz opisanych wyżej typów danych w języku Verilog występują jeszcze dwa typy- bardzo podobne do typów często spotykanych w popularnych językach programowania. Są to typy <b>integer i real.</b>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Zmienne zadeklarowane jako integer przechowują wartości numeryczne – liczby całkowite ze znakiem. Zmienne tego typu mają rozmiar 32 bitów i pod pewnym względem podobne są do 32-bitowych wektorów typu reg. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Z kolei typ danych real reprezentuje 32-bitowe zmiennoprzecinkowe liczby rzeczywiste. Te dwa typy danych znajdują ogromne zastosowanie do celów syntezy logicznej (szczególnie typ real)- bardziej zaś przydane są w opisie zachowania otoczenia projektowanego systemu cyfrowego (symulacje). Do celów symulacji stosowane są również typy time oraz realtime. Reprezentują one czas symulacji.
+    </p>
+</body>
+
+</html>
+
+
+

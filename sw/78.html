@@ -1,0 +1,96 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 78</title>
+</head>
+<body>
+    <a href="/sw/index.html">Lista zadań</a><br />
+    <h1>78. Przypisania ciągłe. Przypisania ciągłe o różnej liczbie bitów.</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W przypadku, gdy nie znamy struktury układu kombinacyjnego, który chcemy opisać lub nie chcemy modelować układu na poziomie bramek logicznych, ale znamy równania algebry Boole&#8217;a, które ten układ opisują, do jego opisu możemy zastosować tzw. przypisania ciągłe (continuous assignment).
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Z kolei wyrażenie składa się z jednego lub wielu operandów przedzielonych operatorami. Wyrażenia używane są wszędzie tam, gdzie wymagana jest wartość w języku Verilog.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Jednobitowy sumator pełny opisany jest następującymi równaniami (można je również bezpośrednio wyprowadzić ze schematu):</p>
+    <pre class="code">
+    Y = A ^ B ^ Cin; Cout = A &#8226; B + (A ^ B) &#8226; Cin
+    </pre>
+    &nbsp;&nbsp;&nbsp;&nbsp;gdzie &#8222;&#8226;&#8221;, &#8222;+&#8221; oraz &#8222;^&#8221; to operatory odpowiednio: iloczynu logicznego, sumy logicznej oraz operacji XOR.
+    </p>
+    <p>
+        <pre class="code">
+<b>Opis modułu sumatora z użyciem przypisania ciągłego</b>
+module sumator1(input A, B, Cin, output Y, Cout);
+    assign Y        = A^B^Cin;                              //(1)
+    assign Cout = (A & B)|((A^B) & Cin);        //(2)
+endmodule
+        </pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Przypisania ciągłe</b> występują w liniach oznaczonych jako (1) oraz (2) i rozpoczynają się od słowa kluczowego (instrukcji) <b>assign</b>. W języku Verilog, identycznie jak w języku C, operatory sumy, iloczynu bitowego oraz bitowej różnicy symetrycznej mają postać odpowiednio &#8222;|&#8221;, &#8222;&&#8221;, &#8222;^&#8221;
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Ogólnie, użycie przypisań ciągłych jest bardzo podobne do specyfikacji układu logicznego za pomocą równań algebry Boole&#8217;a, z tym jednym wyjątkiem, że w języku Verilog istnieje dużo więcej operatorów, które można wykorzystać. Przypisania ciągłe pozwalają opisać układ kombinacyjny bez zajmowania się implementacją jego struktury.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Przypisań ciągłych można użyć w dwojaki sposób:<br />
+<ol>
+<li>Stosując jawne przypisanie za pomocą instrukcji assign</li>
+<li>Specyfikując przypisanie w tej samej linii, w której występuje deklaracja wire.<br />Lewa strona przypisania ciągłego może być sygnałem typu <b>wire</b> (i <b>pochodnym</b>, jak wand, wor, tri), <b>selekcją bitu</b> lub <b>częściową selekcją</b> oraz <b>sklejeniem</b> (konkatenacją) jednego lub więcej bitów wektora. <font color="red"><b>Nie można zastosować</b> przypisania ciągłego do zmiennych typu reg.</font><br />Prawa strona operatora przypisania ciągłego może być wyrażeniem zawierającym dowolny z operatorów dostępnych w języku Verilog oraz wcześniej zadeklarowanych zmiennych (sygnałów) oraz funkcji.</li>
+</ol>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Przypisania ciągłe są wykonywane z uwzględnieniem kolejności bitów: najmniej znaczący bit prawej strony przypisania jest przypisywany do najmniej znaczącego bitu lewej strony itd. Jeżeli liczba bitów prawej strony jest większa niż liczba bitów lewej strony, to najbardziej znaczące bity prawej strony są odrzucane. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Jeżeli liczba bitów lewej strony jest większa niż liczba bitów prawej strony, wówczas operand po prawej stronie jest uzupełniany zerami na najbardziej znaczących pozycjach bitu.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Zilustrujemy teraz praktycznie dwie wspomniane wyżej właściwości przypisania ciągłego. Najpierw wykonamy przypisanie ciągłe niejawnie, bez użycia instrukcji assign - w tej samej linii, w której występuje deklaracja wire. Przypadek taki występuje na listingu 1.13 w linii oznaczonej jako (1). Zadeklarowano tutaj dodatkowy sygnał a_xor_b, przypisując mu bitową różnicę symetryczną wejść A i B.
+    </p>
+    <pre class="code">
+<b>1.13. Równoważna wersja opisu modułu sumatora</b>
+module sumator_1a(input A, B, Cin, output Y, Cout);
+    wire        a_xor_b     = A^B;          //(1)
+    assign  Y               = a_xor_b^Cin;
+    assign  Cout            = (A & B)|(a_xor_b & Cin);
+endmodule
+    </pre>
+    <pre class="code">
+<b>1.14. Opis modułu sumatora z użyciem operatora dodawania</b>
+module sumator_1b(input A, B, Cin, output Y, Cout);
+    assign {Cout,Y} = A+B+Cin; // maksymalny wynik po prawej = 3 (dwa bity wyniku)
+endmodule
+    </pre>
+    <pre class="code">
+<b>1.15. Opis modułu 8-bitowego sumatora</b>
+module sumator_1c(input [7:0] A, B, input Cin, output Cout, output [7:0] Y);
+    assign {Cout,Y}=A+B+Cin;
+endmodule
+    </pre>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Druga właściwość przypisania ciągłego, którą tu zilustrujemy, będzie dotyczyła przypisań sygnałów o różnej liczbie bitów. Wiemy, że nasz układ kombinacyjny z rysunku 1.1 jest sumatorem - realizuje operację sumy arytmetycznej. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W języku Verilog występuje operator sumy arytmetycznej (i co ważne, jest on powszechnie implementowany przez narzędzia syntezy), którego możemy użyć w przypisaniu ciągłym. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Przypadek taki zilustrowano na listingu 1.14. Występuje tam tylko jedna linijka kodu z przypisaniem ciągłym. Liczba bitów po prawej stronie operatora przypisania ciągłego wynosi 2, gdyż tyle bitów wymaga wynik sumy arytmetycznej sygnałów 1-bitowych (jeżeli uwzględnimy bit przeniesienia). 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Po lewej stronie operatora przypisania ciągłego zastosowano sklejenie (konkatenację) dwóch sygnałów Cout oraz Y, używając do tego celu operatora sklejania ({}). W ten sposób wynik sumy przypisany jest do sygnału (wyjścia) Y, a wartość bitu przeniesienia trafia do sygnału (wyjścia) Cout.  
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Taka sama sytuacja mogłaby mieć miejsce w przypadku, gdyby nasz sumator wykonywał operacje nie na pojedynczych bitach, lecz na wektorach. Na listingu 1.15 przedstawiono opis sumatora 8-bitowego. Jak widać, modyfikacji uległa jedynie deklaracja portów wejścia-wyjścia (dodano specyfikator zakresu).
+    </p>
+</body>
+
+</html>
+

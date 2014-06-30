@@ -1,0 +1,236 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 46</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>46. REJESTR INTCON. STRUKTURA I BITY REJESTRU INTCON. REJESTRY PIE1 I PIE2. STRUKTURA I BITY REJESTRÓW PIE1 I PIE2. REJESTRY PIR1 I PIR2. STRUKTURA I BITY REJESTRÓW PIR1 I PIR2</h2>
+<p>
+<b>     Rejestr INTCON jest podstawowym rejestrem służącym do konfiguracji systemu przerwań. </b><br />
+
+
+<img src="/sw/img/46_1.png" />
+</p>
+
+<p>
+<ul>
+    <li>bit 7 (GIE): włączenie lub wyłączenie wszystkich przerwań (bit GIE posiada najwyższy priorytet: Global Interrupt Enable):<br />
+     
+1 - włączenie wszystkich nie zamaskowanych przerwań,<br />
+ 
+0 - wyłączenie wszystkich przerwań, </li>
+    <li>bit 6: 
+dla PIC16F84 (EEIE): uaktywnienie przerwania wywoływanego po zakończeniu zapisu danej do pamięci EEPROM wewnątrz procesora: <br />
+
+1 - po zakończeniu zapisu zostanie wywołane przerwanie, <br />
+
+0 - po zakończeniu zapisu nie zostanie wywołane przerwanie, </li>
+    <li>dla PIC16F877A (PEIE): uaktywnienie przerwań od urządzeń peryferyjnych: <br />
+    
+1 &#8211; uaktywnia przerwania od urządzeń peryferyjnych, <br />
+
+0 - wyłącza przerwania od urządzeń peryferyjnych, </li>
+    <li>bit 5 (T0IE): bit uaktywniający wywołanie przerwania po przepełnieniu licznika TIMER0:<br />
+    1 - jeżeli chcemy aby przerwanie zostało wywoływane po przepełnieniu TIMER0, <br />
+    
+0 - jeżeli nie chcemy aby przerwanie zostało wywoływane po przepełnieniu TIMER0,  </li>
+    <li>bit 4 (INTE): uaktywnienie przerwania zewnętrznego (z wyprowadzenia RB0/INT): <br />
+    
+1 - przerwanie aktywne, <br />
+
+0 - przerwanie nie aktywne, </li>
+    <li>bit 3 (RBIE): włączenie przerwania pochodzącego od zmiany stanu na porcie PORTB: <br />
+    
+1 - przerwanie aktywne, <br />
+
+0 - przerwanie nie aktywne, </li>
+    <li>bit 2 (T0IF): bit informujący o przerwaniu spowodowanym przepełnieniem licznika TIMER0: <br />
+    
+1 - nastąpiło przepełnienie licznika (bit ten powinien być zerowany programowo), <br />
+
+0 - nie nastąpiło przepełnienie licznika, </li>
+    <li>bit 1 (INTF): bit informujący o tym, że ostatnie przerwanie zostało wywołane odpowiednią zmianą sygnału na końcówce RB0/INT:<br />
+     
+1 - nastąpiło przerwanie pochodzące od RB0/INT, <br />
+
+0 - nie nastąpiło przerwanie pochodzące od RB0/INT, </li>
+    <li>bit 0 (RBIF): bit informujący o tym, ze ostatnie przerwanie zostało wywołane zmianą stanu na jednym z wyprowadzeń portu B (RB7:RB4): <br />
+    
+1 - jeżeli nastąpiła zmiana stanu na jednym z wyprowadzeń RB7:RB4 (bit musi być kasowany programowo), <br />
+
+0 - jeżeli nie było zmian stanów na wyprowadzeniach RB7:RB4.</li>
+    
+
+</ul>
+</p>
+
+<p>
+<b> PIR1, PIR2, PIE1, PIE2 </b><br />
+
+Rejestry PIE1 i PIE2 występują w mikrokontrolerze PIC16F877A (nie występują w PIC16F8x) są dodatkowymi rejestrami służącymi do aktywacji lub maskowania przerwań od układów peryferyjnych. <br />
+<br />
+    Aby identyfikacja tych przerwań była możliwa konieczne jest włączenie całego systemu przerwań od układów peryferyjnych, co wykonuje się poprzez ustawienie na 1 bitu PEIE w rejestrze INTCON.<br />
+    <br />
+    <img src="/sw/img/46_2.png" />
+</p>
+
+<p>
+<b> PIR1 </b>
+<ul>
+    <li>bit 7 (PSPIF): bit informujący o przerwaniu od portu równoległego PSP: <br />
+    
+1 &#8211; miała miejsce operacja odczytu lub zapisu (bit musi być zerowany programowo), <br />
+
+0 &#8211; nie było operacji odczytu i zapisu, </li>
+    <li>bit 6 (ADIF): bit informujący o przerwaniu od przetwornika A/C <br />
+    
+1 - konwersja A/C została zakończona,<br />
+ 
+0 - konwersja A/C nie została zakończona, </li>
+    <li>bit 5 (RCIF): bit informujący o przerwaniu od bufora odbiornika USART: <br />
+    
+1 &#8211; bufor odbiornika jest pełny (dane zostały odebrane), <br />
+
+0 &#8211; bufor odbiornika jest pusty, </li>
+    <li>bit 4 (TXIF): bit informujący o przerwaniu od bufora nadajnika USART: <br />
+    
+1 &#8211; bufor nadajnika jest pusty (dane zostały wysłane), <br />
+
+0 &#8211; bufor nadajnika jest pełny; </li>
+    <li>bit 3 (SSPIF): bit informujący o przerwaniu od synchronicznego portu szeregowego SSP: <br />
+    
+1 &#8211; wystąpiło przerwanie od SSP (bit musi być zerowany programowo), <br />
+
+0 &#8211; nie było przerwania od SSP, </li>
+    <li>bit 2 (CCP1IF): bit informujący o przerwaniu od modułu CCP1 (Capture, Compare, PWM): tryb Capture:<br />
+     
+1 &#8211; wykryto operację przechwytywania w rejestrze TMR1 (bit musi być zerowany programowo), <br />
+
+0 &#8211; nie wykryto operacji przechwytywania w rejestrze TMR1; </li>
+    <li>bit 1 (TMR2IF): bit informujący o przerwaniu od licznika TIMER2: <br />
+    
+1 &#8211; wykryto, że zawartości rejestrów TMR2 i PR2 są identyczne (zero progr.) <br />
+
+0 - zawartości rejestrów TMR2 i PR2 są różne, </li>
+    <li>bit 0 (TMR1IF): bit informujący o przerwaniu od licznika TIMER1: <br />
+    
+1 - nastąpiło przepełnienie licznika TIMER1 (bit ten powinien być zerowany programowo),<br />
+
+0 - nie nastąpiło przepełnienie licznika TIMER1. </li>
+</ul>
+</p>
+
+
+<p>
+<b>PIR2  </b>
+<ul>
+    <li>bit 6 (CMIF): bit informujący o przerwaniu pochodzącym od komparatora: <br />
+    
+1 &#8211; wejście komparatora zmieniło się (bit musi być zerowany programowo),<br />
+
+0 - wejście komparatora nie zmieniło się, </li>
+    <li>bit 4 (EEIF): bit informujący o przerwaniu pochodzącym od pamięci EEPROM: <br />
+    
+1 &#8211; operacja zapisu do pamięci EEPROM została zakończona (zero progr.) <br />
+
+0 &#8211; operacja zapisu do pamięci EEPROM trwa lub się nie rozpoczęła, </li>
+    <li>bit 3 (BCLIF): bit informujący o przerwaniu wywoływanym przy kolizji na magistrali I2C: <br />
+    
+1 &#8211; wystąpiła kolizja na magistrali I2C w module SSP skonfigurowanym w trybie I2C, <br />
+
+0 &#8211; nie wykryto kolizji, </li>
+    <li>bit 0 (CCP2IF): bit informujący o przerwaniu pochodzącym od modułu CCP2 (Capture, Compare, PWM):</li>
+</ul>
+</p>
+
+
+<p>
+<b> PIE1 </b>
+<ul>
+    <li>bit 7 (PSPIE): aktywacja przerwania od zapisu/odczytu z portu równoległego PSP: <br />
+    
+1 - włączenie przerwania od PSP, <br />
+
+0 - wyłączenie przerwania od PSP, </li>
+    <li>bit 6 (ADIE): aktywacja przerwania od przetwornika A/C <br />
+    
+1 - włączenie przerwania od przetwornika A/C, <br />
+
+0 - wyłączenie przerwania od przetwornika A/C, </li>
+    <li>bit 5 (RCIE): aktywacja przerwania od zakończenia operacji odbioru bajtu przez moduł USART: <br />
+    
+1 - włączenie przerwania od USART, <br />
+
+0 - wyłączenie przerwania od USART, </li>
+    <li>bit 4 (TXIE): aktywacja przerwania od zakończenia operacji wysyłania bajtu przez moduł USART: <br />
+    
+1 - włączenie przerwania od USART, <br />
+
+0 - wyłączenie przerwania od USART,</li>
+    <li>bit 3 (SSPIE): włączenie przerwania pochodzącego od synchronicznego portu szeregowego SSP: <br />
+    
+1 - przerwanie od SSP aktywne, <br />
+
+0 - przerwanie od SSP nieaktywne, </li>
+    <li>bit 2 (CCP1IE): włączenie przerwania pochodzącego od modułu CCP1 (Capture, Compare, PWM):<br />
+    1 - przerwanie od CCP1 aktywne, <br />
+    
+0 - przerwanie od CCP1 nieaktywne,  </li>
+    <li>bit 1 (TMR2IE): aktywacja przerwania wywoływanego po przepełnieniu licznika TIMER2: <br />
+    
+1 - przerwanie od TIMER2 aktywne, <br />
+
+0 - przerwanie od TIMER2 nieaktywne, </li>
+    <li>bit 0 (TMR1IE): aktywacja przerwania wywoływanego po przepełnieniu licznika TIMER1:<br />
+    
+1 - przerwanie od TIMER1 aktywne, <br />
+
+0 - przerwanie od TIMER1 nieaktywne. </li>
+    
+</ul>
+</p>
+
+
+<p>
+<b>PIE2  </b>
+<ul>
+    <li>bit 6 (CMIE): włączenie przerwania pochodzącego od komparatora: <br />
+    
+1 - przerwanie od komparatora aktywne, <br />
+
+0 - przerwanie od komparatora nieaktywne, </li>
+    <li>bit 4 (EEIE): włączenie przerwania pochodzącego pamięci EEPROM: <br />
+    
+1 - przerwanie od pamięci EEPROM aktywne, <br />
+
+0 - przerwanie od pamięci EEPROM nieaktywne, </li>
+    <li>bit 3 (BCLIE): aktywacja przerwania wywoływanego przy kolizji na magistrali I2C: <br />
+    
+1 - przerwanie od magistrali I2C aktywne, <br />
+
+0 - przerwanie od magistrali I2C nieaktywne, </li>
+    <li>bit 0 (CCP2IE): włączenie przerwania pochodzącego od modułu CCP2 (Capture, Compare, PWM): <br />
+    
+1 - przerwanie od CCP2 aktywne, <br />
+
+0 - przerwanie od CCP2 nieaktywne.</li>
+  
+
+</ul>
+</p>
+
+
+<p>
+    Rejestry PIR1 i PIR2 występują w mikrokontrolerze PIC16F877A (nie występują w PIC16F8x) są dodatkowymi rejestrami służącymi do identyfikacji przerwań od układów peryferyjnych. <br />
+    <br />
+    
+    Przerwanie jest zgłaszane przez dane urządzenie peryferyjne, jeżeli odpowiedni bit w jednym z tych rejestrów jest ustawiony na jedynkę. Wyłącznie przerwań w rejestrach PIE1 i PIE2 nie blokuje możliwości ustawiania znaczników w rejestrach PIR1 i PIR2. Znaczniki w rejestrach PIR1 i PIR2 powinny być zerowane programowo po zakończeniu obsługi przerwania.
+</p>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,223 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 81</title>
+</head>
+<body>
+    <a href="/sw/index.html">Lista zadań</a><br />
+    <h1>81. Operatory bitowe. Operatory redukcji. Operatory przesunięcia bitowego.</h1>
+    <h2>81.1. Operatory bitowe</h2>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W odróżnieniu od operatorów logicznych, operatory bitowe zwracają wartość, która jest wektorem o rozmiarze równym rozmiarowi operandów lub rozmiarowi sygnału/zmiennej, do której wartość wyrażenia jest przypisywana - w zależności od tego, który rozmiar jest większy. Operatorami bitowymi w języku Verilog są:
+    <ul>
+        <li>negacja bitowa ( ~ ),</li>
+        <li>iloczyn bitowy ( & ),</li>
+        <li>suma bitowa (  |  ),</li>
+        <li>bitowa różnica symetryczna XOR ( ^ ),</li>
+        <li>XNOR ( ~^ lub ^~ [takie samo działanie] ).</li>
+    </ul>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Tab. 1.3. Tablica prawdy dla operatorów bitowych
+    <table border="1">
+        <tr>
+            <td colspan="2">Operandy</td>
+            <td colspan="4">Wartość wyrażenia</td>
+        </tr>
+        <tr>
+            <td>a</td>
+            <td>b</td>
+            <td>a & b</td>
+            <td>a | b</td>
+            <td>a ^ b</td>
+            <td>a ~^ b</td>
+        </tr>
+        <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>0</td>
+            <td>x</td>
+            <td>0</td>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+        </tr>
+        <tr>
+            <td>x</td>
+            <td>0</td>
+            <td>0</td>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+        </tr>
+        <tr>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+            <td>x</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>x</td>
+            <td>x</td>
+            <td>1</td>
+            <td>x</td>
+            <td>x</td>
+        </tr>
+        <tr>
+            <td>x</td>
+            <td>1</td>
+            <td>x</td>
+            <td>1</td>
+            <td>x</td>
+            <td>x</td>
+        </tr>
+    </table>    
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operatory bitowe realizują poszczególne operacje na swoich operandach bit po bicie (na bitach o odpowiadającej sobie pozycji). Działanie operatorów bitowych szczegółowo ilustruje tabela 1.3. Z użyciem tych operatorów mieliśmy już do czynienia np. w przypadku opisu modułu z listingu 1.12 (moduł sumatora pełnego).
+    </p>
+    <h2>81.2. Operatory redukcji</h2>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operatory redukcji są specjalnym przypadkiem operatorów bitowych. Są to operatory jednoargumentowe. W Verilogu operatorami redukcji są:
+    <ul>
+        <li>redukcja AND ( & ),</li>
+        <li>redukcja OR ( | ),</li>
+        <li>redukcja NAND ( ~& ),</li>
+        <li>redukcja NOR ( ~| ),</li>
+        <li>redukcja XOR ( ^ ),</li>
+        <li>redukcja XNOR ( ~^ lub ^~ [takie samo działanie] ).</li>
+    </ul>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operatory redukcji przekształcają wielobitowy operand do wartości jednobitowej. Na przykład dla operatora redukcji AND wykonywana jest operacja iloczynu bitowego (AND) na kolejnych bitach operandu, by w wyniku dać <b>wartość 1, gdy wszystkie bity operandu są jedynkami, i 0 w przeciwnym przypadku.</b>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operatory redukcji od operatorów bitowych odróżniane są poprzez składnię (tylko jeden operand z prawej strony). W tabeli 1.4 pokazano przykładowe wartości liczbowe (w kodzie binarnym) oraz wynik zastosowania operatorów redukcji dla tych wartości.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Na listingu 1.22 przedstawiono opis bardzo prostego modułu, w którym zastosowano operatory redukcji w celu wyliczenia bitu parzystości 8-bitowego sygnału wejściowego oraz sygnału informującego o tym, że w sygnale wejściowym wszystkie bity mają wartość 1.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Tab. 1.4. Przykładowe wartości wyrażeń z operatorami redukcji
+<table border="1">
+    <tr>
+        <td>Operand</td>
+        <td colspan="3">Wartość wyrażenia</td>
+    </tr>
+    <tr>
+        <td>a</td>
+        <td>&a</td>
+        <td>|a</td>
+        <td>^a</td>
+    </tr>
+    <tr>
+        <td>0000 0000</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>1111 1111</td>
+        <td>1</td>
+        <td>1</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>1010 1101</td>
+        <td>0</td>
+        <td>1</td>
+        <td>1</td>
+    </tr>
+    <tr>
+        <td>1100 11zz</td>
+        <td>0</td>
+        <td>1</td>
+        <td>x</td>
+    </tr>
+    <tr>
+        <td>1111 111x</td>
+        <td>x</td>
+        <td>1</td>
+        <td>x</td>
+    </tr>
+</table>
+    </p>
+    <p>
+<pre class="code">
+List. 1.22. Przykład zastosowania operatorów redukcji
+module sprawdz_wejscie (input [7:0] in, output parity, all_ones);
+    assign  parity      = ^ in;
+    assign  all_ones    = & in;
+endmodule
+</pre>
+    </p>
+    <h2>81.3. Operatory przesunięcia bitowego</h2>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operatory przesunięcia są operatorami dwuargumentowymi. W języku Verilog występują cztery takie operatory:
+    <ol>
+        <li>przesunięcie bitowe w prawo ( >> ),</li>
+        <li>przesunięcie bitowe w lewo ( << ),</li>
+        <li>przesunięcie bitowe ze znakiem w prawo ( >>> ),</li>
+        <li>przesunięcie bitowe ze znakiem w lewo ( <<< ).</li>
+    </ol>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operatory te powodują przesunięcie w danym kierunku wszystkich bitów pierwszego operandu o liczbę pozycji określoną wartością drugiego operandu. Po wykonaniu przesunięcia brakujące bity wypełniane są zerami. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Wyjątek stanowi operator przesunięcia w prawo ze znakiem ( >>> ), dla którego brakujące pozycje z lewej strony wypełniane są <b>kopią bitu znaku (najstarszego bitu lewego operandu).</b>  
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Operator przesunięcia bitowego w lewo ze znakiem ( <<< ) działa identycznie jak zwykły operator <<
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Na listingu 1.23 pokazano opis modułu realizującego operację mnożenia przez 10, który wykorzystuje m.in. operatory przesunięcia bitowego.
+    </p>
+    <p>
+<pre class="code">
+List. 1.23. Przykład zastosowania operatorów przesunięcia bitowego
+module pomnoz_x10 (input [7:0] A, output [11:0] Y);
+    wire[8:0]   Ax2     =   A << 1; 
+    wire[10:0]  Ax8     =   A << 3; 
+    assign      Y       =   Ax2 + Ax8;
+endmodule  
+</pre>
+    </p>
+
+</body>
+
+</html>

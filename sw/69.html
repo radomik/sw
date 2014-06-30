@@ -1,0 +1,117 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 69</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>69. Wartość logiczna bitu. Reprezentacja liczb. Przykłady reprezentacji liczb</h1>
+    <p>
+<b>Czteropoziomowa wartość logiczna bitu</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;W języku Verilog każdy bit (zmienna, sieć logiczna, wyjście bramki itp.) może przyjmować 4 wartości. Są one następujące:<br />
+<ol>
+    <li>0 – logiczne 0 lub fałsz,</li>
+    <li>1 – logiczne 1 albo prawda,</li>
+    <li>x – wartość nieznana, nieistotna (don’t care): jedna z wartości 0, 1 lub też w stanie zmiany,</li>
+    <li>z- stan wysokiej impedancji (np. na niepodłączonym porcie wejściowym)</li>
+</ol><br />
+&nbsp;&nbsp;&nbsp;&nbsp;W przypadku, gdy <b>wartość z</b> jest obecna na <b>wejściu bramki</b> lub gdy <b>pojawia</b> się w <b>wyrażeniu</b>, wówczas efekt jest zazwyczaj taki sam, jak gdyby była to <b>wartość x</b>.
+    </p>
+    <p>
+<b>Reprezentacja liczb</b><br />
+&nbsp;&nbsp;&nbsp;&nbsp;W Verilog istnieje specjalna notacja dla reprezentacji liczb o określonej podstawie. Poniżej pokazano ogólną formę takiej reprezentacji:<br />
+<pre class="code">
+    &lt;rozmiar&gt;’&lt;podstawa&gt;&lt;wartość&gt;
+</pre><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Gdzie rozmiar jest liczbą bitów (podawaną w kodzie dziesiętnym), postawa reprezentuje symbol podstawy systemu, w którym jest zapisana liczba o wartości wartość. Poniżej wyszczególniono symbole dla reprezentacji liczb o różnych podstawach:<br />
+<ul>
+    <li>‘b lub ‘B – podstawa binarna,</li>
+    <li>‘d lub ‘D – podstawa dziesiętna,</li>
+    <li>‘h lub ‘H – postawa szesnastkowa,</li>
+    <li>‘o lub ‘O – postawa ósemkowa,</li>
+</ul><br />
+&nbsp;&nbsp;&nbsp;&nbsp;Liczba bitów oraz symbol podstawy są opcjonalne. Domyślną podstawą jest podstawa dziesiętna. Domyślna liczba bitów zależy od implementacji, ale zazwyczaj wynosi 32 bity.
+    </p>
+    
+    
+    
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Jeżeli wartość ma <b>mniej bitów</b> niż podany rozmiar jest <b>uzupełniana zerami na najbardziej znaczących bitach</b>, chyba że <b>ostatnim</b> występującym <b>bitem jest x lub z</b>, wtedy jest uzupełniane <b>tą wartością.</b>
+    </p>
+    <p>
+        <b>Przykłady</b>
+        <ul>
+            <li>8’b1011011</li>
+            <li>16’habcd</li>
+            <li>121</li>
+        </ul><br />
+        &nbsp;&nbsp;&nbsp;&nbsp;W pierwszym przypadku mamy do czynienia z 8-bitową liczbą podaną w zapisie binarnym.<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;W drugim przypadku jest to 16-bitowa liczba zapisana w kodzie szesnastkowym.<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;Ostatnia liczba podana jest domyślnie w kodzie dziesiętnym.
+    </p>
+    <b>Przykłady</b><br />
+    <p class="code">
+    <table border="1">
+        <tr>
+            <th>liczba</th>
+            <th>wartość</th>
+        </tr>
+        <tr>
+            <td>8'b0</td>
+            <td>0000 0000</td>
+        </tr>
+        <tr>
+            <td>8'bx</td>
+            <td>xxxx xxxx</td>
+        </tr>
+        <tr>
+            <td>8'b1x</td>
+            <td>0000 001x</td>
+        </tr>
+        <tr>
+            <td>8'b0x</td>
+            <td>0000 000x</td>
+        </tr>
+        <tr>
+            <td>8'hx</td>
+            <td>xxxx xxxx</td>
+        </tr>
+        <tr>
+            <td>8'b1</td>
+            <td>0000 0001</td>
+        </tr>
+        <tr>
+            <td>8'hz1</td>
+            <td>zzzz 0001</td>
+        </tr>
+        <tr>
+            <td>8'bx1</td>
+            <td>xxxx xxx1</td>
+        </tr>
+        <tr>
+            <td>8'bx0</td>
+            <td>xxxx xxx0</td>
+        </tr>
+        <tr>
+            <td>8'hz</td>
+            <td>zzzz zzzz</td>
+        </tr>
+        <tr>
+            <td>8'h0z</td>
+            <td>0000 zzzz</td>
+        </tr>
+    </table>
+    </p>
+</body>
+
+</html>
+
+
+
+
+

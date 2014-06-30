@@ -1,0 +1,46 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 48</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>48. ZLICZANIE IMPULSÓW ZEWNĘTRZNYCH W UKŁADZIE CZASOWYM TIMER0</h2>
+<p>
+    Kiedy preskaler jest niewykorzystywany, wejście zegara zewnętrznego jest tożsame z wyjściem preskalera. 
+</p>
+
+<p>
+Synchronizacja sygnału z wejścia T0CKI z zegarem wewnętrznym odbywa się za pomocą próbkowania wyjścia preskalera w cyklach Q2 i Q4 zegara wewnętrznego. Dlatego niezbędne jest to, aby sygnał z wejścia T0CKI miał poziom wysoki przynajmniej przez czas dwóch okresów oscylatora (oraz krótkie opóźnienie wynoszące 20 ns) oraz poziom niski także przynajmniej przez czas równy dwóm okresom oscylatora (z opóźnieniem 20 ns). 
+</p>
+
+<p>
+Kiedy preskaler jest używany, częstotliwość sygnału zegara zewnętrznego jest dzielona przez szeregowy licznik asynchroniczny i na wyjściu preskalera otrzymujemy przebieg symetryczny. Z tego powodu przy określaniu wymagań próbkowania należy wziąć pod uwagę szeregowy licznik asynchroniczny. Niezbędne jest, aby sygnał na wejściu T0CKI miał okres przynajmniej równy czterem okresom sygnału oscylatora (plus krótkie opóźnienie wynoszące 40 ns). 
+</p>
+
+<p>
+    Z powodu synchronizacji sygnału wejściowego z wewnętrznym zegarem powstaje małe opóźnienie pomiędzy zboczem sygnału z wejścia T0CKI a momentem inkrementacji rejestru TMR0.
+</p>
+
+<h2>48. PRZEPEŁNIENIE LICZNIKA TIMER0. DOŁĄCZENIE PRESKALERA DO UKŁADU TIMER0</h2>
+<p>
+Układ czasowy TIMER0 ma możliwość generacji przerwania w momencie przepełnienia licznika. Przepełnienie licznika skutkuje ustawieniem bitu T0IF w rejestrze INTCON na jedynkę. 
+</p>
+
+<p>
+Przerwanie to może zostać zamaskowane poprzez wyzerowanie bitu T0IE w rejestrze INTCON. Bit T0IF powinien zostać wyzerowany programowo w procedurze obsługi przerwania przed ponownym włączeniem przerwania od układu TIMER0. 
+    Układ czasowy TIMER0 nie jest zdolny do wybudzenia mikrokontrolera ze stanu uśpienia (ponieważ jest taktowany z tego samego oscylatora co procesor, oscylator ten jest wyłączony w trybie uśpienia)
+</p>
+
+<p>
+Układ czasowy TIMER0 posiada możliwość dołączenia wewnętrznego 8-bitowego preskalera, który jest jednocześnie postskalerem dla układu licznika nadzorcy (WDT).  Użycie preskalera z układem TIMER0 powoduje, że nie jest on dostępny dla licznika nadzorcy i odwrotnie.
+</p>
+
+<p>
+Wybór układu, z którym połączony jest preskaler jest dokonywany za pomocą bitu PSA w rejestrze OPTION_REG. Jeżeli bit PSA jest ustawiony na jedynkę &#8211; preskaler jest dołączony do licznika nadzorcy (WDT), a jeśli jest wyzerowany &#8211; do układu TIMER0.  Współczynnik podziału preskalera jest ustawiany za pomocą bitów PS2:PS0 w rejestrze OPTION_REG. Kiedy preskaler jest dołączony do układu TIMER0, wszystkie instrukcje modyfikujące rejestr TMR0 zerują preskaler. Kiedy preskaler jest dołączony do licznika nadzorcy instrukcja CLRWDT zerująca licznik nadzorcy &#8211; zeruje także preskaler. Do preskalera nie można zapisywać żadnych danych ani ich odczytywać.
+</p>
+
+</body>
+
+</html>

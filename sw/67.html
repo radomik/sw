@@ -1,0 +1,86 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 67</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>67. Jednostka testowa dla 1-bitowego sumatora</h1>
+    <p class="code">
+        <pre>
+<font color="#D00000">
+/* Moduł jednostki testowej sumatora jednobitowego
+ * brak portów wejściowych i wyjściowych – jednostka testowa
+ * nie może mieć portów */
+</font>
+<font color="#000092"><b>module </font><font color="#0000D0">test_add_1</font>();</b>
+    <font color="#D00000">/* deklaracja zmiennych dla wektorów wejściowych
+     * na wejścia cin, a, b */</font>
+    <font color="#991111">reg</font>        tcin, ta, tb;
+    
+    <font color="#D00000">/* deklaracja zmiennych dla funkcji wyjściowych */</font>
+    <font color="#991111">wire</font>       ts, tcout;
+    
+    <font color="#D00000">/* utworzenie egzemplarza 1-bitowego sumatora 
+     * wraz z przyporządkowaniem zmiennych do bloku sumatora */</font>
+    <font color="#0000D0">add_1_1</font> <b>sum</b>(tcin, ta, tb, ts, tcout);
+
+    <font color="#D00000">/* Początek nazwanego bloku proceduralnego (musi posiadać nazwę),
+     * wykonywanego tylko RAZ */</font>
+    <font color="#000092">initial begin:</font> <b>test</b>
+        <font color="#D00000">/* deklaracja zmiennej lokalnej */</font>
+        <font color="#991111">integer</font> i;
+        
+        <font color="#D00000">/* wywołanie funkcji systemowej */</font>
+        $display("Wynik symulacji 1-bitowego sumatora");
+        
+        <font color="#D00000">/* deklaracja formatu czasu dla $display i $monitor */</font>
+        $timeformat(-9, 1, "ns", 8);
+        
+        <font color="#D00000">/* monitor uruchamiany jest przy jakiejkolwiek zmianie
+         * tcin, ta, tb, ts, tcout
+         * wszystkich zmiennych na poniższej liście parametrów 
+         * %b - format binarny */</font>
+        $monitor($time, "cin=%b, a=%b, b=%b, s=%b, cout=%b", 
+            tcin, ta, tb, ts, tcout);
+        
+        <font color="#D00000">/* Pętla for - podczas symulacji każda jej iteracja 
+         * wykonywana RÓWNOLEGLE */</font>
+        <font color="#000092">for</font> (i = 0; i &lt; 8; i = i+1) <font color="#D00000">/* nie ma operatora inkrementacji, jak w C */</font>
+        <font color="#000092">begin</font>
+            #10;                    <font color="#D00000">/* instrukcja opóźnienia na 10 jednostek czasowych */</font>
+            {tcin, ta, tb} = i;     <font color="#D00000">/* tworzenie wektora wejściowego 
+                                     * {tcin, ta, tb} = 000, 001, ..., 111 (bo i = 0...7)
+                                     * operacja konkatenacji { } */</font>
+        <font color="#000092">end</font> <font color="#D00000">/* koniec pętli for */</font>
+    <font color="#000092">end</font>  <font color="#D00000">/* koniec nazwanego bloku proceduralnego */</font>
+<font color="#000092">end</font> <font color="#D00000">/* koniec modułu */</font>
+
+<font color="#D00000"><b>/* Wynik symulacji:</b>
+t       cin  a  b s cout
+#0      x   x   x   x   x
+#10     0   0   0   0   0
+#20     0   0   1   1   0
+#30     0   1   0   1   0
+#40     0   1   1   0   1
+#50     1   0   0   1   0
+#60     1   0   1   0   1
+#70     1   1   0   0   1
+#80     1   1   1   1   1
+*/</font>
+        </pre>
+    </p>
+</body>
+
+</html>
+
+
+
+
+
+

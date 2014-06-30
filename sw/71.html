@@ -1,0 +1,84 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="style.css" media="all" rel="stylesheet" type="text/css" />
+    <title>Zadanie 71</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+    <h1>71. Instancje modułów. Składnia utworzenia instancji modułu. Terminali. Notacja poprzez nazwę. Notacje pozycyjne. Hierarchia.</h1>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Instancja (konkretyzacja) modułu – użycie tego modułu, utworzenie rzeczywistego egzemplarza modułu i połączenie jego portów z innymi komponentami opisywanego system cyfrowego. Sam opis modułu stanowi tylko definicję jego działania (pełnionej funkcji) albo jest specyfikacją struktury (lub jedno i drugie). 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Dopiero utworzenie instancji tego modułu z wnętrza innego modułu powoduje, że podczas procesu syntezy logicznej utworzony zostanie konkretny egzemplarz naszego modułu i zostaną mu przydzielone określone zasoby logiczne. 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;<b>Składnia utworzenia modułu jest następująca:</b><br />
+<pre class="code">
+identyfikator_modułu [przypisania_wartości_parametrów] instancja_modułu {, instancja_modułu};
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;gdzie<br />
+&nbsp;<b>identyfikator_modułu</b> – oznacza nazwę modułu, którego instancję tworzymy<br /><br />
+&nbsp;a <b>instancja_modułu</b> ma postać:<br />
+<pre class="code">
+nazwa_instancji ([lista_połączeń_portów])
+</pre><br />
+&nbsp;z kolei <b>lista_połączeń_portów</b> jest jednym z poniższych:<br />
+<pre class="code">
+<ol>
+    <li>uporządkowane_połączenie_portu {, uporządkowane_połączenie_portu}</li>
+    <li>nazwane_połączenie_portu {, nazwane_połączenie_portu}</li>
+</ol>
+</pre>
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Użycie unikalnej nazwy instancji modułu jest obowiązkowe. Ogólnie lista_połączeń_portów może być traktowana jako lista tzw. terminali. Poszczególne terminale instancji dołączane są do odpowiednich portów modułu. <br />
+Terminale dołączane do portów wejściowych modułu mogą być dowolnymi wyrażeniami. Terminale dołączane do portów wyjściowych lub dwukierunkowych mogą być identyfikatorami, wektorami, jedno- lub wielobitowymi fragmentami wektorów lub sklejeniem takich fragmentów lub pojedynczych bitów.<br />
+Istotne jest to, że liczba bitów terminala musi być identyczna z liczbą bitów oczekiwaną przez dany port modułu (w przypadku niezgodności generowane są ostrzeżenia, nie są to błędy więc nie zatrzymują procesu syntezy – może to powodować nieprawidłowe działanie układu). 
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W przypadku użycia jako terminalu <b>niezadeklarowanego identyfikatora</b> (zmiennej)  terminal ten jest niejawnie deklarowany jako <b>skalar</b> (sygnał 1-bitowy) <b>typu wire</b> i może być użyty wszędzie tam, gdzie dopuszczalne jest użycie sygnałów typu wire.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W celu określenia sposobu połączenia terminali instancji z poszczególnymi portami modułu można posłużyć się notacją:<br />
+<ul>
+    <li>
+        <b>pozycyjną</b> – istotna jest kolejność terminali na liście połączeń, pierwszy terminal z listy jest dołączany do pierwszego portu modułu, itd.
+    </li>
+    <li>
+        <b>przez nazwę</b> – w sposób jawny podajemy, który port modułu należy połączyć z którym terminalem instancji. Wówczas <b>nazwane_połączenie_portu</b> ma postać: <br />
+        <pre class="code">
+        .identyfikator_portu ([wyrażenie])
+        </pre> <br />
+        gdzie <b>identyfikator_portu</b>to nazwa portu modułu, do którego dołączamy wyrażenie instancji modułu
+    </li>
+</ul>
+    </p>
+    <h2>Hierarchia modułów</h2>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;W środowisku projektowym Quartus II w momencie dodania nowego modułu automatycznie tworzona jest hierarchia modułów.
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Podczas tworzenia instancji modułu, w celu zmiany domyślnej wartości parametrów można posłużyć się albo notacją pozycyjną, albo opartą na nazwach – identycznie jak dla terminali modułu
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Modułem nadrzędnym jest moduł tworzący egzemplarz innego modułu, który jest jego modułem podrzędnym:
+    </p>
+    <p>
+&nbsp;&nbsp;&nbsp;&nbsp;Jednostka testowa jest zawsze modułem nadrzędnym. Przykład (sum_2 – sumator 2-bitowy, sum_1 – sumator 1-bitowy)
+    </p>
+    <img src="/sw/img/71_1.png" /><br />
+</body>
+
+</html>
+
+
+
+

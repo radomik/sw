@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 21</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>21. INSTRUKCJA WYJŚCIA Z PODPROGRAMU RETLW (ORGANIZACJA TABLIC W PAMIĘCI PROGRAMU)</h2>
+
+<br />
+<p>
+    <pre>
+    <b>21.1. RETLW k</b>
+<i>Funkcja:</i>    Powrót z podprogramu ze stałą w rej. W
+<i>Argumenty:</i>  0 &lt;= k &lt;= 255
+<i>Działanie:</i>  k -&gt; W
+            STOS -&gt; PC
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  11 01xx kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Powrót z podprogramu. 13-bitowy adres jest zdejmowany ze stosu i wpisywany do licznika rozkazów PC. Do rejestru W jest ładowana 8-bitowa stała k będąca argumentem rozkazu. Rozkaz jest wykonywany w ciągu dwóch cykli. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Rozkaz RETLW może być używany do tworzenia w pamięci programu tablic z 8-bitowymi stałymi. Przed wywołaniem podprogramu tablica, do rejestru W należy wpisać numer odczytywanego elementu tablicy, czyli przesunięcie względem adresu tablica. W tym przykładzie rejestr W=2. 
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+main:
+ movlw  .2      ; W = 2, indeks komórki tablicy którą chcemy odczytać
+                ; W tym miejscu W = tablica[2] = 0x23
+tablica:
+ addwf  PCL, f
+ retlw  0x10    ; [0]
+ retlw  0x12    ; [1]
+ retlw  0x23    ; [2]
+ retlw  0x33    ; [3]
+ 
+; Skrócona deklaracja tablicy (równoważna powyższej) 
+; z użyciem dyrektywy preprocesora dt
+tablica:
+ addwf  PCL, f
+ dt     0x10, 0x12, 0x23, 0x33
+</pre>
+</p>
+
+
+
+</body>
+
+</html>

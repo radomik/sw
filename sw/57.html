@@ -1,0 +1,77 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 57</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>57.1. ALGORYTM WYSYŁANIA DANYCH DLA INTERFEJSU 8-BITOWEGO. ALGORYTM WYSYŁANIA DANYCH DLA INTERFEJSU 4-BITOWEGO</h2>
+<p>
+<b>Algorytm wysyłania danych dla interfejsu 8-bitowego   </b><br />
+	Wysyłanie danych do wyświetlacza w przypadku interfejsu 8-bitowego wymaga wykonania następujących czynności: 
+<ol>
+	<li>ustawienie zera logicznego na linii R/W; w przypadku, gdy korzysta się z uproszczonej wersji interfejsu linia ta jest zwarta do masy na stałe; </li>
+	<li>ustawienie odpowiedniej wartości na linii RS; </li>
+	<li>ustawienie właściwej wartości na liniach danych;</li>
+	<li>ustawienie na linii E logicznej jedynki, a następnie logicznego zera; Czas trwania logicznej jedynki i logicznego zera na linii E należy odczytać z dokumentacji sterownika (typowo jest to 0,5 &#956;s dla każdego z poziomów logicznych).</li>
+</ol>
+</p>
+
+<p>
+<b> Algorytm wysyłania danych dla interfejsu 4-bitowego  </b><br />
+	Wysyłanie danych do wyświetlacza w przypadku interfejsu 4-bitowego jest bardziej złożone i wymaga wykonania następujących czynności: <br />
+	<br />
+	<ol>
+		<li>1. ustawienie zera logicznego na linii R/W; w przypadku, gdy korzysta się z uproszczonej wersji interfejsu linia ta jest zwarta do masy na stałe; </li>
+		<li>ustawienie odpowiedniej wartości na linii RS; </li>
+		<li>ustawienie na liniach danych wartości starszych czterech bitów wartości, która ma być wysłana do sterownika; </li>
+		<li>ustawienie na linii E logicznej jedynki, a następnie logicznego zera; </li>
+		<li>ustawienie na liniach danych wartości młodszych czterech bitów wartości, która ma być wysłana do sterownika; </li>
+		<li>ustawienie na linii E logicznej jedynki, a następnie logicznego zera</li>
+		
+	</ol>
+  	Czas trwania logicznej jedynki i logicznego zera na linii E podczas wysyłania starszego i młodszego półbajtu należy odczytać z dokumentacji sterownika (typowo jest to 0,5 &#956;s dla każdego z poziomów logicznych).	
+
+</p>
+<h2>57.2. INICJALIZACJA WYŚWIETLACZA LCD. INICJALIZACJA WYŚWIETLACZA LCD DLA INTERFEJSU 4-BITOWEGO. PROCEDURA INICJALIZACJI WYŚWIETLACZA DLA INTERFEJSU 4-BITOWEGO</h2>
+<p>
+<b> 	Po włączeniu zasilania sterownik wyświetlacza wykonuje procedurę inicjalizacji, po której jest gotowy do pracy. Wewnętrzna procedura inicjalizacji wykonuje następujące operacje:  </b>
+<br />
+<ol>
+	<li>Kasowanie ekranu (wyczyszczenie zawartości pamięci DDRAM). </li>
+	<li>Ustawienie funkcji: interfejs 8-bitowy, wyświetlanie w jednym wierszu, znaki 5x8.</li>
+	<li>Ustawienie trybu pracy: wyświetlacz wyłączony, kursor wyłączony, migotanie wyłączone.</li>
+	<li>Wyłączenie przesuwania, włączenie inkrementacji. </li>
+</ol>
+</p>
+
+<p>
+<b>Inicjalizacja wyświetlacza dla interfejsu 4-bitowego  </b>
+<br />
+<ol>
+	<li>odczekanie min. 15 ms; </li>
+	<li> wysłanie komendy &#8222;Function Set&#8221; dla 8-bitowego interfejsu; </li>
+	<li>odczekanie min. 4.1 ms;</li>
+	<li>ponowne wysłanie komendy &#8222;Function Set&#8221; dla 8-bitowego interfejsu; </li>
+	<li>odczekanie min. 100 &#956;s; </li>
+	<li>ponowne wysłanie komendy &#8222;Function Set&#8221; dla 8-bitowego interfejsu;</li>
+	<li>odczekanie min. 40 &#956;s; </li>
+	<li>wysłanie komendy &#8222;Function Set&#8221; dla 4-bitowego interfejsu; </li>
+	<li>w tym miejscu interfejs jest nadal 8-bitowy, więc wysyłany jest tylko starszy półbajt; odczekanie min. 40 &#956;s;</li>
+	<li> wysłanie komendy &#8222;Function Set&#8221; dla 4-bitowego interfejsu z jednoczesnym ustawieniem liczby wierszy i fontu; </li>
+	<li>odczekanie min. 40 &#956;s; </li>
+	<li>wysłanie komendy &#8222;Display Off&#8221;; </li>
+	<li>odczekanie min. 40 &#956;s; </li>
+	<li>wysłanie komendy &#8222;Display Clear&#8221;; </li>
+	<li>odczekanie min. 40 &#956;s; </li>
+	<li>wysłanie komendy &#8222;Entry Mode Set&#8221; z odpowiednimi parametrami; </li>
+	<li>odczekanie min. 40 &#956;s</li>
+</ol>
+</p>
+
+
+
+</body>
+
+</html>

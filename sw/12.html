@@ -1,0 +1,103 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 12</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>12. Instrukcje przesyłania danych movf, movlw, movwf i swapf</h2>
+
+<br />
+<p>
+    <pre>
+    <b>12.1. MOVF f, d </b>
+<i>Funkcja:</i>    Prześlij zawartość rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  W | (f) -&gt; rejestr przeznaczenia określony bitem d
+<i>Zm. znaczn:</i> Z
+<i>Kod rozk.:</i>  00 1000 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Do rejestru przeznaczenia przesyłana jest zawartość rejestru o adresie f.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f 
+</p>
+
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ movf   TMR0, 0     ; zapisz w rej. W zawartość rej. TMR0
+ movf   FSR, 1      ; przepisz rejestr FSR do siebie samego
+ btfss  STATUS, Z
+ goto   FSR_not_0   ; wartość w FSR różna od zera
+ goto   FSR_is_0    ; wartość w FSR równa zero
+</pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>12.2. MOVWF f</b>
+<i>Funkcja:</i>    Prześlij zawartość rej. W do rej. o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127
+<i>Działanie:</i>  W -&gt; (f)
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  00 0000 1fff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Zawartość rejestru W jest przesyłana do rejestru o adresie f
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>12.3. MOVLW k</b>
+<i>Funkcja:</i>    Prześlij stałą k do rejestru W
+<i>Argumenty:</i>  0 &lt;= k &lt;= 255
+<i>Działanie:</i>  k -&gt; W
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  11 00xx kkkk kkkk
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;Do rejestru W wpisywana jest 8-bitowa stała k.
+</p>
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ ST_ADDR equ 0x20
+ movlw    .123     ; W := .123 (dziesiętnie)
+ movwf    TMR0     ; TMR0 := W
+ movlw    ST_ADDR  ; W := 0x20 (szesnastkowo)
+ movwf    FSR      ; FSR := W
+    </pre>
+</p>
+
+<br />
+<p>
+    <pre>
+    <b>12.4. SWAPF f, d</b>
+<i>Funkcja:</i>    Zamień połówkami zawartość rejestru o adresie f
+<i>Argumenty:</i>  0 &lt;= f &lt;= 127; d = 0 lub 1
+<i>Działanie:</i>  (f)&lt;3:0&gt; -&gt; rejestr przeznaczenia &lt;7:4&gt; określony bitem d
+            (f)&lt;7:4&gt; -&gt; rejestr przeznaczenia &lt;3:0&gt; określony bitem d
+<i>Zm. znaczn:</i> brak
+<i>Kod rozk.:</i>  00 1110 dfff ffff
+    </pre>
+<b>Opis:</b><br />                
+&nbsp;&nbsp;&nbsp;&nbsp;W rejestrze o adresie f cztery mniej znaczące bity zamieniane są miejscami z czterema bardziej znaczącymi bitami. <br />
+&nbsp;&nbsp;&nbsp;&nbsp;Jeśli d = 0 to wynik jest przesyłany do rejestru W. Jeśli d = 1 to wynik jest przesyłany do rejestru o adresie f .
+</p>
+<p>
+    <pre class="code">
+<b>; Przykład:</b>
+ REG    equ 0x20
+ movlw  0xAB    ; W := 0xAB
+ movwf  REG     ; REG := W = 0xAB
+ swapf  REG, f  ; REG := swapf(REG) = 0xBA
+ swapf  REG, w  ; W := swapf(REG) = 0xAB
+    </pre>
+</p>
+
+</body>
+
+</html>

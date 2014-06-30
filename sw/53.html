@@ -1,0 +1,37 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 53</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>53. UKŁAD LICZNIKA NADZORCY WDT. SCHEMAT BLOKOWY LICZNIKA NADZORCY WDT. KONFIGURACJA POSTSKALERA DLA UKŁADU WDT</h2>
+<p>
+	<img src="/sw/img/53_1.png" /><br />
+    Licznik nadzorcy, inaczej strażnik (WDT &#8211; Watchdog Timer) jest swobodnie działającym wewnętrznym oscylatorem RC, który nie potrzebuje żadnych komponentów zewnętrznych. Oscylator RC układu WDT jest odseparowany od oscylatora RC mikrokontrolera podłączonego do wyprowadzenia OSC1/CLKIN.
+    <br /><br />
+    Oznacza to, że licznik nadzorcy będzie działał nawet, jeżeli sygnał zegarowy na wyprowadzeniach OSC1 i OSC2 zostanie zatrzymany, np. przy wywołaniu instrukcji SLEEP. Układ WDT jest włączany i wyłączany za pomocą rejestru konfiguracyjnego mikrokontrolera przy programowaniu i nie można go wyłączyć programowo.<br />
+    <br />
+  Licznik nadzorcy posiada nominalny czas przepełnienia licznika 18 ms (bez postskalera). Czas ten zależy od temp., nap. zasilania i wykonania konkretnego ukł. scalonego. Jeżeli wymagany dłuższy czas przepełnienia -> można zastosować postskaler ze stosunkiem podziału do 1:128.     <br />
+  <br />
+  <br />
+            Instrukcje CLRWDT oraz SLEEP &#8211; wyzer. licznika WDT oraz postskalera i zabezpieczają go przed przepełnieniem i generacją sygnału zerowania. Po przepełnieniu licznika WDT zer. jest bit     !TO w rejestrze STATUS. Kiedy postskaler jest dołączony do licznika WDT, trzeba wykonać instrukcje CLRWDT przed zmianą współczynnika podziału postskalera, aby uniknąć resetu  mikrokontrolera:<br />
+            <br />
+                    
+</p>
+
+<p>
+
+<pre class="code">
+ bsf     STATUS, RP0 ; wybierz bank 1 
+ movlw   B'00001011' ; podłącz postskaler do WDT ze współczynnikiem 1:8 
+ clrwdt              ; zeruj układ WDT 
+ movwf   OPTION_REG  ; zmień zawartość OPTION_REG z ustawieniami układu WDT 
+</pre>
+</p>
+
+
+</body>
+
+</html>

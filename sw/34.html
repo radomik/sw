@@ -1,0 +1,77 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" media="all" rel="stylesheet" type="text/css" />
+<title>Zadanie 34</title>
+</head>
+<body>
+	<a href="/sw/index.html">Lista zadań</a><br />
+<h2>34. BEZPOŚREDNI I POŚREDNI DOSTĘP DO PAMIĘCI. ADRESOWANIE BEZPOŚREDNIE. PRZYKŁAD ADRESOWANIA BEZPOŚREDNIEGO. ADRESOWANIE POŚREDNIE. PRZYKŁAD ADRESOWANIA POŚREDNIEGO</h2>
+<p>
+Pamięć adresowana może być na dwa sposoby: pośredni i bezpośredni. 
+</p>
+
+<p>
+W trybie adresowania bezpośredniego adres rejestru pamięci danych zawarty jest w kodzie rozkazu. Jest to 7-bitowy adres, który wskazuje słowo w  aktywnym banku pamięci, a wybór odpowiedniego banku dokonywany jest za pomocą bitów RP1, RP0 z rejestru STATUS. 
+</p>
+
+<p>
+Efektywny 9-bitowy adres pamięci tworzy się poprzez połączenie 2-bitowego pola RP1:RP0 (starsze bity adresu) oraz 7-bitowego adresu zawartego w kodzie rozkazu. Zaadresowanie rejestrów z obszaru pamięci, który nie został zaimplementowany, powoduje odwołanie się do odpowiednich komórek pamięci w młodszych banków (zawijanie adresów polegające na ignorowaniu najbardziej znaczących bitów adresu). 
+</p>
+
+<p>
+ 
+<pre class="code">
+    <b>; Przykład adresowania bezpośredniego: </b>
+    <b>; program wpisuje wartość 0 do rejestrów PORTA i TRISA</b>
+    movlw  0            ; do rejestru W ładuj 0
+    bcf    STATUS, RP0  ; przełącz się do banku 0 
+    bcf    STATUS, RP1  ;
+    movwf  PORTA        ; przepisz zawartość W do rej. 
+                        ; PORTA (bank 0)
+    bsf    STATUS, RP0  ; przełącz się do banku 1
+    movwf  TRISA        ; przepisz zawartość W do rej. 
+                        ; TRISA (bank 1)
+</pre>
+</p>
+
+
+<p>
+<h2>ADRESOWANIE POŚREDNIE. PRZYKŁAD ADRESOWANIA POŚREDNIEGO</h2>
+<br />
+W trybie adresowania pośredniego osiem mniej znaczących bitów adresu pamięci danych znajduje się w rejestrze specjalnym FSR (File Select Register), starszy bit adresu stanowi bit IRP z rejestru STATUS. 
+<br />
+<br />
+
+Tryb adresowania pośredniego uzyskuje się przy odwołaniu do rejestru INDF o adresie 00h. Użycie rejestru INDF jako operandu powoduje, że właściwy adres argumentu pobierany jest z rejestru FSR i rozszerzany o wartość bitu IRP (starszy bit). Tryb adresowania pośredniego wymaga uprzedniego załadowania adresu komórki pamięci do FSR i odpowiedniego ustawienia bitu wyboru banków  pamięci IRP.
+    
+    <br />
+    
+<pre class="code">
+	<b>; Przykład adresowania pośredniego: </b>
+	<b>; program zeruje 16 komórek pamięci od adresu 0x20<br />
+ movlw  0x20   ; zainicjuj wskaźnik do pamięci
+ movwf  FSR    
+NEXT:
+ clrf   INDF   ; wyzeruj rejestr INDF 
+ incf   FSR,F  ; inkrementuj wskaźnik do pamięci
+ btfss  FSR,4  ; sprawdź czy wskaźnik równy 16
+ goto   NEXT   ; nie &#8211; skocz do NEXT
+CONTINUE:      ; tak &#8211; idź dalej
+ ...
+</pre>
+</p>
+
+
+<p>
+<b> Ilustracja 1: Bezpośrednie/pośrednie adresowanie pamięci danych dla PIC16F8x </b><br />
+
+<img src="/sw/img/34_1.png" />
+
+</p>
+
+
+
+</body>
+
+</html>
